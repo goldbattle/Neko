@@ -73,7 +73,8 @@ fun Chapter.filteredBySource(sourceName: String, filteredSources: Set<String>): 
     }
 
     if (sourceName == MdConstants.name) {
-        return !this.isMergedChapter()
+        return !this.isMergedChapter() &&
+            ChapterUtil.getScanlators(this.scanlator).contains(MdConstants.name)
     }
 
     return ChapterUtil.getScanlators(this.scanlator).any { group -> group == sourceName }

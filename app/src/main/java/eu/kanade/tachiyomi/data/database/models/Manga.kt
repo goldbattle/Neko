@@ -53,6 +53,8 @@ interface Manga : SManga {
 
     var dynamic_cover: String?
 
+    var cached_unread: Int
+
     fun displayTitle(): String {
         return user_title ?: title
     }
@@ -117,6 +119,24 @@ interface Manga : SManga {
     fun availableFilter(mangaDetailsPreferences: MangaDetailsPreferences): Int =
         if (usesLocalFilter) availableFilter
         else mangaDetailsPreferences.filterChapterByAvailable().get()
+
+    var smartChapterFilterEnabled: Boolean
+        get() = chapter_flags and CHAPTER_SMART_DEDUP_MASK == CHAPTER_SMART_DEDUP_ENABLED
+        set(enabled) =
+            setChapterFlags(
+                if (enabled) CHAPTER_SMART_DEDUP_ENABLED else CHAPTER_SORT_FILTER_GLOBAL,
+                CHAPTER_SMART_DEDUP_MASK,
+            )
+
+    fun smartChapterFilterEnabled(mangaDetailsPreferences: MangaDetailsPreferences): Boolean {
+        val perMangaEnabled =
+            chapter_flags and CHAPTER_SMART_DEDUP_MASK == CHAPTER_SMART_DEDUP_ENABLED
+        return when {
+            usesLocalFilter -> perMangaEnabled
+            perMangaEnabled -> true
+            else -> mangaDetailsPreferences.smartChapterFilterByDefault().get()
+        }
+    }
 
     fun getGenres(filterOutSafe: Boolean = false): List<String>? {
         return genre?.split(",")?.mapNotNull { tag ->
@@ -296,6 +316,9 @@ interface Manga : SManga {
         const val CHAPTER_SHOW_UNAVAILABLE = 0x00200000
         const val CHAPTER_SHOW_AVAILABLE = 0x00400000
         const val CHAPTER_UNAVAILABLE_MASK = 0x00600000
+
+        const val CHAPTER_SMART_DEDUP_ENABLED = 0x00800000
+        const val CHAPTER_SMART_DEDUP_MASK = 0x00800000
 
         const val TYPE_MANGA = 1
         const val TYPE_MANHWA = 2

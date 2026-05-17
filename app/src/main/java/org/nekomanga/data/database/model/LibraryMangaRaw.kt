@@ -10,7 +10,6 @@ import org.nekomanga.data.database.entity.MangaEntity
  */
 data class LibraryMangaRaw(
     @Embedded val manga: MangaEntity,
-    @ColumnInfo(name = "unread") val unread: String,
     @ColumnInfo(name = "has_read") val hasRead: String,
     @ColumnInfo(name = "bookmark_count") val bookmarkCount: Int,
     @ColumnInfo(name = "unavailable_count") val unavailableCount: Int,

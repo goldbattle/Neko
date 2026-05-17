@@ -34,6 +34,7 @@ import kotlinx.coroutines.flow.SharedFlow
 import org.nekomanga.R
 import org.nekomanga.constants.Constants.DONT_KILL_MY_APP_URL
 import org.nekomanga.core.network.NetworkPreferences
+import org.nekomanga.domain.details.MangaDetailsPreferences
 import org.nekomanga.domain.reader.ReaderPreferences
 import org.nekomanga.logging.TimberKt
 import org.nekomanga.presentation.components.UiText
@@ -61,12 +62,14 @@ internal class AdvancedSettingsScreen(
     val preferences: PreferencesHelper,
     val networkPreferences: NetworkPreferences,
     val readerPreferences: ReaderPreferences,
+    val mangaDetailsPreferences: MangaDetailsPreferences,
     val toastEvent: SharedFlow<UiText>,
     val clearNetworkCookies: () -> Unit,
     val cleanupDownloads: (Boolean, Boolean) -> Unit,
     val reindexDownloads: () -> Unit,
     val clearDatabase: (Boolean) -> Unit,
     val dedupeCategories: () -> Unit,
+    val rebuildLibraryUnreadCounters: () -> Unit,
     onNavigationIconClick: (() -> Unit)?,
 ) : SearchableSettings(onNavigationIconClick, incognitoMode) {
 
@@ -107,10 +110,21 @@ internal class AdvancedSettingsScreen(
                     true
                 },
             ),
+            Preference.PreferenceItem.SwitchPreference(
+                pref = mangaDetailsPreferences.smartChapterFilterVerboseLog(),
+                title = stringResource(R.string.smart_chapter_filter_verbose_log),
+                subtitle = stringResource(R.string.smart_chapter_filter_verbose_log_summary),
+            ),
             backgroundActivityGroup(context),
             systemGroup(context),
             networkGroup(context, clearNetworkCookies),
-            dataGroup(cleanupDownloads, clearDatabase, reindexDownloads, dedupeCategories),
+            dataGroup(
+                cleanupDownloads,
+                clearDatabase,
+                reindexDownloads,
+                dedupeCategories,
+                rebuildLibraryUnreadCounters,
+            ),
             getReaderGroup(readerPreferences),
         )
     }
@@ -271,11 +285,13 @@ internal class AdvancedSettingsScreen(
         clearDatabase: (Boolean) -> Unit,
         reindexDownloads: () -> Unit,
         dedupeCategories: () -> Unit,
+        rebuildLibraryUnreadCounters: () -> Unit,
     ): Preference.PreferenceGroup {
 
         var showCleanDownloadsDialog by rememberSaveable { mutableStateOf(false) }
         var showClearDatabaseDialog by rememberSaveable { mutableStateOf(false) }
         var showDedupeCategoriesDialog by rememberSaveable { mutableStateOf(false) }
+        var showRebuildUnreadDialog by rememberSaveable { mutableStateOf(false) }
 
         if (showCleanDownloadsDialog) {
             CleanDownloadsDialog(
@@ -300,10 +316,27 @@ internal class AdvancedSettingsScreen(
             )
         }
 
+        if (showRebuildUnreadDialog) {
+            ConfirmationDialog(
+                title = stringResource(R.string.rebuild_library_unread_counters),
+                body = stringResource(R.string.rebuild_library_unread_counters_confirmation),
+                onDismiss = { showRebuildUnreadDialog = false },
+                onConfirm = {
+                    showRebuildUnreadDialog = false
+                    rebuildLibraryUnreadCounters()
+                },
+            )
+        }
+
         return Preference.PreferenceGroup(
             title = stringResource(R.string.data_management),
             preferenceItems =
                 persistentListOf(
+                    Preference.PreferenceItem.TextPreference(
+                        title = stringResource(R.string.rebuild_library_unread_counters),
+                        subtitle = stringResource(R.string.rebuild_library_unread_counters_summary),
+                        onClick = { showRebuildUnreadDialog = true },
+                    ),
                     Preference.PreferenceItem.TextPreference(
                         title = stringResource(R.string.reindex_downloads),
                         subtitle = stringResource(R.string.reindex_downloads_summary),
@@ -345,6 +378,10 @@ internal class AdvancedSettingsScreen(
                     subtitle = stringResource(R.string.verbose_logging_summary),
                 ),
                 SearchTerm(
+                    title = stringResource(R.string.smart_chapter_filter_verbose_log),
+                    subtitle = stringResource(R.string.smart_chapter_filter_verbose_log_summary),
+                ),
+                SearchTerm(
                     title = stringResource(R.string.disable_battery_optimization),
                     subtitle = stringResource(R.string.disable_if_issues_with_updating),
                     group = stringResource(R.string.background_activity),
@@ -370,6 +407,11 @@ internal class AdvancedSettingsScreen(
                 SearchTerm(
                     title = stringResource(R.string.doh),
                     group = stringResource(R.string.network),
+                ),
+                SearchTerm(
+                    title = stringResource(R.string.rebuild_library_unread_counters),
+                    subtitle = stringResource(R.string.rebuild_library_unread_counters_summary),
+                    group = stringResource(R.string.data_management),
                 ),
                 SearchTerm(
                     title = stringResource(R.string.reindex_downloads),

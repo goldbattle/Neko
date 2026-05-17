@@ -9,6 +9,7 @@ import eu.kanade.tachiyomi.data.database.models.MergeType
 import eu.kanade.tachiyomi.data.database.models.SourceMergeManga
 import eu.kanade.tachiyomi.data.external.ExternalLink
 import eu.kanade.tachiyomi.util.chapter.MissingChapterHolder
+import eu.kanade.tachiyomi.util.chapter.smartfilter.ChapterDisplayMetadata
 import kotlinx.collections.immutable.ImmutableSet
 import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.PersistentSet
@@ -86,6 +87,8 @@ object MangaConstants {
     data class MangaScreenChapterState(
         val activeChapters: PersistentList<ChapterItem> = persistentListOf(),
         val allChapters: PersistentList<ChapterItem> = persistentListOf(),
+        val smartChapterFilterEnabled: Boolean = false,
+        val chapterMetadataById: Map<Long, ChapterDisplayMetadata> = emptyMap(),
         val nextUnreadChapter: NextUnreadChapter = NextUnreadChapter(),
         val chapterFilter: ChapterDisplay = ChapterDisplay(),
         val chapterFilterText: String = "",
@@ -167,6 +170,7 @@ object MangaConstants {
         val bookmarked: ToggleableState = ToggleableState.Off,
         val hideChapterTitles: ToggleableState = ToggleableState.Off,
         val available: ToggleableState = ToggleableState.Off,
+        val smartChapterFilter: Boolean = false,
         val matchesGlobalDefaults: Boolean = true,
     )
 
@@ -206,6 +210,7 @@ object MangaConstants {
         val changeFilter: (filterOption: ChapterDisplayOptions?) -> Unit,
         val changeScanlator: (scanlatorOption: ScanlatorOption?) -> Unit,
         val changeLanguage: (languageOption: LanguageOption?) -> Unit,
+        val changeSmartChapterFilter: (Boolean) -> Unit,
         val setAsGlobal: (SetGlobal) -> Unit,
     )
 

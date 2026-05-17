@@ -82,6 +82,7 @@ import org.nekomanga.domain.reader.ReaderPreferences
 import org.nekomanga.domain.site.MangaDexPreferences
 import org.nekomanga.domain.storage.StorageManager
 import org.nekomanga.logging.TimberKt
+import org.nekomanga.usecases.chapters.ChapterReadProgress
 import org.nekomanga.usecases.chapters.ParseChapterNameUseCase
 import tachiyomi.core.util.storage.DiskUtil
 import uy.kohesive.injekt.Injekt
@@ -106,6 +107,7 @@ constructor(
     private val readerPreferences: ReaderPreferences = Injekt.get(),
     private val securityPreferences: SecurityPreferences = Injekt.get(),
     private val chapterItemFilter: ChapterItemFilter = Injekt.get(),
+    private val chapterReadProgress: ChapterReadProgress = Injekt.get(),
     private val storageManager: StorageManager = Injekt.get(),
 ) : ViewModel() {
 
@@ -170,17 +172,22 @@ constructor(
 
         val chapterItemSort = ChapterItemSort()
 
+        // Chapter being read must stay in the list even when filters would hide it (e.g.
+        // duplicate).
         val selectedChapterItem =
             allChapterItems.find { it.chapter.id == chapterId }
                 ?: error("Requested chapter of id $chapterId not found in chapter list")
 
+        // Prev/next order: same rules as [getChapters] / manga details when smart + skip filtered.
         val chaptersForReader =
             chapterItemFilter
                 .filterChaptersForReader(
-                    allChapterItems,
-                    manga,
-                    chapterItemSort.sortComparator(manga, true), // Ascending sort for reader
-                    selectedChapterItem,
+                    chapters = allChapterItems,
+                    manga = manga,
+                    comparator =
+                        chapterItemSort.sortComparator(manga, forceAscending = true), // ascending
+                    selectedChapterItem = selectedChapterItem,
+                    chapterReadProgress = chapterReadProgress,
                 )
                 .map { it.chapter.toDbChapter() }
                 .map(::ReaderChapter)
@@ -315,34 +322,27 @@ constructor(
                 // 1. Convert to ChapterItem
                 val allChapterItems = dbChapters.map { DomainChapterItem(it.toSimpleChapter()!!) }
 
-                // 2. Instantiate new sort
+                // 2. Reader navigation is always ascending regardless of manga sort preference.
                 val chapterItemSort = ChapterItemSort()
 
-                // 3. Filter using new filter
-                val filteredChapterItems = chapterItemFilter.filterChapters(allChapterItems, manga)
+                // 3. Keep the open chapter in the filtered set (see
+                // [ChapterItemFilter.filterChaptersForReader]).
+                val selectedChapterItem = allChapterItems.first {
+                    it.chapter.id == (currentReaderChapter?.chapter?.id ?: chapterId)
+                }
 
-                // 4. Sort using new sort (always ascending)
-                val sortedChapterItems =
-                    filteredChapterItems.sortedWith(chapterItemSort.sortComparator(manga, true))
-
-                // 5. Re-implement logic from filterChaptersForReader
+                // 4. Apply reader filters; with smart + skip filtered, matches manga details active
+                // list.
                 val chaptersForReader =
-                    if (
-                        sortedChapterItems.any {
-                            it.chapter.id == (currentReaderChapter?.chapter?.id ?: chapterId)
-                        }
-                    ) {
-                        sortedChapterItems
-                    } else {
-                        val selectedChapterItem = allChapterItems.first {
-                            it.chapter.id == (currentReaderChapter?.chapter?.id ?: chapterId)
-                        }
-                        (sortedChapterItems + selectedChapterItem).sortedWith(
-                            chapterItemSort.sortComparator(manga, true)
-                        )
-                    }
+                    chapterItemFilter.filterChaptersForReader(
+                        chapters = allChapterItems,
+                        manga = manga,
+                        comparator = chapterItemSort.sortComparator(manga, forceAscending = true),
+                        selectedChapterItem = selectedChapterItem,
+                        chapterReadProgress = chapterReadProgress,
+                    )
 
-                // 6. Map to ReaderChapterItem
+                // 5. Map to UI rows for the chapter sheet.
                 chaptersForReader.map {
                     ReaderChapterItem(
                         it.chapter.toDbChapter(),
@@ -609,6 +609,13 @@ constructor(
     private suspend fun updateChapterProgressOnComplete(readerChapter: ReaderChapter) {
         if (!securityPreferences.incognitoMode().get()) {
             readerChapter.chapter.read = true
+            val mangaId = manga?.id
+            if (mangaId != null) {
+                Injekt.get<ChapterReadProgress>()
+                    .syncReadToEquivalentRows(mangaId, listOf(readerChapter.chapter), read = true)
+            } else {
+                chapterRepository.updateChaptersProgress(listOf(readerChapter.chapter))
+            }
             updateTrackChapterAfterReading(readerChapter)
             updateReadingStatus(readerChapter)
             deleteChapterIfNeeded(readerChapter)

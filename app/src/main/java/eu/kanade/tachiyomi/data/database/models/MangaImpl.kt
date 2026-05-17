@@ -85,6 +85,8 @@ open class MangaImpl : Manga {
 
     override var dynamic_cover: String? = null
 
+    override var cached_unread: Int = 0
+
     override var replies_count: String? = null
 
     override var thread_id: String? = null

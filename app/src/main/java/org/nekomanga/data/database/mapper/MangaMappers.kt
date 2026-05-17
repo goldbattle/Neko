@@ -50,6 +50,7 @@ fun MangaEntity.toManga(): MangaImpl {
         user_title = this@toManga.userTitle
         filtered_language = this@toManga.filteredLanguage
         dynamic_cover = this@toManga.dynamicCover
+        cached_unread = this@toManga.cachedUnread
     }
 }
 
@@ -97,5 +98,6 @@ fun Manga.toEntity(): MangaEntity {
         userTitle = this.user_title,
         filteredLanguage = this.filtered_language,
         dynamicCover = this.dynamic_cover,
+        cachedUnread = this.cached_unread,
     )
 }

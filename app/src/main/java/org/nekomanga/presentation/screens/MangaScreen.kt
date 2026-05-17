@@ -291,6 +291,7 @@ fun MangaScreen(
                 changeFilter = mangaViewModel::changeFilterOption,
                 changeScanlator = mangaViewModel::changeScanlatorOption,
                 changeLanguage = mangaViewModel::changeLanguageOption,
+                changeSmartChapterFilter = mangaViewModel::changeSmartChapterFilter,
                 setAsGlobal = mangaViewModel::setGlobalOption,
             ),
         chapterActions =
@@ -617,6 +618,8 @@ private fun LazyListScope.chapterList(
             themeColorState = themeColorState,
             shouldHideChapterTitles =
                 screenState.chapters.chapterFilter.hideChapterTitles == ToggleableState.On,
+            smartChapterFilterEnabled = screenState.chapters.smartChapterFilterEnabled,
+            displayMetadata = screenState.chapters.chapterMetadataById[chapterItem.chapter.id],
             chapterActions = chapterActions,
             onBookmark = onBookmark,
             onRead = onRead,

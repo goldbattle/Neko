@@ -18,6 +18,8 @@ import org.nekomanga.data.database.repository.MangaRepository
 import org.nekomanga.domain.library.LibraryPreferences
 import org.nekomanga.domain.site.MangaDexPreferences
 import org.nekomanga.logging.TimberKt
+import org.nekomanga.usecases.chapters.CachedMangaUnread
+import org.nekomanga.usecases.chapters.ChapterReadProgress
 import tachiyomi.core.util.storage.DiskUtil
 import tachiyomi.core.util.storage.nameWithoutExtension
 import uy.kohesive.injekt.Injekt
@@ -322,6 +324,7 @@ suspend fun syncChaptersWithSource(
         val deletedChapterNumbers = TreeSet<Float>()
         val deletedReadChapterNumbers = TreeSet<Float>()
         if (toDelete.isNotEmpty()) {
+            Injekt.get<ChapterReadProgress>().preserveReadStateBeforeDelete(manga.id!!, toDelete)
             for (c in toDelete) {
                 if (c.read) {
                     deletedReadChapterNumbers.add(c.chapter_number)
@@ -335,6 +338,8 @@ suspend fun syncChaptersWithSource(
             // Set the date fetch for new items in reverse order to allow another sorting method.
             // Sources MUST return the chapters from most to less recent, which is common.
             var now = Date().time
+
+            Injekt.get<ChapterReadProgress>().applyMarkersInMemory(manga.id!!, toAdd)
 
             for (i in toAdd.indices.reversed()) {
                 val chapter = toAdd[i]
@@ -389,6 +394,12 @@ suspend fun syncChaptersWithSource(
         mangaRepository.updateLastUpdated(manga.id!!, manga.last_update)
     }
     val newChapters = toAdd.subtract(readded.toSet()).toList().filter { !it.isUnavailable }
+
+    // Persist marker read state to chapter rows and refresh library badge after sync completes.
+    // (Avoid relying on manga-details chapter-list recompute, which can run mid-transaction.)
+    val readProgress = Injekt.get<ChapterReadProgress>()
+    readProgress.applyMarkersToAllChapters(manga.id!!)
+    Injekt.get<CachedMangaUnread>().refresh(manga)
 
     return Pair(newChapters, toDelete - readded.toSet())
 }

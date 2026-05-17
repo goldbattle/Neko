@@ -41,6 +41,7 @@ fun FilterChapterSheet(
     changeFilter: (MangaConstants.ChapterDisplayOptions?) -> Unit,
     changeScanlatorFilter: (MangaConstants.ScanlatorOption?) -> Unit,
     changeLanguageFilter: (MangaConstants.LanguageOption?) -> Unit,
+    changeSmartChapterFilter: (Boolean) -> Unit,
     setAsGlobal: (MangaConstants.SetGlobal) -> Unit,
 ) {
     CompositionLocalProvider(
@@ -51,7 +52,12 @@ fun FilterChapterSheet(
                 setAsGlobal(MangaConstants.SetGlobal.Sort)
             }
 
-            Filter(themeColorState = themeColorState, filter, changeFilter) {
+            Filter(
+                themeColorState = themeColorState,
+                filter,
+                changeFilter,
+                changeSmartChapterFilter,
+            ) {
                 setAsGlobal(MangaConstants.SetGlobal.Filter)
             }
 
@@ -148,6 +154,7 @@ private fun Filter(
     themeColorState: ThemeColorState,
     filter: MangaConstants.ChapterDisplay,
     changeFilter: (MangaConstants.ChapterDisplayOptions?) -> Unit,
+    changeSmartChapterFilter: (Boolean) -> Unit,
     setGlobal: () -> Unit,
 ) {
     Column(modifier = Modifier.fillMaxWidth()) {
@@ -193,6 +200,12 @@ private fun Filter(
                     )
                 )
             },
+        )
+        CheckboxLine(
+            themeColorState = themeColorState,
+            checked = filter.smartChapterFilter,
+            text = stringResource(id = R.string.smart_chapter_filter),
+            onChecked = { changeSmartChapterFilter(!filter.smartChapterFilter) },
         )
         FilterLine(
             themeColorState = themeColorState,

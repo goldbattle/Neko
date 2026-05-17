@@ -90,7 +90,8 @@ class ChapterUtil {
             }
 
             if (sourceName == MdConstants.name && !isLocal) {
-                return !isMerged
+                // MangaDex filter applies to native MD chapters only, not other scanlators.
+                return !isMerged && scanlators.contains(MdConstants.name)
             }
 
             if (sourceName == Constants.LOCAL_SOURCE) {

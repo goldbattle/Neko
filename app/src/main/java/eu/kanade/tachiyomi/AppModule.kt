@@ -53,6 +53,8 @@ import org.nekomanga.data.database.repository.BrowseFilterRepository
 import org.nekomanga.data.database.repository.BrowseFilterRepositoryImpl
 import org.nekomanga.data.database.repository.CategoryRepository
 import org.nekomanga.data.database.repository.CategoryRepositoryImpl
+import org.nekomanga.data.database.repository.ChapterReadMarkerRepository
+import org.nekomanga.data.database.repository.ChapterReadMarkerRepositoryImpl
 import org.nekomanga.data.database.repository.ChapterRepository
 import org.nekomanga.data.database.repository.ChapterRepositoryImpl
 import org.nekomanga.data.database.repository.HistoryRepository
@@ -81,7 +83,9 @@ import org.nekomanga.domain.track.store.DelayedTrackingStore
 import org.nekomanga.logging.TimberKt
 import org.nekomanga.presentation.screens.feed.FeedRepository
 import org.nekomanga.presentation.screens.similar.SimilarRepo
+import org.nekomanga.usecases.chapters.CachedMangaUnread
 import org.nekomanga.usecases.chapters.CalculateChapterFilterUseCase
+import org.nekomanga.usecases.chapters.ChapterReadProgress
 import org.nekomanga.usecases.chapters.ChapterUseCases
 import org.nekomanga.usecases.chapters.ParseChapterNameUseCase
 import org.nekomanga.usecases.library.FilterLibraryMangaUseCase
@@ -106,7 +110,10 @@ class AppModule(val app: Application) : InjektModule {
         addSingletonFactory {
             Room.databaseBuilder(app, AppDatabase::class.java, AppDatabase.DATABASE_NAME)
                 .setJournalMode(RoomDatabase.JournalMode.WRITE_AHEAD_LOGGING)
-                .addMigrations(DatabaseMigrations.MIGRATION_45_46)
+                .addMigrations(
+                    DatabaseMigrations.MIGRATION_45_48,
+                    DatabaseMigrations.MIGRATION_48_49,
+                )
                 .fallbackToDestructiveMigration(false)
                 .build()
         }
@@ -128,6 +135,29 @@ class AppModule(val app: Application) : InjektModule {
 
         addSingletonFactory<ChapterRepository> {
             ChapterRepositoryImpl(chapterDao = get<AppDatabase>().chapterDao())
+        }
+
+        addSingletonFactory<ChapterReadMarkerRepository> {
+            ChapterReadMarkerRepositoryImpl(dao = get<AppDatabase>().chapterReadMarkerDao())
+        }
+
+        addSingletonFactory<ChapterReadProgress> {
+            ChapterReadProgress(
+                chapterRepository = get<ChapterRepository>(),
+                markerRepository = get<ChapterReadMarkerRepository>(),
+                mangaRepository = get<MangaRepository>(),
+                mangaDetailsPreferences = get<MangaDetailsPreferences>(),
+            )
+        }
+
+        addSingletonFactory<CachedMangaUnread> {
+            CachedMangaUnread(
+                mangaRepository = get<MangaRepository>(),
+                chapterRepository = get<ChapterRepository>(),
+                chapterItemFilter = get<ChapterItemFilter>(),
+                downloadManager = get<DownloadManager>(),
+                chapterReadProgress = get<ChapterReadProgress>(),
+            )
         }
 
         addSingletonFactory<HistoryRepository> {
@@ -252,7 +282,15 @@ class AppModule(val app: Application) : InjektModule {
 
         addSingleton(CalculateChapterFilterUseCase())
         addSingleton(ParseChapterNameUseCase())
-        addSingleton(ChapterUseCases())
+        addSingletonFactory<ChapterUseCases> {
+            ChapterUseCases(
+                chapterRepository = get(),
+                chapterReadProgress = get(),
+                statusHandler = get(),
+                mangaDexPreferences = get(),
+                calculateChapterFilter = get(),
+            )
+        }
 
         addSingleton(FilterLibraryMangaUseCase())
 
@@ -260,7 +298,18 @@ class AppModule(val app: Application) : InjektModule {
 
         addSingleton(TrackUseCases())
 
-        addSingleton(FeedRepository())
+        addSingletonFactory<FeedRepository> {
+            FeedRepository(
+                chapterRepository = get(),
+                historyRepository = get(),
+                mangaRepository = get(),
+                downloadManager = get(),
+                chapterUseCases = get(),
+                mangaDexPreferences = get(),
+                mangaDetailsPreferences = get(),
+                chapterItemFilter = get(),
+            )
+        }
 
         addSingleton(AppSnackbarManager())
 

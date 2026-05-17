@@ -65,6 +65,12 @@ interface MangaDao {
 
     @Query("DELETE FROM manga") suspend fun deleteAllManga()
 
+    @Query("UPDATE manga SET cached_unread = :count WHERE id = :mangaId")
+    suspend fun updateCachedUnread(mangaId: Long, count: Int)
+
+    @Query("SELECT id FROM manga WHERE favorite = 1 ORDER BY title")
+    suspend fun getFavoriteMangaIds(): List<Long>
+
     @Query(
         """
         SELECT * FROM manga

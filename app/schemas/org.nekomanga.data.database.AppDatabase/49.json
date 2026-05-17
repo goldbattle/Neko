@@ -1,12 +1,12 @@
 {
   "formatVersion": 1,
   "database": {
-    "version": 46,
-    "identityHash": "f2039b81533e1703050c0d042f6e4ac0",
+    "version": 49,
+    "identityHash": "6b36cf4f3e2732df7d6401400e07f218",
     "entities": [
       {
         "tableName": "manga",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `source` INTEGER NOT NULL, `url` TEXT NOT NULL, `artist` TEXT, `author` TEXT, `description` TEXT, `genre` TEXT, `title` TEXT NOT NULL, `status` INTEGER NOT NULL, `thumbnail_url` TEXT, `favorite` INTEGER NOT NULL, `last_update` INTEGER, `next_update` INTEGER, `date_added` INTEGER, `initialized` INTEGER NOT NULL, `viewer` INTEGER NOT NULL, `chapter_flags` INTEGER NOT NULL, `lang_flag` TEXT, `follow_status` INTEGER NOT NULL, `anilist_id` TEXT, `kitsu_id` TEXT, `my_anime_list_id` TEXT, `manga_updates_id` TEXT, `anime_planet_id` TEXT, `other_urls` TEXT, `scanlator_filter_flag` TEXT, `missing_chapters` TEXT, `rating` TEXT, `users` TEXT, `thread_id` TEXT, `replies_count` TEXT, `merge_manga_url` TEXT, `manga_last_volume` INTEGER, `manga_last_chapter` INTEGER, `merge_manga_image_url` TEXT, `alt_titles` TEXT, `user_cover` TEXT, `user_title` TEXT, `language_filter_flag` TEXT, `dynamic_cover` TEXT)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `source` INTEGER NOT NULL, `url` TEXT NOT NULL, `artist` TEXT, `author` TEXT, `description` TEXT, `genre` TEXT, `title` TEXT NOT NULL, `status` INTEGER NOT NULL, `thumbnail_url` TEXT, `favorite` INTEGER NOT NULL, `last_update` INTEGER, `next_update` INTEGER, `date_added` INTEGER, `initialized` INTEGER NOT NULL, `viewer` INTEGER NOT NULL, `chapter_flags` INTEGER NOT NULL, `lang_flag` TEXT, `follow_status` INTEGER NOT NULL, `anilist_id` TEXT, `kitsu_id` TEXT, `my_anime_list_id` TEXT, `manga_updates_id` TEXT, `anime_planet_id` TEXT, `other_urls` TEXT, `scanlator_filter_flag` TEXT, `missing_chapters` TEXT, `rating` TEXT, `users` TEXT, `thread_id` TEXT, `replies_count` TEXT, `merge_manga_url` TEXT, `manga_last_volume` INTEGER, `manga_last_chapter` INTEGER, `merge_manga_image_url` TEXT, `alt_titles` TEXT, `user_cover` TEXT, `user_title` TEXT, `language_filter_flag` TEXT, `dynamic_cover` TEXT, `cached_unread` INTEGER NOT NULL DEFAULT 0)",
         "fields": [
           {
             "fieldPath": "id",
@@ -217,6 +217,13 @@
             "fieldPath": "dynamicCover",
             "columnName": "dynamic_cover",
             "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "cachedUnread",
+            "columnName": "cached_unread",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "0"
           }
         ],
         "primaryKey": {
@@ -1057,11 +1064,82 @@
             ]
           }
         ]
+      },
+      {
+        "tableName": "chapter_read_markers",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`manga_id` INTEGER NOT NULL, `equiv_key` TEXT NOT NULL, `read_at` INTEGER NOT NULL, `last_page_read` INTEGER NOT NULL, PRIMARY KEY(`manga_id`, `equiv_key`), FOREIGN KEY(`manga_id`) REFERENCES `manga`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "mangaId",
+            "columnName": "manga_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "equivKey",
+            "columnName": "equiv_key",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "readAt",
+            "columnName": "read_at",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "lastPageRead",
+            "columnName": "last_page_read",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "manga_id",
+            "equiv_key"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_chapter_read_markers_manga_id",
+            "unique": false,
+            "columnNames": [
+              "manga_id"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_chapter_read_markers_manga_id` ON `${TABLE_NAME}` (`manga_id`)"
+          },
+          {
+            "name": "index_chapter_read_markers_manga_id_equiv_key",
+            "unique": true,
+            "columnNames": [
+              "manga_id",
+              "equiv_key"
+            ],
+            "orders": [],
+            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_chapter_read_markers_manga_id_equiv_key` ON `${TABLE_NAME}` (`manga_id`, `equiv_key`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "manga",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "manga_id"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          }
+        ]
       }
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'f2039b81533e1703050c0d042f6e4ac0')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '6b36cf4f3e2732df7d6401400e07f218')"
     ]
   }
 }

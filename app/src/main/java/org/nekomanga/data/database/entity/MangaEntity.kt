@@ -48,6 +48,11 @@ data class MangaEntity(
     @ColumnInfo(name = "user_title") val userTitle: String?,
     @ColumnInfo(name = "language_filter_flag") val filteredLanguage: String?,
     @ColumnInfo(name = "dynamic_cover") val dynamicCover: String?,
+    /**
+     * Unread count after chapter gate filters and smart dedup; see
+     * [org.nekomanga.usecases.chapters.CachedMangaUnread].
+     */
+    @ColumnInfo(name = "cached_unread", defaultValue = "0") val cachedUnread: Int = 0,
 ) {
     fun displayTitle(): String {
         return userTitle ?: title

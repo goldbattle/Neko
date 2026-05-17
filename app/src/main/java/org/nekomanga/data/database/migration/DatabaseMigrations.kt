@@ -4,31 +4,68 @@ import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 
 object DatabaseMigrations {
-    val MIGRATION_45_46 =
-        object : Migration(45, 46) {
+
+    /** StorIO v45 → Room v48: table renames + chapter read markers. */
+    val MIGRATION_45_48 =
+        object : Migration(45, 48) {
             override fun migrate(db: SupportSQLiteDatabase) {
-                // 0. Clean up any leftover temporary tables from previous failed migrations
-                dropTempTables(db)
-
-                // 1. Copy all data into temporary tables (strips constraints)
-                backupDataToTempTables(db)
-
-                // 2. Safely drop old tables in the correct order to respect Foreign Keys
-                dropOldTables(db)
-
-                // 3. Create the new tables with the updated Room schemas
-                createNewTables(db)
-
-                // 4. Restore the data, applying transformations/COALESCE where needed
-                restoreDataFromTempTables(db)
-
-                // 5. Create indices required by Room
-                createIndices(db)
-
-                // 6. Clean up temporary tables
-                dropTempTables(db)
+                migrate45To46(db)
+                migrate46To48(db)
             }
         }
+
+    val MIGRATION_48_49 =
+        object : Migration(48, 49) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL("ALTER TABLE manga ADD COLUMN cached_unread INTEGER NOT NULL DEFAULT 0")
+            }
+        }
+
+    private fun migrate45To46(db: SupportSQLiteDatabase) {
+        dropTempTables(db)
+        backupDataToTempTables(db)
+        dropOldTables(db)
+        createNewTables(db)
+        restoreDataFromTempTables(db)
+        createIndices(db)
+        dropTempTables(db)
+    }
+
+    private fun migrate46To48(db: SupportSQLiteDatabase) {
+        db.execSQL(
+            """
+            CREATE TABLE IF NOT EXISTS `chapter_read_markers` (
+                `manga_id` INTEGER NOT NULL,
+                `equiv_key` TEXT NOT NULL,
+                `read_at` INTEGER NOT NULL,
+                `last_page_read` INTEGER NOT NULL,
+                PRIMARY KEY(`manga_id`, `equiv_key`),
+                FOREIGN KEY(`manga_id`) REFERENCES `manga`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE
+            )
+            """
+                .trimIndent()
+        )
+        db.execSQL(
+            "CREATE INDEX IF NOT EXISTS `index_chapter_read_markers_manga_id` ON `chapter_read_markers` (`manga_id`)"
+        )
+        db.execSQL(
+            "CREATE UNIQUE INDEX IF NOT EXISTS `index_chapter_read_markers_manga_id_equiv_key` ON `chapter_read_markers` (`manga_id`, `equiv_key`)"
+        )
+        db.execSQL(
+            """
+            INSERT OR IGNORE INTO chapter_read_markers (manga_id, equiv_key, read_at, last_page_read)
+            SELECT manga_id,
+                'w:' || CAST(CAST(chapter_number AS INTEGER) AS TEXT),
+                date_fetch,
+                last_page_read
+            FROM chapters
+            WHERE read = 1
+                AND chapter_number >= 0
+                AND ABS(chapter_number - ROUND(chapter_number)) < 0.01
+            """
+                .trimIndent()
+        )
+    }
 
     private fun backupDataToTempTables(db: SupportSQLiteDatabase) {
         db.execSQL("CREATE TABLE `temp_mangas` AS SELECT * FROM `mangas`")
@@ -47,15 +84,12 @@ object DatabaseMigrations {
     }
 
     private fun dropOldTables(db: SupportSQLiteDatabase) {
-        // Child tables MUST be dropped before Parent tables
-        db.execSQL("DROP TABLE IF EXISTS `history`") // Child of chapters
-        db.execSQL("DROP TABLE IF EXISTS `artwork`") // Child of mangas
-        db.execSQL("DROP TABLE IF EXISTS `manga_sync`") // Child of mangas
-        db.execSQL("DROP TABLE IF EXISTS `manga_aggregate`") // Child of mangas
-        db.execSQL("DROP TABLE IF EXISTS `mangas_categories`") // Child of mangas & categories
-        db.execSQL("DROP TABLE IF EXISTS `chapters`") // Child of mangas
-
-        // Parent tables and standalone tables
+        db.execSQL("DROP TABLE IF EXISTS `history`")
+        db.execSQL("DROP TABLE IF EXISTS `artwork`")
+        db.execSQL("DROP TABLE IF EXISTS `manga_sync`")
+        db.execSQL("DROP TABLE IF EXISTS `manga_aggregate`")
+        db.execSQL("DROP TABLE IF EXISTS `mangas_categories`")
+        db.execSQL("DROP TABLE IF EXISTS `chapters`")
         db.execSQL("DROP TABLE IF EXISTS `mangas`")
         db.execSQL("DROP TABLE IF EXISTS `categories`")
         db.execSQL("DROP TABLE IF EXISTS `browse_filter`")
@@ -66,7 +100,6 @@ object DatabaseMigrations {
     }
 
     private fun createNewTables(db: SupportSQLiteDatabase) {
-        // 1. Manga (Parent)
         db.execSQL(
             """
             CREATE TABLE IF NOT EXISTS `manga` (
@@ -83,8 +116,6 @@ object DatabaseMigrations {
             """
                 .trimIndent()
         )
-
-        // 2. Categories (Parent)
         db.execSQL(
             """
             CREATE TABLE IF NOT EXISTS `categories` (
@@ -94,8 +125,6 @@ object DatabaseMigrations {
             """
                 .trimIndent()
         )
-
-        // 3. Chapters (Child of Manga)
         db.execSQL(
             """
             CREATE TABLE IF NOT EXISTS `chapters` (
@@ -110,8 +139,6 @@ object DatabaseMigrations {
             """
                 .trimIndent()
         )
-
-        // 4. History (Child of Chapters)
         db.execSQL(
             """
             CREATE TABLE IF NOT EXISTS `history` (
@@ -121,8 +148,6 @@ object DatabaseMigrations {
             """
                 .trimIndent()
         )
-
-        // 5. Manga Categories (Child of Manga & Categories)
         db.execSQL(
             """
             CREATE TABLE IF NOT EXISTS `manga_categories` (
@@ -133,8 +158,6 @@ object DatabaseMigrations {
             """
                 .trimIndent()
         )
-
-        // 6. Manga Aggregate (Child of Manga)
         db.execSQL(
             """
             CREATE TABLE IF NOT EXISTS `manga_aggregate` (
@@ -144,8 +167,6 @@ object DatabaseMigrations {
             """
                 .trimIndent()
         )
-
-        // 7. Track (Child of Manga)
         db.execSQL(
             """
             CREATE TABLE IF NOT EXISTS `track` (
@@ -158,8 +179,6 @@ object DatabaseMigrations {
             """
                 .trimIndent()
         )
-
-        // 8. Artwork (Child of Manga)
         db.execSQL(
             """
             CREATE TABLE IF NOT EXISTS `artwork` (
@@ -170,8 +189,6 @@ object DatabaseMigrations {
             """
                 .trimIndent()
         )
-
-        // 9. Merge Manga (Child of Manga)
         db.execSQL(
             """
             CREATE TABLE IF NOT EXISTS `merge_manga` (
@@ -182,8 +199,6 @@ object DatabaseMigrations {
             """
                 .trimIndent()
         )
-
-        // 10. Independent tables
         db.execSQL(
             "CREATE TABLE IF NOT EXISTS `browse_filter` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT NOT NULL, `filters` TEXT NOT NULL, `is_default` INTEGER NOT NULL)"
         )
@@ -199,8 +214,6 @@ object DatabaseMigrations {
     }
 
     private fun restoreDataFromTempTables(db: SupportSQLiteDatabase) {
-        // Insert order matters for Foreign Keys: Parents first, then children
-
         db.execSQL(
             """
             INSERT INTO `manga` (
@@ -222,7 +235,6 @@ object DatabaseMigrations {
             """
                 .trimIndent()
         )
-
         db.execSQL(
             """
             INSERT INTO `categories` (`id`, `name`, `sort`, `flags`, `manga_order`)
@@ -231,7 +243,6 @@ object DatabaseMigrations {
             """
                 .trimIndent()
         )
-
         db.execSQL(
             """
             INSERT INTO `chapters` (
@@ -249,7 +260,6 @@ object DatabaseMigrations {
             """
                 .trimIndent()
         )
-
         db.execSQL(
             """
             INSERT INTO `history` (`id`, `chapter_id`, `last_read`, `time_read`)
@@ -258,7 +268,6 @@ object DatabaseMigrations {
             """
                 .trimIndent()
         )
-
         db.execSQL(
             """
             INSERT INTO `manga_categories` (`id`, `manga_id`, `category_id`)
@@ -267,7 +276,6 @@ object DatabaseMigrations {
             """
                 .trimIndent()
         )
-
         db.execSQL(
             """
             INSERT INTO `manga_aggregate` (`manga_id`, `volumes`)
@@ -276,7 +284,6 @@ object DatabaseMigrations {
             """
                 .trimIndent()
         )
-
         db.execSQL(
             """
             INSERT INTO `track` (
@@ -291,7 +298,6 @@ object DatabaseMigrations {
             """
                 .trimIndent()
         )
-
         db.execSQL(
             """
             INSERT INTO `artwork` (`id`, `manga_id`, `file_name`, `volume`, `locale`, `description`)
@@ -300,7 +306,6 @@ object DatabaseMigrations {
             """
                 .trimIndent()
         )
-
         db.execSQL(
             """
             INSERT INTO `merge_manga` (`id`, `manga_id`, `cover_url`, `title`, `url`, `merge_type`)
@@ -309,7 +314,6 @@ object DatabaseMigrations {
             """
                 .trimIndent()
         )
-
         db.execSQL(
             """
             INSERT INTO `browse_filter` (`id`, `name`, `filters`, `is_default`)
@@ -318,7 +322,6 @@ object DatabaseMigrations {
             """
                 .trimIndent()
         )
-
         db.execSQL(
             """
             INSERT INTO `manga_similar` (`id`, `manga_id`, `matched_ids`)
@@ -327,7 +330,6 @@ object DatabaseMigrations {
             """
                 .trimIndent()
         )
-
         db.execSQL(
             """
             INSERT INTO `scanlator_group` (`id`, `name`, `uuid`, `description`)
@@ -336,7 +338,6 @@ object DatabaseMigrations {
             """
                 .trimIndent()
         )
-
         db.execSQL(
             """
             INSERT INTO `uploader` (`id`, `username`, `uuid`)

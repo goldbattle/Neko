@@ -13,6 +13,10 @@ import org.nekomanga.data.database.repository.MangaRepository
 import org.nekomanga.data.database.repository.MergeMangaRepository
 import org.nekomanga.domain.library.LibraryPreferences
 import org.nekomanga.logging.TimberKt
+import org.nekomanga.usecases.chapters.CachedMangaUnread
+import org.nekomanga.usecases.chapters.ChapterReadProgress
+import uy.kohesive.injekt.Injekt
+import uy.kohesive.injekt.api.get
 
 class SearchMergedManga(private val sourceManager: SourceManager) {
     suspend fun execute(
@@ -47,6 +51,7 @@ class RemoveMergedManga(
     private val mergeMangaRepository: MergeMangaRepository,
     private val downloadManager: DownloadManager,
     private val libraryPreferences: LibraryPreferences,
+    private val chapterReadProgress: ChapterReadProgress,
 ) {
     suspend fun execute(mangaId: Long, mergeManga: MergeMangaImpl): Boolean {
         val dbManga = mangaRepository.getMangaById(mangaId) ?: return true
@@ -61,6 +66,10 @@ class RemoveMergedManga(
                 chapterRepository.getChaptersForManga(mangaId).partition {
                     it.isMergedChapterOfType(mergeManga.mergeType)
                 }
+            chapterReadProgress.preserveReadStateBeforeDelete(mangaId, mergedChapters)
+            chapterReadProgress.applyMarkersToAllChapters(mangaId)
+            Injekt.get<CachedMangaUnread>().refresh(mangaId)
+
             if (!libraryPreferences.enableLocalChapters().get()) {
                 try {
                     downloadManager.deleteChapters(dbManga, mergedChapters)

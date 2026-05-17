@@ -7,6 +7,7 @@ import org.nekomanga.data.database.dao.ArtworkDao
 import org.nekomanga.data.database.dao.BrowseFilterDao
 import org.nekomanga.data.database.dao.CategoryDao
 import org.nekomanga.data.database.dao.ChapterDao
+import org.nekomanga.data.database.dao.ChapterReadMarkerDao
 import org.nekomanga.data.database.dao.HistoryDao
 import org.nekomanga.data.database.dao.LibraryDao
 import org.nekomanga.data.database.dao.MangaAggregateDao
@@ -21,6 +22,7 @@ import org.nekomanga.data.database.entity.ArtworkEntity
 import org.nekomanga.data.database.entity.BrowseFilterEntity
 import org.nekomanga.data.database.entity.CategoryEntity
 import org.nekomanga.data.database.entity.ChapterEntity
+import org.nekomanga.data.database.entity.ChapterReadMarkerEntity
 import org.nekomanga.data.database.entity.HistoryEntity
 import org.nekomanga.data.database.entity.MangaAggregateEntity
 import org.nekomanga.data.database.entity.MangaCategoryEntity
@@ -49,8 +51,9 @@ import org.nekomanga.data.database.utils.MergeTypeConverter
             MangaSimilarEntity::class,
             UploaderEntity::class,
             MergeMangaEntity::class,
+            ChapterReadMarkerEntity::class,
         ],
-    version = 46, // Set higher than StorIO version 45
+    version = 49, // Set higher than StorIO version 45
     exportSchema = true,
 )
 @TypeConverters(MergeTypeConverter::class, FollowStatusConverter::class)
@@ -62,6 +65,8 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun categoryDao(): CategoryDao
 
     abstract fun chapterDao(): ChapterDao
+
+    abstract fun chapterReadMarkerDao(): ChapterReadMarkerDao
 
     abstract fun historyDao(): HistoryDao
 

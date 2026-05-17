@@ -223,6 +223,7 @@ fun DetailsBottomSheet(
                 languageFilter = mangaDetailScreenState.chapters.chapterLanguageFilter,
                 changeScanlatorFilter = chapterFilterActions.changeScanlator,
                 changeLanguageFilter = chapterFilterActions.changeLanguage,
+                changeSmartChapterFilter = chapterFilterActions.changeSmartChapterFilter,
                 setAsGlobal = chapterFilterActions.setAsGlobal,
             )
         }

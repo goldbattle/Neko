@@ -38,6 +38,7 @@ import org.nekomanga.R
 import org.nekomanga.data.database.repository.ChapterRepository
 import org.nekomanga.data.database.repository.MangaRepository
 import org.nekomanga.domain.site.MangaDexPreferences
+import org.nekomanga.usecases.chapters.ChapterReadProgress
 import tachiyomi.core.util.storage.DiskUtil
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
@@ -283,12 +284,11 @@ class NotificationReceiver : BroadcastReceiver() {
         val manga = mangaRepository.getMangaById(mangaId) ?: return
 
         val dbChapters = chapterUrls.mapNotNull { chapterUrl ->
-            val chapter =
-                chapterRepository.getChapterByUrlAndMangaId(chapterUrl, mangaId)
-                    ?: return@mapNotNull null
-            chapter.read = true
-            chapterRepository.updateChaptersProgress(listOf(chapter))
-            chapter
+            chapterRepository.getChapterByUrlAndMangaId(chapterUrl, mangaId)
+        }
+        if (dbChapters.isNotEmpty()) {
+            Injekt.get<ChapterReadProgress>()
+                .syncReadToEquivalentRows(mangaId, dbChapters, read = true)
         }
         if (preferences.removeAfterMarkedAsRead().get()) {
             val chaptersToDelete = dbChapters.filter { it.canDeleteChapter() }

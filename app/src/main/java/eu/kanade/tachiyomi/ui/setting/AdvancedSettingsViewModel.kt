@@ -1,8 +1,10 @@
 package eu.kanade.tachiyomi.ui.setting
 
+import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import eu.kanade.tachiyomi.data.download.DownloadManager
+import eu.kanade.tachiyomi.data.library.CachedUnreadRebuildJob
 import eu.kanade.tachiyomi.data.preference.PreferencesHelper
 import eu.kanade.tachiyomi.network.NetworkHelper
 import eu.kanade.tachiyomi.util.system.launchIO
@@ -129,6 +131,23 @@ class AdvancedSettingsViewModel : ViewModel() {
                 downloadManager.refreshCache()
                 _toastEvent.emit(UiText.StringResource(R.string.reindex_downloads_complete))
             }
+        }
+    }
+
+    fun rebuildLibraryUnreadCounters(context: Context) {
+        if (CachedUnreadRebuildJob.isRunning(context)) {
+            viewModelScope.launchUI {
+                _toastEvent.emit(
+                    UiText.StringResource(R.string.rebuild_library_unread_counters_already_running)
+                )
+            }
+            return
+        }
+        CachedUnreadRebuildJob.start(context)
+        viewModelScope.launchUI {
+            _toastEvent.emit(
+                UiText.StringResource(R.string.rebuild_library_unread_counters_started)
+            )
         }
     }
 

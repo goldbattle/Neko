@@ -697,6 +697,13 @@
     <string name="show_unread_chapters">Show unread chapters</string>
     <string name="show_read_chapters">Show read chapters</string>
     <string name="hide_chapter_titles">Hide chapter titles</string>
+    <string name="smart_chapter_filter">Smart chapter filtering</string>
+    <string name="smart_chapter_filter_summary">Hide duplicate chapters, split parts when a full chapter exists, and show read status across sources</string>
+    <string name="smart_chapter_filter_verbose_log">Smart chapter filter debug logging</string>
+    <string name="smart_chapter_filter_verbose_log_summary">Log duplicate groups, winners, and test fixtures (tag: SmartChapterFilter). A one-line summary still appears in debug logcat when smart filter runs; enable this for full detail.</string>
+    <string name="smart_chapter_filter_verbose_log_hint">Verbose dedup logs: Settings → Debug or Advanced → Smart chapter filter debug logging (logcat tag: SmartChapterFilter)</string>
+    <string name="chapter_tag_extra">Extra</string>
+    <string name="chapter_tag_read_via">Read via %s</string>
     <string name="show_available_chapters">Show available chapters</string>
     <string name="sort_by_source_s_order">Sort by source\'s order</string>
     <string name="sort_by_chapter_number">Sort by chapter number</string>
@@ -1583,6 +1590,19 @@
     <string name="reindex_downloads_summary">Force app to recheck for downloaded chapters.</string>
     <string name="reindex_downloads_invalidate">Reindexing downloads</string>
     <string name="reindex_downloads_complete">Reindexing complete</string>
+
+    <string name="rebuild_library_unread_counters">Rebuild library unread counters</string>
+    <string name="rebuild_library_unread_counters_summary">Recomputes unread badges for every library title using your current chapter filters (blocked groups, scanlator filters, smart chapter filter). Normally this runs when you update each manga from the library.</string>
+    <string name="rebuild_library_unread_counters_confirmation">Rebuild unread counters for all library manga now? This may take a while on a large library.</string>
+    <string name="rebuild_library_unread_counters_started">Rebuilding library unread counters…</string>
+    <string name="rebuild_library_unread_counters_already_running">Unread counter rebuild already in progress</string>
+    <string name="rebuild_library_unread_counters_progress">Rebuilding unread counters</string>
+    <string name="rebuild_library_unread_counters_progress_detail">%1$d / %2$d</string>
+    <string name="rebuild_library_unread_counters_complete">Unread counters rebuilt</string>
+    <plurals name="rebuild_library_unread_counters_complete_message">
+        <item quantity="one">Updated unread count for %d library entry.</item>
+        <item quantity="other">Updated unread counts for %d library entries.</item>
+    </plurals>
 
 
     <!-- Login dialog -->

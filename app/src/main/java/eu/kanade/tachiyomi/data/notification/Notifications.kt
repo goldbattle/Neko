@@ -49,6 +49,7 @@ object Notifications {
             const val Progress = -101
             const val Error = -102
             const val Skipped = -103
+            const val CachedUnreadRebuild = -104
         }
 
         object Status {

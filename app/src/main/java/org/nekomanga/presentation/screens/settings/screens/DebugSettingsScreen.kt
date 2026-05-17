@@ -5,17 +5,20 @@ import android.os.Bundle
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import com.google.firebase.analytics.FirebaseAnalytics
 import eu.kanade.tachiyomi.util.system.toast
 import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.flow.SharedFlow
 import org.nekomanga.R
+import org.nekomanga.domain.details.MangaDetailsPreferences
 import org.nekomanga.presentation.components.UiText
 import org.nekomanga.presentation.screens.settings.Preference
 
 internal class DebugSettingsScreen(
     incognitoMode: Boolean,
+    val mangaDetailsPreferences: MangaDetailsPreferences,
     val toastEvent: SharedFlow<UiText>,
     val unfollowAllLibraryManga: () -> Unit,
     val removeAllMangaWithStatusOnMangaDex: () -> Unit,
@@ -25,7 +28,7 @@ internal class DebugSettingsScreen(
     onNavigationIconClick: (() -> Unit)?,
 ) : SearchableSettings(onNavigationIconClick, incognitoMode) {
 
-    override fun getTitleRes(): Int = R.string.advanced
+    override fun getTitleRes(): Int = R.string.debug
 
     @SuppressLint("BatteryLife")
     @Composable
@@ -35,6 +38,11 @@ internal class DebugSettingsScreen(
         LaunchedEffect(Unit) { toastEvent.collect { event -> context.toast(event) } }
 
         return persistentListOf(
+            Preference.PreferenceItem.SwitchPreference(
+                pref = mangaDetailsPreferences.smartChapterFilterVerboseLog(),
+                title = stringResource(R.string.smart_chapter_filter_verbose_log),
+                subtitle = stringResource(R.string.smart_chapter_filter_verbose_log_summary),
+            ),
             Preference.PreferenceItem.TextPreference(
                 title = "Send a test firebase event",
                 onClick = {

@@ -2,6 +2,7 @@ package eu.kanade.tachiyomi.util.chapter
 
 import eu.kanade.tachiyomi.data.database.models.Manga
 import eu.kanade.tachiyomi.data.preference.PreferencesHelper
+import eu.kanade.tachiyomi.util.chapter.smartfilter.SmartChapterContext
 import org.nekomanga.constants.MdConstants
 import org.nekomanga.domain.chapter.ChapterItem
 import org.nekomanga.domain.details.MangaDetailsPreferences
@@ -14,23 +15,49 @@ class ChapterItemSort(
     val mangaDetailsPreferences: MangaDetailsPreferences = Injekt.get(),
 ) {
 
-    fun getChaptersSorted(manga: Manga, rawChapters: List<ChapterItem>): List<ChapterItem> {
-        return chapterFilter.filterChapters(rawChapters, manga).sortedWith(sortComparator(manga))
+    fun getChaptersSorted(
+        manga: Manga,
+        rawChapters: List<ChapterItem>,
+        smartContext: SmartChapterContext? = null,
+    ): List<ChapterItem> {
+        val filtered =
+            if (smartContext != null) {
+                chapterFilter.filterFromSmartContext(smartContext, manga)
+            } else {
+                chapterFilter.filterChapters(rawChapters, manga)
+            }
+        return filtered.sortedWith(sortComparator(manga))
     }
 
     fun getNextUnreadChapter(
         manga: Manga,
         rawChapters: List<ChapterItem>,
         andFiltered: Boolean = true,
+        smartContext: SmartChapterContext? = null,
     ): ChapterItem? {
         val chapters =
             when {
-                andFiltered -> chapterFilter.filterChapters(rawChapters, manga)
-                else -> rawChapters
+                andFiltered -> {
+                    val filtered =
+                        if (smartContext != null) {
+                            chapterFilter.filterFromSmartContext(smartContext, manga)
+                        } else {
+                            chapterFilter.filterChapters(rawChapters, manga)
+                        }
+                    filtered.filter { chapter ->
+                        val read =
+                            smartContext?.isEffectivelyRead(chapter.chapter.id)
+                                ?: chapter.chapter.read
+                        !read && !chapter.chapter.isUnavailable
+                    }
+                }
+                else ->
+                    rawChapters.filter {
+                        val read = smartContext?.isEffectivelyRead(it.chapter.id) ?: it.chapter.read
+                        !read && !it.chapter.isUnavailable
+                    }
             }.filter { it.chapter.scanlator !in MdConstants.UnsupportedOfficialGroupList }
-        return chapters.sortedWith(sortComparator(manga, true)).find {
-            !it.chapter.read && !it.chapter.isUnavailable
-        }
+        return chapters.sortedWith(sortComparator(manga, true)).firstOrNull()
     }
 
     fun sortComparator(manga: Manga, forceAscending: Boolean = false): Comparator<ChapterItem> {

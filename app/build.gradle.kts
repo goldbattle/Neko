@@ -12,7 +12,12 @@ plugins {
     alias(libs.plugins.ksp)
 }
 
-if (gradle.startParameter.taskRequests.toString().contains("Standard")) {
+// Google Services / Crashlytics require google-services.json (CI/release only).
+// Disabled for local debug installs — set NEKO_ENABLE_GOOGLE_SERVICES=true to re-enable.
+if (
+    providers.environmentVariable("NEKO_ENABLE_GOOGLE_SERVICES").orNull == "true" &&
+        gradle.startParameter.taskRequests.toString().contains("Standard")
+) {
     apply(mapOf("plugin" to "com.google.gms.google-services"))
     apply(mapOf("plugin" to "com.google.firebase.crashlytics"))
 }

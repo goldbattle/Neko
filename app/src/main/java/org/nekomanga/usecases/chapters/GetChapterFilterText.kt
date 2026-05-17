@@ -26,6 +26,7 @@ class GetChapterFilterText(private val context: Context) {
             if (languageFilter.languages.any { it.disabled }) add(R.string.language)
             if (chapterScanlatorFilter.scanlators.any { it.disabled }) add(R.string.scanlators)
             if (chapterSourceFilter.scanlators.any { it.disabled }) add(R.string.sources)
+            if (chapterDisplay.smartChapterFilter) add(R.string.smart_chapter_filter)
         }
 
         return filters.joinToString(", ") { context.getString(it) }

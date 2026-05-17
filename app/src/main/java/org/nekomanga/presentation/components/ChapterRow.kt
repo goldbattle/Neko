@@ -6,6 +6,7 @@ import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -48,6 +49,8 @@ import eu.kanade.tachiyomi.data.download.model.Download
 import eu.kanade.tachiyomi.source.online.utils.MdLang
 import eu.kanade.tachiyomi.ui.manga.MangaConstants
 import eu.kanade.tachiyomi.util.chapter.ChapterUtil
+import eu.kanade.tachiyomi.util.chapter.smartfilter.ChapterDisplayMetadata
+import eu.kanade.tachiyomi.util.chapter.smartfilter.ChapterKind
 import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
 import jp.wasabeef.gap.Gap
@@ -70,6 +73,8 @@ fun ChapterRow(
     themeColor: ThemeColorState,
     chapterItem: ChapterItem,
     shouldHideChapterTitles: Boolean = false,
+    smartChapterFilterEnabled: Boolean = false,
+    displayMetadata: ChapterDisplayMetadata? = null,
     onClick: (ChapterItem) -> Unit,
     onBookmark: (ChapterItem) -> Unit,
     onRead: (ChapterItem) -> Unit,
@@ -127,6 +132,8 @@ fun ChapterRow(
             ChapterRowContent(
                 themeColorState = themeColor,
                 shouldHideChapterTitles = shouldHideChapterTitles,
+                smartChapterFilterEnabled = smartChapterFilterEnabled,
+                displayMetadata = displayMetadata,
                 chapterItem = chapterItem,
                 onClick = onClick,
                 onWebView = onWebView,
@@ -143,6 +150,8 @@ fun ChapterRow(
 private fun ChapterRowContent(
     themeColorState: ThemeColorState,
     shouldHideChapterTitles: Boolean,
+    smartChapterFilterEnabled: Boolean,
+    displayMetadata: ChapterDisplayMetadata?,
     chapterItem: ChapterItem,
     onClick: (ChapterItem) -> Unit,
     onWebView: (ChapterItem) -> Unit,
@@ -158,16 +167,16 @@ private fun ChapterRowContent(
 
     val onSurfaceColor = MaterialTheme.colorScheme.onSurface
 
+    val effectivelyRead = displayMetadata?.readState?.effectivelyRead ?: chapterItem.chapter.read
+
     val textColor =
-        remember(chapterItem.chapter.read) {
-            if (chapterItem.chapter.read)
-                onSurfaceColor.copy(alpha = NekoColors.disabledAlphaLowContrast)
+        remember(effectivelyRead) {
+            if (effectivelyRead) onSurfaceColor.copy(alpha = NekoColors.disabledAlphaLowContrast)
             else onSurfaceColor
         }
     val secondaryTextColor =
-        remember(chapterItem.chapter.read) {
-            if (chapterItem.chapter.read)
-                onSurfaceColor.copy(alpha = NekoColors.disabledAlphaLowContrast)
+        remember(effectivelyRead) {
+            if (effectivelyRead) onSurfaceColor.copy(alpha = NekoColors.disabledAlphaLowContrast)
             else onSurfaceColor.copy(alpha = NekoColors.mediumAlphaLowContrast)
         }
 
@@ -228,6 +237,13 @@ private fun ChapterRowContent(
                 themeColor = themeColorState.primaryColor,
             )
 
+            if (smartChapterFilterEnabled && displayMetadata != null) {
+                ChapterMetadataTags(
+                    displayMetadata = displayMetadata,
+                    modifier = Modifier.padding(top = Size.extraTiny),
+                )
+            }
+
             val subtitleText =
                 remember(
                     chapterItem.chapter.dateUpload,
@@ -287,6 +303,34 @@ private fun ChapterRowContent(
             onDownload = { action -> onDownload(listOf(chapterItem), action) },
             themeColorState = themeColorState,
         )
+    }
+}
+
+@Composable
+private fun ChapterMetadataTags(
+    displayMetadata: ChapterDisplayMetadata,
+    modifier: Modifier = Modifier,
+) {
+    val context = LocalContext.current
+    FlowRow(
+        modifier = modifier,
+        horizontalArrangement = Arrangement.spacedBy(Size.extraTiny),
+        verticalArrangement = Arrangement.spacedBy(Size.extraTiny),
+    ) {
+        if (displayMetadata.kind == ChapterKind.Extra) {
+            ChapterMetadataChip(label = stringResource(id = R.string.chapter_tag_extra))
+        }
+        val readState = displayMetadata.readState
+        if (readState.autoRead && !readState.userRead) {
+            val via = readState.userReadVia?.scanlatorLabel ?: ""
+            val label =
+                if (via.isNotBlank()) {
+                    stringResource(id = R.string.chapter_tag_read_via, via)
+                } else {
+                    stringResource(id = R.string.chapter_tag_read_via, "?")
+                }
+            ChapterMetadataChip(label = label)
+        }
     }
 }
 

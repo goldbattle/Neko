@@ -9,11 +9,12 @@ import uy.kohesive.injekt.api.get
 /** Holds the use cases for Chapter handling */
 class ChapterUseCases(
     chapterRepository: ChapterRepository = Injekt.get(),
+    chapterReadProgress: ChapterReadProgress = Injekt.get(),
     statusHandler: StatusHandler = Injekt.get(),
     mangaDexPreferences: MangaDexPreferences = Injekt.get(),
     calculateChapterFilter: CalculateChapterFilterUseCase = Injekt.get(),
 ) {
-    val markChapters = MarkChapterUseCase(chapterRepository)
+    val markChapters = MarkChapterUseCase(chapterRepository, chapterReadProgress)
     val markChaptersRemote = MarkChaptersRemote(statusHandler, mangaDexPreferences)
     val calculateChapterFilter = calculateChapterFilter
     val markPreviousChapters = MarkPreviousChaptersUseCase()

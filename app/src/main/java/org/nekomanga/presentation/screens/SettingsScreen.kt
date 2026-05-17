@@ -370,6 +370,7 @@ fun SettingsScreen(windowSizeClass: WindowSizeClass, onBackPressed: () -> Unit, 
                     preferences = vm.preferences,
                     readerPreferences = vm.readerPreferences,
                     networkPreferences = vm.networkPreference,
+                    mangaDetailsPreferences = vm.mangaDetailsPreferences,
                     incognitoMode = settingsVm.securityPreferences.incognitoMode().get(),
                     toastEvent = vm.toastEvent,
                     clearNetworkCookies = vm::clearNetworkCookies,
@@ -377,6 +378,7 @@ fun SettingsScreen(windowSizeClass: WindowSizeClass, onBackPressed: () -> Unit, 
                     cleanupDownloads = vm::cleanupDownloads,
                     reindexDownloads = vm::reindexDownloads,
                     dedupeCategories = vm::dedupeCategories,
+                    rebuildLibraryUnreadCounters = { vm.rebuildLibraryUnreadCounters(context) },
                     onNavigationIconClick =
                         if (isTablet && detailBackStack.size == 1) null
                         else {
@@ -396,6 +398,7 @@ fun SettingsScreen(windowSizeClass: WindowSizeClass, onBackPressed: () -> Unit, 
             val vm: DebugSettingsViewModel = viewModel()
 
             DebugSettingsScreen(
+                    mangaDetailsPreferences = vm.mangaDetailsPreferences,
                     toastEvent = vm.toastEvent,
                     incognitoMode = settingsVm.securityPreferences.incognitoMode().get(),
                     unfollowAllLibraryManga = vm::unfollowAllLibraryManga,

@@ -6,6 +6,7 @@ import org.nekomanga.data.database.repository.ChapterRepository
 import org.nekomanga.data.database.repository.MangaRepository
 import org.nekomanga.data.database.repository.MergeMangaRepository
 import org.nekomanga.domain.library.LibraryPreferences
+import org.nekomanga.usecases.chapters.ChapterReadProgress
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 
@@ -16,6 +17,7 @@ class MergeMangaUseCases(
     downloadManager: DownloadManager = Injekt.get(),
     libraryPreferences: LibraryPreferences = Injekt.get(),
     sourceManager: SourceManager = Injekt.get(),
+    chapterReadProgress: ChapterReadProgress = Injekt.get(),
 ) {
     val searchMergedManga = SearchMergedManga(sourceManager)
     val removeMergedManga =
@@ -25,6 +27,7 @@ class MergeMangaUseCases(
             mergeMangaRepository = mergeMangaRepository,
             downloadManager = downloadManager,
             libraryPreferences = libraryPreferences,
+            chapterReadProgress = chapterReadProgress,
         )
     val addMergedManga = AddMergedManga(mergeMangaRepository)
 }

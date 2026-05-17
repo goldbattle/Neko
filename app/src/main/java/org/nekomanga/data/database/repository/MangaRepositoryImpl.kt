@@ -198,4 +198,10 @@ class MangaRepositoryImpl(
     override suspend fun updateLanguageFilter(manga: Manga) {
         manga.id?.let { mangaDao.updateLanguageFilter(it, manga.filtered_language) }
     }
+
+    override suspend fun updateCachedUnread(mangaId: Long, count: Int) {
+        mangaDao.updateCachedUnread(mangaId, count)
+    }
+
+    override suspend fun getFavoriteMangaIds(): List<Long> = mangaDao.getFavoriteMangaIds()
 }

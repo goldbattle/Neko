@@ -103,4 +103,8 @@ interface MangaRepository {
     suspend fun updateScanlatorFilter(manga: Manga)
 
     suspend fun updateLanguageFilter(manga: Manga)
+
+    suspend fun updateCachedUnread(mangaId: Long, count: Int)
+
+    suspend fun getFavoriteMangaIds(): List<Long>
 }

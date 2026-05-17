@@ -16,12 +16,14 @@ import org.nekomanga.R
 import org.nekomanga.data.database.repository.CategoryRepository
 import org.nekomanga.data.database.repository.MangaRepository
 import org.nekomanga.data.database.repository.TrackRepository
+import org.nekomanga.domain.details.MangaDetailsPreferences
 import org.nekomanga.presentation.components.UiText
 import uy.kohesive.injekt.injectLazy
 
 // This class just holds some injects.  If a settings screen requires
 class DebugSettingsViewModel : ViewModel() {
     val preferences: PreferencesHelper by injectLazy()
+    val mangaDetailsPreferences: MangaDetailsPreferences by injectLazy()
     val downloadManager: DownloadManager by injectLazy()
 
     val categoryRepository: CategoryRepository by injectLazy()

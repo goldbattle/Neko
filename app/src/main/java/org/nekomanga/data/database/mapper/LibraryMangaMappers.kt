@@ -66,15 +66,7 @@ fun LibraryMangaRaw.toLibraryManga(
         this.unavailableCount = raw.unavailableCount
         this.isMerged = raw.isMerged
 
-        // 3. Parse the concatenated chapter strings
-        this.unread =
-            parseChapterCount(
-                raw.unread,
-                baseManga.filtered_scanlators,
-                blockedGroups,
-                blockedUploaders,
-                scanlatorFilterOption,
-            )
+        this.unread = raw.manga.cachedUnread
 
         this.read =
             parseChapterCount(

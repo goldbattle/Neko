@@ -209,8 +209,8 @@ class LibraryViewModel() : ViewModel() {
             .shareIn(viewModelScope, SharingStarted.WhileSubscribed(5000), 1)
 
     /**
-     * Flow that performs the initial, expensive conversion from DB entities to UI models. This is
-     * shared to ensure the conversion only happens once when the DB emits.
+     * DB → UI conversion; unread comes from persisted
+     * [eu.kanade.tachiyomi.data.database.models.Manga.cached_unread].
      */
     private val initialLibraryItemsFlow =
         rawLibraryMangaListFlow

@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import eu.kanade.tachiyomi.ui.manga.MangaConstants.ChapterActions
+import eu.kanade.tachiyomi.util.chapter.smartfilter.ChapterDisplayMetadata
 import org.nekomanga.domain.chapter.ChapterItem
 import org.nekomanga.presentation.components.ChapterRow
 import org.nekomanga.presentation.components.listcard.ExpressiveListCard
@@ -20,6 +21,8 @@ fun MangaChapterListItem(
     count: Int,
     themeColorState: ThemeColorState,
     shouldHideChapterTitles: Boolean,
+    smartChapterFilterEnabled: Boolean = false,
+    displayMetadata: ChapterDisplayMetadata? = null,
     chapterActions: ChapterActions,
     onBookmark: (ChapterItem) -> Unit,
     onRead: (ChapterItem) -> Unit,
@@ -41,6 +44,8 @@ fun MangaChapterListItem(
             themeColor = themeColorState,
             chapterItem = chapterItem,
             shouldHideChapterTitles = shouldHideChapterTitles,
+            smartChapterFilterEnabled = smartChapterFilterEnabled,
+            displayMetadata = displayMetadata,
             onClick = chapterActions.open,
             onBookmark = onBookmark,
             onRead = onRead,

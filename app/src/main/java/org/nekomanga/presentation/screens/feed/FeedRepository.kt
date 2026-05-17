@@ -10,8 +10,10 @@ import eu.kanade.tachiyomi.data.database.models.uuid
 import eu.kanade.tachiyomi.data.download.DownloadManager
 import eu.kanade.tachiyomi.data.download.model.Download
 import eu.kanade.tachiyomi.ui.manga.MangaConstants
+import eu.kanade.tachiyomi.util.chapter.ChapterItemFilter
 import eu.kanade.tachiyomi.util.chapter.ChapterItemSort
 import eu.kanade.tachiyomi.util.chapter.isAvailable
+import eu.kanade.tachiyomi.util.chapter.smartfilter.SmartChapterHelpers
 import eu.kanade.tachiyomi.util.manga.toDisplayManga
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -28,9 +30,12 @@ import org.nekomanga.domain.chapter.ChapterItem
 import org.nekomanga.domain.chapter.ChapterMarkActions
 import org.nekomanga.domain.chapter.SimpleChapter
 import org.nekomanga.domain.chapter.toSimpleChapter
+import org.nekomanga.domain.details.MangaDetailsPreferences
 import org.nekomanga.domain.network.ResultError
 import org.nekomanga.domain.site.MangaDexPreferences
 import org.nekomanga.logging.TimberKt
+import org.nekomanga.usecases.chapters.CachedMangaUnread
+import org.nekomanga.usecases.chapters.ChapterReadProgress
 import org.nekomanga.usecases.chapters.ChapterUseCases
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
@@ -42,6 +47,10 @@ class FeedRepository(
     private val downloadManager: DownloadManager = Injekt.get(),
     private val chapterUseCases: ChapterUseCases = Injekt.get(),
     private val mangaDexPreferences: MangaDexPreferences = Injekt.get(),
+    private val mangaDetailsPreferences: MangaDetailsPreferences = Injekt.get(),
+    private val chapterItemFilter: ChapterItemFilter = Injekt.get(),
+    private val chapterReadProgress: ChapterReadProgress = Injekt.get(),
+    private val cachedMangaUnread: CachedMangaUnread = Injekt.get(),
 ) {
 
     val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
@@ -477,44 +486,58 @@ class FeedRepository(
         }
         return com.github.michaelbull.result
             .runCatching {
-                val chapters =
-                    chapterRepository
-                        .getRecentChapters(
-                            search = searchQuery,
-                            offset = offset,
-                            limit = limit,
-                            sortByFetched = uploadsFetchSort,
-                        )
-                        .mapNotNull {
-                            val chapterItem =
-                                getChapterItem(it.manga, it.chapter.toSimpleChapter()!!)
-                            val date =
-                                when (uploadsFetchSort) {
-                                    true -> it.chapter.date_fetch
-                                    false -> it.chapter.date_upload
-                                }
+                val recent =
+                    chapterRepository.getRecentChapters(
+                        search = searchQuery,
+                        offset = offset,
+                        limit = limit,
+                        sortByFetched = uploadsFetchSort,
+                    )
 
-                            if (blockedGroups.isNotEmpty() || blockedUploaders.isNotEmpty()) {
-                                if (
-                                    !chapterUseCases.validateChapterNotBlocked(
-                                        chapterItem.chapter.scanlatorList(),
-                                        chapterItem.chapter.uploader,
-                                        blockedGroups,
-                                        blockedUploaders,
-                                    )
-                                ) {
-                                    return@mapNotNull null
-                                }
-                            }
+                val contextCache =
+                    SmartChapterHelpers.buildContextCache(
+                        mangas = recent.map { it.manga },
+                        chapterRepository = chapterRepository,
+                        chapterItemFilter = chapterItemFilter,
+                        mangaDetailsPreferences = mangaDetailsPreferences,
+                        chapterReadProgress = chapterReadProgress,
+                        cachedMangaUnread = cachedMangaUnread,
+                    )
 
-                            FeedManga(
-                                mangaId = chapterItem.chapter.mangaId,
-                                mangaTitle = it.manga.displayTitle(),
-                                date = date,
-                                artwork = it.manga.toDisplayManga().currentArtwork,
-                                chapters = persistentListOf(chapterItem),
-                            )
+                val chapters = recent.mapNotNull {
+                    val chapterItem = getChapterItem(it.manga, it.chapter.toSimpleChapter()!!)
+                    val date =
+                        when (uploadsFetchSort) {
+                            true -> it.chapter.date_fetch
+                            false -> it.chapter.date_upload
                         }
+
+                    if (blockedGroups.isNotEmpty() || blockedUploaders.isNotEmpty()) {
+                        if (
+                            !chapterUseCases.validateChapterNotBlocked(
+                                chapterItem.chapter.scanlatorList(),
+                                chapterItem.chapter.uploader,
+                                blockedGroups,
+                                blockedUploaders,
+                            )
+                        ) {
+                            return@mapNotNull null
+                        }
+                    }
+
+                    val smartContext = contextCache[it.manga.id]
+                    if (!SmartChapterHelpers.shouldShowInUpdates(chapterItem, smartContext)) {
+                        return@mapNotNull null
+                    }
+
+                    FeedManga(
+                        mangaId = chapterItem.chapter.mangaId,
+                        mangaTitle = it.manga.displayTitle(),
+                        date = date,
+                        artwork = it.manga.toDisplayManga().currentArtwork,
+                        chapters = persistentListOf(chapterItem),
+                    )
+                }
                 Pair(chapters.isNotEmpty(), chapters)
             }
             .mapError { err ->

@@ -41,6 +41,12 @@ class MangaDetailsPreferences(private val preferenceStore: PreferenceStore) {
 
     fun hideButtonText() = this.preferenceStore.getBoolean("hide_manga_detail_button_text")
 
+    fun smartChapterFilterByDefault() =
+        this.preferenceStore.getBoolean("smart_chapter_filter_by_default", false)
+
+    fun smartChapterFilterVerboseLog() =
+        this.preferenceStore.getBoolean("smart_chapter_filter_verbose_log", false)
+
     fun backdropSize() =
         this.preferenceStore.getEnum("backdrop_size", MangaConstants.BackdropSize.Default)
 }

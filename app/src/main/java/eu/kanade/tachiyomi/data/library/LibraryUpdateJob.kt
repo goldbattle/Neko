@@ -44,9 +44,11 @@ import eu.kanade.tachiyomi.source.online.MangaDexLoginHelper
 import eu.kanade.tachiyomi.source.online.handlers.StatusHandler
 import eu.kanade.tachiyomi.source.online.utils.FollowStatus
 import eu.kanade.tachiyomi.source.online.utils.MdUtil
+import eu.kanade.tachiyomi.util.chapter.ChapterItemFilter
 import eu.kanade.tachiyomi.util.chapter.ChapterUtil
 import eu.kanade.tachiyomi.util.chapter.getChapterNum
 import eu.kanade.tachiyomi.util.chapter.mergeSorted
+import eu.kanade.tachiyomi.util.chapter.smartfilter.SmartChapterHelpers
 import eu.kanade.tachiyomi.util.chapter.syncChaptersWithSource
 import eu.kanade.tachiyomi.util.lang.toDisplayMessage
 import eu.kanade.tachiyomi.util.manga.shouldDownloadNewChapters
@@ -94,12 +96,15 @@ import org.nekomanga.data.database.repository.ChapterRepository
 import org.nekomanga.data.database.repository.MangaRepository
 import org.nekomanga.data.database.repository.MergeMangaRepository
 import org.nekomanga.data.database.repository.TrackRepository
+import org.nekomanga.domain.details.MangaDetailsPreferences
 import org.nekomanga.domain.library.LibraryPreferences
 import org.nekomanga.domain.library.LibraryPreferences.Companion.DEVICE_CHARGING
 import org.nekomanga.domain.library.LibraryPreferences.Companion.DEVICE_NETWORK_NOT_METERED
 import org.nekomanga.domain.network.message
 import org.nekomanga.domain.site.MangaDexPreferences
 import org.nekomanga.logging.TimberKt
+import org.nekomanga.usecases.chapters.CachedMangaUnread
+import org.nekomanga.usecases.chapters.ChapterReadProgress
 import org.nekomanga.usecases.manga.MangaUseCases
 import org.nekomanga.util.system.mapAsync
 import uy.kohesive.injekt.Injekt
@@ -135,6 +140,14 @@ class LibraryUpdateJob(private val context: Context, workerParameters: WorkerPar
     private val statusHandler by injectLazy<StatusHandler>()
 
     private val mangaUseCases by injectLazy<MangaUseCases>()
+
+    private val chapterItemFilter by injectLazy<ChapterItemFilter>()
+
+    private val chapterReadProgress by injectLazy<ChapterReadProgress>()
+
+    private val cachedMangaUnread by injectLazy<CachedMangaUnread>()
+
+    private val mangaDetailsPreferences by injectLazy<MangaDetailsPreferences>()
 
     private var extraDeferredJobs = Collections.synchronizedList(mutableListOf<Deferred<Any>>())
     private val extraScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
@@ -574,9 +587,19 @@ class LibraryUpdateJob(private val context: Context, workerParameters: WorkerPar
                                 )
 
                             if (newChapters.first.isNotEmpty()) {
+                                val notifyChapters =
+                                    SmartChapterHelpers.filterNewChaptersForNotification(
+                                        manga = manga,
+                                        newChapters = newChapters.first,
+                                        chapterRepository = chapterRepository,
+                                        chapterItemFilter = chapterItemFilter,
+                                        mangaDetailsPreferences = mangaDetailsPreferences,
+                                        chapterReadProgress = chapterReadProgress,
+                                        cachedMangaUnread = cachedMangaUnread,
+                                    )
+
                                 if (shouldDownload) {
-                                    var chaptersToDl =
-                                        newChapters.first.sortedBy { it.chapter_number }
+                                    var chaptersToDl = notifyChapters
 
                                     if (manga.filtered_scanlators != null) {
                                         //  Ignored sources, groups and uploaders
@@ -604,8 +627,9 @@ class LibraryUpdateJob(private val context: Context, workerParameters: WorkerPar
                                     downloadChapters(manga, chaptersToDl)
                                     hasDownloads = true
                                 }
-                                newUpdates[manga] =
-                                    newChapters.first.sortedBy { it.chapter_number }.toTypedArray()
+                                if (notifyChapters.isNotEmpty()) {
+                                    newUpdates[manga] = notifyChapters.toTypedArray()
+                                }
                             }
                             if (deleteRemoved && newChapters.second.isNotEmpty()) {
                                 val removedChapters =
@@ -626,7 +650,7 @@ class LibraryUpdateJob(private val context: Context, workerParameters: WorkerPar
                         }
 
                         coroutineScope {
-                            launch {
+                            val readSyncJob = launch {
                                 if (mangaDexPreferences.readingSync().get()) {
                                     val dbChapters =
                                         chapterRepository.getChaptersForManga(manga.id!!)
@@ -656,7 +680,13 @@ class LibraryUpdateJob(private val context: Context, workerParameters: WorkerPar
                                                             }
                                                         }
                                                         .toList()
-                                                chapterRepository.updateChaptersProgress(markRead)
+                                                if (markRead.isNotEmpty()) {
+                                                    chapterReadProgress.syncReadToEquivalentRows(
+                                                        manga.id!!,
+                                                        markRead,
+                                                        read = true,
+                                                    )
+                                                }
                                             }
                                     }
                                     if (mergedChapters.isNotEmpty()) {
@@ -690,12 +720,23 @@ class LibraryUpdateJob(private val context: Context, workerParameters: WorkerPar
                                                     }
                                                 }
                                                 .toList()
-                                        chapterRepository.updateChaptersProgress(markRead)
+                                        if (markRead.isNotEmpty()) {
+                                            chapterReadProgress.syncReadToEquivalentRows(
+                                                manga.id!!,
+                                                markRead,
+                                                read = true,
+                                            )
+                                        }
                                     }
                                 }
                             }
                             launch { updateMissingChapterCount(manga) }
+                            readSyncJob.join()
                         }
+
+                        // Always recompute badge: MangaDex read sync may change rows without new
+                        // chapters, and [syncChaptersWithSource] already refreshes when it runs.
+                        refreshCachedLibraryUnread(manga)
 
                         hasDownloads
                     } finally {
@@ -723,6 +764,10 @@ class LibraryUpdateJob(private val context: Context, workerParameters: WorkerPar
 
     private suspend fun updateMissingChapterCount(manga: LibraryManga) {
         mangaUseCases.updateMangaStatusAndMissingCount(manga)
+    }
+
+    private suspend fun refreshCachedLibraryUnread(manga: LibraryManga) {
+        SmartChapterHelpers.refreshCachedUnreadForManga(manga, cachedMangaUnread)
     }
 
     suspend fun updateReadingStatus(mangaList: List<LibraryManga>?) = coroutineScope {

@@ -1,10 +1,8 @@
 package org.nekomanga.usecases.chapters
 
-import eu.kanade.tachiyomi.data.database.models.Chapter
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
-import io.mockk.slot
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.StandardTestDispatcher
@@ -12,8 +10,6 @@ import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
 import org.junit.After
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertFalse
 import org.junit.Before
 import org.junit.Test
 import org.nekomanga.data.database.repository.ChapterRepository
@@ -26,13 +22,15 @@ class MarkChapterUseCaseTest {
 
     private val testDispatcher = StandardTestDispatcher()
     private lateinit var mockChapterRepository: ChapterRepository
+    private lateinit var mockChapterReadProgress: ChapterReadProgress
     private lateinit var markChapterUseCase: MarkChapterUseCase
 
     @Before
     fun setup() {
         Dispatchers.setMain(testDispatcher)
-        mockChapterRepository = mockk()
-        markChapterUseCase = MarkChapterUseCase(mockChapterRepository)
+        mockChapterRepository = mockk(relaxed = true)
+        mockChapterReadProgress = mockk(relaxed = true)
+        markChapterUseCase = MarkChapterUseCase(mockChapterRepository, mockChapterReadProgress)
     }
 
     @After
@@ -56,26 +54,35 @@ class MarkChapterUseCaseTest {
                 SimpleChapter.create()
                     .copy(id = 1L, mangaId = 100L, read = true, lastPageRead = 20, pagesLeft = 0)
             val chapterItem = ChapterItem(chapter = simpleChapter)
-
-            val capturedChapters = slot<List<Chapter>>()
-
-            coEvery {
-                mockChapterRepository.updateChaptersProgress(capture(capturedChapters))
-            } returns mockk()
+            coEvery { mockChapterReadProgress.isSmartFilterEnabled(100L) } returns true
 
             // Act
             markChapterUseCase(markAction, listOf(chapterItem))
 
             // Assert
-            coVerify(exactly = 1) { mockChapterRepository.updateChaptersProgress(any()) }
+            coVerify(exactly = 1) {
+                mockChapterReadProgress.syncReadToEquivalentRows(
+                    mangaId = 100L,
+                    anchorChapters = any(),
+                    read = false,
+                )
+            }
+        }
 
-            val updatedChapters = capturedChapters.captured
-            assertEquals(1, updatedChapters.size)
+    @Test
+    fun `given read action when smart filter disabled then refreshes library unread cache`() =
+        runTest {
+            val chapterItem =
+                ChapterItem(
+                    chapter = SimpleChapter.create().copy(id = 1L, mangaId = 100L, read = false)
+                )
+            coEvery { mockChapterReadProgress.isSmartFilterEnabled(100L) } returns false
 
-            val updatedChapter = updatedChapters.first()
-            assertEquals(1L, updatedChapter.id)
-            assertFalse("Chapter should be marked as unread", updatedChapter.read)
-            assertEquals(expectedLastRead, updatedChapter.last_page_read)
-            assertEquals(expectedPagesLeft, updatedChapter.pages_left)
+            markChapterUseCase(ChapterMarkActions.Read(), listOf(chapterItem))
+
+            coVerify(exactly = 1) { mockChapterReadProgress.notifyLibraryUnreadChanged(100L) }
+            coVerify(exactly = 0) {
+                mockChapterReadProgress.syncReadToEquivalentRows(any(), any(), any())
+            }
         }
 }
