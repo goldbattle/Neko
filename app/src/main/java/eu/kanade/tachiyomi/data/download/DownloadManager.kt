@@ -518,7 +518,7 @@ class DownloadManager(
                 emitAll(
                     queueState.value
                         .filter { download -> download.status == Download.State.DOWNLOADING }
-                        .asFlow()
+                        .asFlow(),
                 )
             }
 
@@ -531,7 +531,7 @@ class DownloadManager(
                 emitAll(
                     queueState.value
                         .filter { download -> download.status == Download.State.DOWNLOADING }
-                        .asFlow()
+                        .asFlow(),
                 )
             }
 

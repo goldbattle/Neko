@@ -309,7 +309,7 @@ class AppDownloadInstallJob(private val context: Context, workerParams: WorkerPa
                                             NetworkType.CONNECTED
                                         } else {
                                             NetworkType.UNMETERED
-                                        }
+                                        },
                                     )
                                     .setRequiresDeviceIdle(true)
                                     .build()

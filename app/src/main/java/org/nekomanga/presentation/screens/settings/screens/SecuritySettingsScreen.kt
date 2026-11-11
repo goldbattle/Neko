@@ -35,7 +35,7 @@ internal class SecuritySettingsScreen(
                     val activity = context.getActivity() as? FragmentActivity
                     val authenticated =
                         activity?.authenticate(
-                            title = context.getString(R.string.lock_with_biometrics)
+                            title = context.getString(R.string.lock_with_biometrics),
                         ) ?: false
                     if (authenticated) {
                         SecureActivityDelegate.locked = false
@@ -80,7 +80,7 @@ internal class SecuritySettingsScreen(
                 },
             ),
             Preference.PreferenceItem.InfoPreference(
-                title = stringResource(R.string.secure_screen_summary)
+                title = stringResource(R.string.secure_screen_summary),
             ),
         )
     }

@@ -21,7 +21,7 @@ fun CrashReportDialog(onDismissRequest: () -> Unit, onShareClick: () -> Unit) {
                     stringResource(
                         id = R.string.crash_report_dialog_title,
                         stringResource(id = R.string.app_name),
-                    )
+                    ),
             )
         },
         text = { Text(text = stringResource(id = R.string.crash_report_dialog_body)) },

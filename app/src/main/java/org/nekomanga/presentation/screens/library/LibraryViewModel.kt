@@ -142,7 +142,7 @@ class LibraryViewModel() : ViewModel() {
         combine(
                 Injekt.get<TrackManager>().services.values.map { service ->
                     service.isLoggedInFlow().map { isLoggedIn -> service to isLoggedIn }
-                }
+                },
             ) { serviceStatusList ->
                 serviceStatusList.mapNotNull { (service, isLoggedIn) ->
                     service.takeIf { isLoggedIn || service.isMdList() }
@@ -728,7 +728,7 @@ class LibraryViewModel() : ViewModel() {
         }
 
         mangadexPreferences.includeUnavailableChapters().changes().observeAndUpdate(
-            viewModelScope
+            viewModelScope,
         ) { value ->
             _internalLibraryScreenState.update { state ->
                 state.copy(showUnavailableFilter = value)
@@ -757,7 +757,7 @@ class LibraryViewModel() : ViewModel() {
         }
 
         libraryPreferences.libraryHorizontalCategories().changes().observeAndUpdate(
-            viewModelScope
+            viewModelScope,
         ) { value ->
             _internalLibraryScreenState.update { state -> state.copy(horizontalCategories = value) }
         }
@@ -1094,13 +1094,17 @@ class LibraryViewModel() : ViewModel() {
                     if (allSelected) {
                         // Unselect all
                         addAll(
-                            currentSelected.filterNot { it.displayManga.mangaId in categoryItemIds }
+                            currentSelected.filterNot {
+                                it.displayManga.mangaId in categoryItemIds
+                            },
                         )
                     } else {
                         // Select all
                         addAll(currentSelected)
                         addAll(
-                            libraryMangaItems.filter { it.displayManga.mangaId !in selectedItemIds }
+                            libraryMangaItems.filter {
+                                it.displayManga.mangaId !in selectedItemIds
+                            },
                         )
                     }
                 }
@@ -1146,7 +1150,7 @@ class LibraryViewModel() : ViewModel() {
                     addAll(selectedItems)
                     val categoryItems =
                         categoryUseCases.getCategories.getCategoriesForManga(
-                            libraryMangaItem.displayManga.mangaId
+                            libraryMangaItem.displayManga.mangaId,
                         )
                     val copy = libraryMangaItem.copy(allCategories = categoryItems)
                     add(copy)

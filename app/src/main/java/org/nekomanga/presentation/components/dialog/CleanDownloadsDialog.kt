@@ -54,7 +54,7 @@ fun CleanDownloadsDialog(onDismiss: () -> Unit, onConfirm: (Boolean, Boolean) ->
                 onClick = {
                     onConfirm(readChecked, readNotInLibraryChecked)
                     onDismiss()
-                }
+                },
             ) {
                 Text(text = stringResource(id = R.string.ok))
             }

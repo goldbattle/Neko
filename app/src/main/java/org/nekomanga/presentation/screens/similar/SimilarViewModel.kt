@@ -55,7 +55,7 @@ class SimilarViewModel(val mangaUUID: String) : ViewModel() {
                     libraryPreferences.layout().get() != LibraryDisplayMode.CompactGrid,
                 rawColumnCount = libraryPreferences.gridSize().get(),
                 libraryEntryVisibility = preferences.browseDisplayMode().get(),
-            )
+            ),
         )
 
     val similarScreenState: StateFlow<SimilarScreenState> = _similarScreenState.asStateFlow()
@@ -133,7 +133,7 @@ class SimilarViewModel(val mangaUUID: String) : ViewModel() {
     }
 
     fun Map<Int, List<DisplayManga>>.filterByVisibility(
-        prefs: PreferencesHelper
+        prefs: PreferencesHelper,
     ): Map<Int, List<DisplayManga>> {
         val visibilityMode = prefs.browseDisplayMode().get()
 
@@ -212,7 +212,7 @@ class SimilarViewModel(val mangaUUID: String) : ViewModel() {
                                         cover = dbManga.user_cover ?: "",
                                         originalCover =
                                             dbManga.thumbnail_url ?: MdConstants.noCoverUrl,
-                                    )
+                                    ),
                             )
                         } else {
                             manga

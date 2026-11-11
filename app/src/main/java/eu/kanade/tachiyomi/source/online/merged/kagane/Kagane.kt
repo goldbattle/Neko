@@ -99,7 +99,7 @@ class Kagane : ReducedHttpSource() {
                     request
                         .newBuilder()
                         .url(url.newBuilder().setQueryParameter("token", token).build())
-                        .build()
+                        .build(),
                 )
         }
         return response
@@ -138,7 +138,7 @@ class Kagane : ReducedHttpSource() {
                                 "$apiUrl/sources/list",
                                 headers,
                                 jsonBody("{\"source_types\":null}"),
-                            )
+                            ),
                         )
                         .await()
                 if (!res.isSuccessful) {
@@ -185,9 +185,9 @@ class Kagane : ReducedHttpSource() {
                             json.encodeToString(
                                 kotlinx.serialization.json.JsonObject.serializer(),
                                 body,
-                            )
+                            ),
                         ),
-                    )
+                    ),
                 )
                 .await()
         if (!response.isSuccessful) {
@@ -200,7 +200,7 @@ class Kagane : ReducedHttpSource() {
     }
 
     override suspend fun fetchChapters(
-        mangaUrl: String
+        mangaUrl: String,
     ): Result<List<SChapterStatusPair>, ResultError> {
         val response = client.newCall(GET("$apiUrl/series/$mangaUrl", headers)).await()
         if (!response.isSuccessful) {

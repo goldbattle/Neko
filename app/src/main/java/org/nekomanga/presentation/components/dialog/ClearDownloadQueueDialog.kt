@@ -32,7 +32,7 @@ fun ClearDownloadQueueDialog(onDismiss: () -> Unit, onConfirm: () -> Unit) {
                         text = stringResource(R.string.clear_download_queue),
                         style =
                             MaterialTheme.typography.bodyLarge.copy(
-                                MaterialTheme.colorScheme.onSurface
+                                MaterialTheme.colorScheme.onSurface,
                             ),
                     )
                     Gap(Size.medium)
@@ -40,7 +40,7 @@ fun ClearDownloadQueueDialog(onDismiss: () -> Unit, onConfirm: () -> Unit) {
                         text = stringResource(R.string.clear_download_queue_confirmation),
                         style =
                             MaterialTheme.typography.bodyLarge.copy(
-                                MaterialTheme.colorScheme.onSurface
+                                MaterialTheme.colorScheme.onSurface,
                             ),
                     )
                 }
@@ -54,7 +54,7 @@ fun ClearDownloadQueueDialog(onDismiss: () -> Unit, onConfirm: () -> Unit) {
                     },
                     colors =
                         ButtonDefaults.textButtonColors(
-                            contentColor = MaterialTheme.colorScheme.primary
+                            contentColor = MaterialTheme.colorScheme.primary,
                         ),
                 ) {
                     Text(text = stringResource(id = R.string.clear))
@@ -65,7 +65,7 @@ fun ClearDownloadQueueDialog(onDismiss: () -> Unit, onConfirm: () -> Unit) {
                     onClick = onDismiss,
                     colors =
                         ButtonDefaults.textButtonColors(
-                            contentColor = MaterialTheme.colorScheme.primary
+                            contentColor = MaterialTheme.colorScheme.primary,
                         ),
                 ) {
                     Text(text = stringResource(id = R.string.cancel))

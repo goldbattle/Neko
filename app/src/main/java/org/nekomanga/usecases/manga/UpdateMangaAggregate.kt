@@ -15,7 +15,7 @@ class UpdateMangaAggregate(
             sourceManager.mangaDex.getAggregate(MdUtil.getMangaUUID(mangaUrl)).onOk { aggregateDto
                 ->
                 mangaAggregateRepository.insertMangaAggregate(
-                    MangaAggregate(mangaId = mangaId, volumes = aggregateDto.volumes.toString())
+                    MangaAggregate(mangaId = mangaId, volumes = aggregateDto.volumes.toString()),
                 )
             }
         } else {

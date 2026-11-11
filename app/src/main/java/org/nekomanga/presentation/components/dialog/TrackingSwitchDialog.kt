@@ -54,7 +54,7 @@ fun TrackingSwitchDialog(
                                         oldName,
                                         name,
                                     )
-                                }
+                                },
                         )
                     }
                     Gap(Size.small)
@@ -68,7 +68,7 @@ fun TrackingSwitchDialog(
                                     stringResource(id = R.string.keep_both_on_service, name)
                                 } else {
                                     stringResource(id = R.string.keep_on_service, name)
-                                }
+                                },
                         )
                     }
                 }
@@ -79,7 +79,7 @@ fun TrackingSwitchDialog(
                     onClick = onDismiss,
                     colors =
                         ButtonDefaults.textButtonColors(
-                            contentColor = themeColorState.primaryColor
+                            contentColor = themeColorState.primaryColor,
                         ),
                 ) {
                     Text(text = stringResource(id = R.string.cancel))

@@ -19,7 +19,7 @@ class ReaderChapterTest {
                 override fun log(priority: Int, tag: String?, message: String, t: Throwable?) {
                     if (priority == Log.WARN) warnings += message
                 }
-            }
+            },
         )
     }
 
@@ -33,7 +33,7 @@ class ReaderChapterTest {
             Chapter.create().apply {
                 url = "/chapter/1"
                 name = "Chapter 1"
-            }
+            },
         )
 
     @Test

@@ -59,7 +59,7 @@ interface MangaDao {
         WHERE favorite = 0 AND id NOT IN (
             SELECT manga_id FROM chapters WHERE read = 1 OR last_page_read != 0
         )
-    """
+    """,
     )
     suspend fun deleteAllNotInLibraryAndNotRead()
 
@@ -71,7 +71,7 @@ interface MangaDao {
         WHERE favorite = 0 AND id IN (
             SELECT manga_id FROM chapters WHERE read = 1 OR last_page_read != 0
         )
-    """
+    """,
     )
     fun observeReadNotInLibraryManga(): Flow<List<MangaEntity>>
 
@@ -81,7 +81,7 @@ interface MangaDao {
         WHERE favorite = 0 AND id IN (
             SELECT manga_id FROM chapters WHERE read = 1 OR last_page_read != 0
         )
-    """
+    """,
     )
     suspend fun getReadNotInLibraryManga(): List<MangaEntity>
 
@@ -94,7 +94,7 @@ interface MangaDao {
         WHERE manga.favorite = 1
         GROUP BY manga.id
         ORDER BY MAX(history.last_read) DESC
-    """
+    """,
     )
     fun observeLastReadManga(): Flow<List<MangaEntity>>
 
@@ -106,7 +106,7 @@ interface MangaDao {
         WHERE manga.favorite = 1
         GROUP BY manga.id
         ORDER BY MAX(chapters.date_fetch) DESC
-    """
+    """,
     )
     fun observeLastFetchedManga(): Flow<List<MangaEntity>>
 
@@ -117,7 +117,7 @@ interface MangaDao {
         JOIN chapters ON manga.id = chapters.manga_id
         GROUP BY manga.id
         ORDER BY COUNT(*)
-    """
+    """,
     )
     fun observeTotalChapterManga(): Flow<List<MangaEntity>>
 
@@ -143,7 +143,7 @@ interface MangaDao {
     status = :status,
     description = :description
     WHERE id = :mangaId
-"""
+""",
     )
     suspend fun updateMangaInfo(
         mangaId: Long,

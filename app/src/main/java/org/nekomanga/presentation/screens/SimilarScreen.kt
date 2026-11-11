@@ -166,7 +166,7 @@ private fun SimilarWrapper(
                                 showIsList = true,
                                 switchDisplayClick = switchDisplayClick,
                                 libraryEntryVisibilityClick = libraryEntryVisibilityClick,
-                            )
+                            ),
                         )
                     }
                 },
@@ -193,8 +193,8 @@ private fun SimilarWrapper(
                                     setCategories = { selectedCategories ->
                                         scope.launch { sheetState.hide() }
                                         toggleFavorite(displayManga.mangaId, selectedCategories)
-                                    }
-                                )
+                                    },
+                                ),
                             )
                         }
                     } else {
@@ -229,7 +229,7 @@ private fun SimilarContent(
                 modifier = modifier,
                 actions =
                     listOf(
-                        Action(text = UiText.StringResource(R.string.retry), onClick = onRefresh)
+                        Action(text = UiText.StringResource(R.string.retry), onClick = onRefresh),
                     ),
             )
         }

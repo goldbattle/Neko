@@ -774,7 +774,7 @@ class PagerTapNavigationTest {
                 isClaimed = false,
                 menuVisible = false,
                 longTapEnabled = true,
-            )
+            ),
         )
     }
 
@@ -787,7 +787,7 @@ class PagerTapNavigationTest {
                 isClaimed = false,
                 menuVisible = true,
                 longTapEnabled = false,
-            )
+            ),
         )
     }
 
@@ -800,7 +800,7 @@ class PagerTapNavigationTest {
                 isClaimed = false,
                 menuVisible = false,
                 longTapEnabled = false,
-            )
+            ),
         )
     }
 
@@ -813,7 +813,7 @@ class PagerTapNavigationTest {
                 isClaimed = true,
                 menuVisible = true,
                 longTapEnabled = true,
-            )
+            ),
         )
     }
 }

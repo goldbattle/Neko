@@ -319,7 +319,7 @@ fun HorizontalFloatingSlider(
                                 if (roundedValue != lastValue) {
                                     lastValue = roundedValue
                                     view.performHapticFeedback(
-                                        HapticFeedbackConstants.TEXT_HANDLE_MOVE
+                                        HapticFeedbackConstants.TEXT_HANDLE_MOVE,
                                     )
                                     currentOnPageChange(roundedValue)
                                 }
@@ -498,7 +498,7 @@ fun VerticalFloatingSlider(
                             if (roundedValue != lastValue) {
                                 lastValue = roundedValue
                                 currentView.performHapticFeedback(
-                                    HapticFeedbackConstants.TEXT_HANDLE_MOVE
+                                    HapticFeedbackConstants.TEXT_HANDLE_MOVE,
                                 )
                                 currentOnPageChange(roundedValue)
                             }
@@ -576,7 +576,7 @@ fun BottomActionSheet(
                         ),
                 )
                 .navigationBarsPadding()
-                .padding(horizontal = Size.smedium, vertical = Size.smedium)
+                .padding(horizontal = Size.smedium, vertical = Size.smedium),
     ) {
         BoxWithConstraints(modifier = Modifier.fillMaxWidth()) {
             Row(
@@ -674,12 +674,12 @@ fun PageNumberIndicator(
 @Preview
 @Composable
 private fun PageNumberIndicatorPreview(
-    @PreviewParameter(ThemeConfigProvider::class) themeConfig: ThemeConfig
+    @PreviewParameter(ThemeConfigProvider::class) themeConfig: ThemeConfig,
 ) {
     ThemedPreviews(themeConfig) {
         Box(
             modifier =
-                Modifier.background(MaterialTheme.colorScheme.surfaceVariant).padding(Size.medium)
+                Modifier.background(MaterialTheme.colorScheme.surfaceVariant).padding(Size.medium),
         ) {
             Column(
                 verticalArrangement = Arrangement.spacedBy(Size.small),
@@ -696,13 +696,13 @@ private fun PageNumberIndicatorPreview(
 @Preview
 @Composable
 private fun ReaderBottomControlsPreview(
-    @PreviewParameter(ThemeConfigProvider::class) themeConfig: ThemeConfig
+    @PreviewParameter(ThemeConfigProvider::class) themeConfig: ThemeConfig,
 ) {
     ThemedPreviews(themeConfig) {
         val sampleButtons = buildReaderBottomBarButtons()
         Box(
             modifier =
-                Modifier.background(MaterialTheme.colorScheme.surfaceVariant).padding(Size.medium)
+                Modifier.background(MaterialTheme.colorScheme.surfaceVariant).padding(Size.medium),
         ) {
             Column(verticalArrangement = Arrangement.spacedBy(Size.medium)) {
                 // Horizontal normal page state
@@ -808,12 +808,12 @@ private fun ReaderBottomControlsPreview(
 @Preview
 @Composable
 private fun HorizontalFloatingSliderPreview(
-    @PreviewParameter(ThemeConfigProvider::class) themeConfig: ThemeConfig
+    @PreviewParameter(ThemeConfigProvider::class) themeConfig: ThemeConfig,
 ) {
     ThemedPreviews(themeConfig) {
         Box(
             modifier =
-                Modifier.background(MaterialTheme.colorScheme.surfaceVariant).padding(Size.medium)
+                Modifier.background(MaterialTheme.colorScheme.surfaceVariant).padding(Size.medium),
         ) {
             Column(verticalArrangement = Arrangement.spacedBy(Size.medium)) {
                 HorizontalFloatingSlider(
@@ -851,12 +851,12 @@ private fun HorizontalFloatingSliderPreview(
 @Preview
 @Composable
 private fun VerticalFloatingSliderPreview(
-    @PreviewParameter(ThemeConfigProvider::class) themeConfig: ThemeConfig
+    @PreviewParameter(ThemeConfigProvider::class) themeConfig: ThemeConfig,
 ) {
     ThemedPreviews(themeConfig) {
         Box(
             modifier =
-                Modifier.background(MaterialTheme.colorScheme.surfaceVariant).padding(Size.medium)
+                Modifier.background(MaterialTheme.colorScheme.surfaceVariant).padding(Size.medium),
         ) {
             Row(horizontalArrangement = Arrangement.spacedBy(Size.medium)) {
                 VerticalFloatingSlider(
@@ -893,12 +893,12 @@ private fun VerticalFloatingSliderPreview(
 @Preview
 @Composable
 private fun BottomActionSheetPreview(
-    @PreviewParameter(ThemeConfigProvider::class) themeConfig: ThemeConfig
+    @PreviewParameter(ThemeConfigProvider::class) themeConfig: ThemeConfig,
 ) {
     ThemedPreviews(themeConfig) {
         Box(
             modifier =
-                Modifier.background(MaterialTheme.colorScheme.surfaceVariant).padding(Size.medium)
+                Modifier.background(MaterialTheme.colorScheme.surfaceVariant).padding(Size.medium),
         ) {
             Column(verticalArrangement = Arrangement.spacedBy(Size.medium)) {
                 BottomActionSheet(

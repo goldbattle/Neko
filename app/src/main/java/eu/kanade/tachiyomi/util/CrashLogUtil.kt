@@ -43,7 +43,7 @@ class CrashLogUtil(private val context: Context) {
                     storageManager
                         .getCrashLogDirectory()
                         ?.createFile(
-                            "neko_crash_log-${SimpleDateFormat("yyyyMMddHHmm").format(Date())}.txt"
+                            "neko_crash_log-${SimpleDateFormat("yyyyMMddHHmm").format(Date())}.txt",
                         )
                 if (uniFile == null) {
                     withUIContext { context.toast(R.string.crash_log_folder_failed) }

@@ -94,7 +94,7 @@ fun ReaderPageActionsSheet(
                 )
 
                 HorizontalDivider(
-                    modifier = Modifier.padding(horizontal = Size.medium, vertical = Size.tiny)
+                    modifier = Modifier.padding(horizontal = Size.medium, vertical = Size.tiny),
                 )
 
                 ActionRow(
@@ -123,7 +123,7 @@ fun ReaderPageActionsSheet(
                 )
 
                 HorizontalDivider(
-                    modifier = Modifier.padding(horizontal = Size.medium, vertical = Size.tiny)
+                    modifier = Modifier.padding(horizontal = Size.medium, vertical = Size.tiny),
                 )
 
                 ActionRow(

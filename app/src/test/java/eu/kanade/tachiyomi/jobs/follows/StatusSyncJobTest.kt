@@ -69,18 +69,18 @@ class StatusSyncJobTest {
         Injekt.addSingleton(mockk<MangaDexLoginHelper> { every { isLoggedIn() } returns true })
         Injekt.addSingleton(mangaRepository)
         Injekt.addSingleton(
-            mockk<SourceManager> { every { mangaDex } returns this@StatusSyncJobTest.mangaDex }
+            mockk<SourceManager> { every { mangaDex } returns this@StatusSyncJobTest.mangaDex },
         )
         Injekt.addSingleton(
-            mockk<CategoryRepository> { coEvery { getCategories() } returns emptyList() }
+            mockk<CategoryRepository> { coEvery { getCategories() } returns emptyList() },
         )
         Injekt.addSingleton(
             mockk<MangaDexPreferences> {
                 every { mangaDexPullToLibraryIndices().get() } returns emptySet()
-            }
+            },
         )
         Injekt.addSingleton(
-            mockk<LibraryPreferences> { every { defaultCategory().get() } returns 0 }
+            mockk<LibraryPreferences> { every { defaultCategory().get() } returns 0 },
         )
 
         mockkObject(WorkManager.Companion)

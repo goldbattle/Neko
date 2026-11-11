@@ -87,7 +87,7 @@ fun SaveFilterDialog(
                         text = errorMessage,
                         style =
                             MaterialTheme.typography.labelSmall.copy(
-                                color = MaterialTheme.colorScheme.error
+                                color = MaterialTheme.colorScheme.error,
                             ),
                     )
                 }
@@ -99,7 +99,7 @@ fun SaveFilterDialog(
                     enabled = saveEnabled,
                     colors =
                         ButtonDefaults.textButtonColors(
-                            contentColor = themeColorState.primaryColor
+                            contentColor = themeColorState.primaryColor,
                         ),
                 ) {
                     Text(text = stringResource(id = R.string.save))
@@ -110,7 +110,7 @@ fun SaveFilterDialog(
                     onClick = onDismiss,
                     colors =
                         ButtonDefaults.textButtonColors(
-                            contentColor = themeColorState.primaryColor
+                            contentColor = themeColorState.primaryColor,
                         ),
                 ) {
                     Text(text = stringResource(id = R.string.cancel))

@@ -197,7 +197,7 @@ class ReaderUiItemTest {
                     createReaderPage(chapterId = 100L, index = 0),
                     topOffset = 1000,
                     splitHeight = 1000,
-                )
+                ),
             )
         val otherChapterSlice =
             ReaderUiItem.SplitPage(
@@ -205,7 +205,7 @@ class ReaderUiItemTest {
                     createReaderPage(chapterId = 200L, index = 0),
                     topOffset = 2000,
                     splitHeight = 1000,
-                )
+                ),
             )
 
         assertFalse(lastSlice.continuesInto(otherChapterSlice))
@@ -220,7 +220,7 @@ class ReaderUiItemTest {
                 ChapterTransition.Next(
                     from = createReaderChapter(100L),
                     to = createReaderChapter(200L),
-                )
+                ),
             )
 
         assertFalse(ReaderUiItem.Page(page).continuesInto(ReaderUiItem.Page(page)))
@@ -327,7 +327,7 @@ class ReaderUiItemTest {
                     to = prev,
                     preloadState = PreloadState.Error("timeout"),
                     isNext = false,
-                )
+                ),
             )
 
         prev.state = ReaderChapter.State.Loading
@@ -344,7 +344,7 @@ class ReaderUiItemTest {
                     from = createReaderChapter(1L),
                     to = next,
                     preloadState = PreloadState.Error("timeout"),
-                )
+                ),
             )
 
         next.state = ReaderChapter.State.Loaded(emptyList())

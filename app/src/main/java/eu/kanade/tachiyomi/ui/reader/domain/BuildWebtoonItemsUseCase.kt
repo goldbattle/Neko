@@ -14,7 +14,7 @@ import eu.kanade.tachiyomi.ui.reader.viewer.hasMissingChapters
  * transitions, and split reuse to maintain key and layout continuity.
  */
 class BuildWebtoonItemsUseCase(
-    private val checkTallPage: CheckTallPageUseCase = CheckTallPageUseCase()
+    private val checkTallPage: CheckTallPageUseCase = CheckTallPageUseCase(),
 ) {
 
     data class Result(
@@ -51,7 +51,7 @@ class BuildWebtoonItemsUseCase(
                         tallSplitPages = tallSplitPages,
                         screenHeight = screenHeight,
                         splitTallPages = splitTallPages,
-                    )
+                    ),
                 )
             }
         }
@@ -69,7 +69,7 @@ class BuildWebtoonItemsUseCase(
                     tallSplitPages = tallSplitPages,
                     screenHeight = screenHeight,
                     splitTallPages = splitTallPages,
-                )
+                ),
             )
         }
 
@@ -100,7 +100,7 @@ class BuildWebtoonItemsUseCase(
                         tallSplitPages = tallSplitPages,
                         screenHeight = screenHeight,
                         splitTallPages = splitTallPages,
-                    )
+                    ),
                 )
             }
         }

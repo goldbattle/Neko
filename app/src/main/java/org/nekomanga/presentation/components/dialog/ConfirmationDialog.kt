@@ -28,7 +28,7 @@ fun ConfirmationDialog(
                 onClick = {
                     onConfirm()
                     onDismiss()
-                }
+                },
             ) {
                 Text(text = confirmButton)
             }

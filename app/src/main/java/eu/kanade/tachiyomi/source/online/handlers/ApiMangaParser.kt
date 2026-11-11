@@ -112,7 +112,7 @@ class ApiMangaParser {
                         .map { dexTagId ->
                             MangaTag.entries.firstOrNull { tag -> tag.uuid == dexTagId }
                         }
-                        .map { tag -> tag?.prettyPrint }
+                        .map { tag -> tag?.prettyPrint },
                 )
                 add(contentRating)
             }
@@ -156,7 +156,7 @@ class ApiMangaParser {
                             uploaderMap,
                         )
                     }
-                    .toList()
+                    .toList(),
             )
         }
             .getOrElse {

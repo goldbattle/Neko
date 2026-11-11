@@ -16,7 +16,7 @@ import eu.kanade.tachiyomi.data.database.models.MergeType
                 parentColumns = ["id"],
                 childColumns = ["manga_id"],
                 onDelete = ForeignKey.CASCADE,
-            )
+            ),
         ],
     indices = [Index(value = ["manga_id"])],
 )

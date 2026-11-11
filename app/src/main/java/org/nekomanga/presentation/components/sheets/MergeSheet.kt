@@ -236,7 +236,8 @@ private fun MergeSelectionSheet(
 
                 Header(stringResource(id = R.string.select_an_entry), { onMergeTypeSelected(null) })
                 Box(
-                    modifier = Modifier.fillMaxWidth().requiredHeightIn(Size.none, maxLazyHeight.dp)
+                    modifier =
+                        Modifier.fillMaxWidth().requiredHeightIn(Size.none, maxLazyHeight.dp),
                 ) {
                     if (mergeSearchResults is MergeSearchResult.Success) {
                         SuccessResults(
@@ -292,7 +293,7 @@ fun MergeLogo(
                     .conditional(small) {
                         padding(Size.none)
                         fillMaxHeight()
-                    }
+                    },
         ) {
             Image(
                 painter = painterResource(id = id),
@@ -320,7 +321,7 @@ fun MergedItem(
             BorderStroke(
                 1.dp,
                 MaterialTheme.colorScheme.onSurface.copy(
-                    alpha = NekoColors.disabledAlphaLowContrast
+                    alpha = NekoColors.disabledAlphaLowContrast,
                 ),
             ),
         modifier = Modifier.padding(horizontal = Size.small),
@@ -402,7 +403,7 @@ private fun SuccessResults(
                         .combinedClickable(
                             onClick = { mergeMangaClick(item) },
                             onLongClick = { mergeMangaLongClick(item) },
-                        )
+                        ),
             ) {
                 AsyncImage(
                     model =
@@ -439,7 +440,7 @@ private fun SuccessResults(
                         .align(Alignment.BottomStart)
                         .background(
                             Brush.verticalGradient(
-                                colors = listOf(Color.Transparent, Color.Black.copy(alpha = .95f))
+                                colors = listOf(Color.Transparent, Color.Black.copy(alpha = .95f)),
                             ),
                             shape =
                                 RoundedCornerShape(
@@ -458,7 +459,7 @@ private fun SuccessResults(
                         color = Color.White,
                         style =
                             MaterialTheme.typography.bodyMedium.copy(
-                                fontWeight = FontWeight.Medium
+                                fontWeight = FontWeight.Medium,
                             ),
                     )
                 }
@@ -513,7 +514,7 @@ private fun BoxScope.NonSuccessResultsAndChips(
                             },
                             colors =
                                 SuggestionChipDefaults.elevatedSuggestionChipColors(
-                                    containerColor = themeColorState.primaryColor
+                                    containerColor = themeColorState.primaryColor,
                                 ),
                         )
                     }

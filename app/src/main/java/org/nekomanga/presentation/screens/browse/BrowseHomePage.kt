@@ -75,7 +75,7 @@ fun BrowseHomePage(
 
             if (mangaList.isNotEmpty()) {
                 TextButton(
-                    onClick = { titleClick(homePageManga.displayScreenType.toSerializable()) }
+                    onClick = { titleClick(homePageManga.displayScreenType.toSerializable()) },
                 ) {
                     Row(
                         modifier = Modifier.fillMaxWidth(),
@@ -112,7 +112,7 @@ fun BrowseHomePage(
                                         .combinedClickable(
                                             onClick = { onClick(displayManga.mangaId) },
                                             onLongClick = { onLongClick(displayManga) },
-                                        )
+                                        ),
                             ) {
                                 Column(modifier = Modifier.width(coverSize)) {
                                     MangaCover.Square(

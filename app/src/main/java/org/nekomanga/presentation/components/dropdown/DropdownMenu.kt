@@ -45,7 +45,7 @@ fun NekoDropdownMenu(
 
     MaterialTheme(colorScheme = colors) {
         CompositionLocalProvider(
-            LocalRippleConfiguration provides (themeColorState.rippleConfiguration)
+            LocalRippleConfiguration provides (themeColorState.rippleConfiguration),
         ) {
             CascadeDropdownMenu(
                 expanded = expanded,

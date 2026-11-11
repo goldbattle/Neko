@@ -24,7 +24,7 @@ import org.nekomanga.presentation.theme.withThemes
 @Preview(widthDp = 400, showBackground = true)
 @Composable
 private fun MangaGridItemPreview(
-    @PreviewParameter(DisplayMangaProvider::class) themedDisplayManga: Themed<DisplayManga>
+    @PreviewParameter(DisplayMangaProvider::class) themedDisplayManga: Themed<DisplayManga>,
 ) {
     val previewHandler = AsyncImagePreviewHandler { ColorImage(Color.Red.toArgb()) }
     CompositionLocalProvider(LocalAsyncImagePreviewHandler provides previewHandler) {

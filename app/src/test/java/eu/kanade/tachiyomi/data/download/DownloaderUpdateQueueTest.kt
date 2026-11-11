@@ -63,7 +63,7 @@ class DownloaderUpdateQueueTest {
         Injekt.addSingleton(
             mockk<MangaDetailsPreferences> {
                 every { sortChapterOrder().get() } returns Manga.CHAPTER_SORTING_SOURCE
-            }
+            },
         )
 
         val editor = mockk<SharedPreferences.Editor>(relaxed = true)

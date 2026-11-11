@@ -169,7 +169,7 @@ internal class AdvancedSettingsScreen(
                                 }
                             context.startActivity(intent)
                         },
-                    )
+                    ),
                 ),
         )
     }
@@ -257,7 +257,7 @@ internal class AdvancedSettingsScreen(
                         title = stringResource(R.string.display_profile),
                         subtitle = readerPreferences.displayProfile().get(),
                         onClick = { chooseColorProfile.launch(arrayOf("*/*")) },
-                    )
+                    ),
                 ),
         )
     }

@@ -158,7 +158,7 @@ fun HorizontalCategoriesPage(
                             item.libraryItems.isNotEmpty() &&
                                 item.libraryItems.all { libraryItem ->
                                     libraryItem.displayManga.mangaId in selectedIds
-                                }
+                                },
                         )
                     }
                 when (libraryScreenState.libraryDisplayMode) {
@@ -167,7 +167,7 @@ fun HorizontalCategoriesPage(
                         val gridState =
                             rememberLazyGridState(
                                 initialFirstVisibleItemIndex =
-                                    libraryScreenState.scrollPositions[page] ?: 0
+                                    libraryScreenState.scrollPositions[page] ?: 0,
                             )
 
                         DisposableEffect(libraryScreenActions, page) {
@@ -186,7 +186,7 @@ fun HorizontalCategoriesPage(
                                 totalItems = item.libraryItems.size,
                                 onSelectAll = {
                                     libraryScreenActions.selectAllLibraryMangaItems(
-                                        item.libraryItems
+                                        item.libraryItems,
                                     )
                                 },
                                 categoryItem = item.categoryItem,
@@ -229,7 +229,7 @@ fun HorizontalCategoriesPage(
                         val listState =
                             rememberLazyListState(
                                 initialFirstVisibleItemIndex =
-                                    libraryScreenState.scrollPositions[page] ?: 0
+                                    libraryScreenState.scrollPositions[page] ?: 0,
                             )
                         DisposableEffect(libraryScreenActions, page) {
                             onDispose {
@@ -247,7 +247,7 @@ fun HorizontalCategoriesPage(
                                 totalItems = null,
                                 onSelectAll = {
                                     libraryScreenActions.selectAllLibraryMangaItems(
-                                        item.libraryItems
+                                        item.libraryItems,
                                     )
                                 },
                                 categoryItem = item.categoryItem,

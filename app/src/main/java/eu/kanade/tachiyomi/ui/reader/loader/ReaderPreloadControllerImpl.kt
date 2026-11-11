@@ -169,7 +169,7 @@ class ReaderPreloadControllerImpl(
                     ) {
                         item.page.precomputedSplits?.forEach { split ->
                             activeMemoryKeys.add(
-                                "${DOMAIN_KEY_PREFIX}_split_${split.page.chapter.chapter.id ?: 0}_${split.page.index}_${split.topOffset}"
+                                "${DOMAIN_KEY_PREFIX}_split_${split.page.chapter.chapter.id ?: 0}_${split.page.index}_${split.topOffset}",
                             )
                         }
                     }
@@ -362,7 +362,7 @@ class ReaderPreloadControllerImpl(
                                     val error =
                                         if (pageStatus == null) {
                                             TimeoutException(
-                                                "Timeout downloading page ${page.index}"
+                                                "Timeout downloading page ${page.index}",
                                             )
                                         } else {
                                             Exception("Failed to load page ${page.index}")
@@ -384,7 +384,7 @@ class ReaderPreloadControllerImpl(
                                     val error =
                                         if (extraStatus == null) {
                                             TimeoutException(
-                                                "Timeout downloading extra page ${extra.index}"
+                                                "Timeout downloading extra page ${extra.index}",
                                             )
                                         } else {
                                             Exception("Failed to load extra page ${extra.index}")
@@ -433,11 +433,11 @@ class ReaderPreloadControllerImpl(
                                 val error =
                                     if (pageStatus == null) {
                                         TimeoutException(
-                                            "Timeout downloading parent page for split"
+                                            "Timeout downloading parent page for split",
                                         )
                                     } else {
                                         Exception(
-                                            "Failed to load parent page for split ${item.split.topOffset}"
+                                            "Failed to load parent page for split ${item.split.topOffset}",
                                         )
                                     }
                                 updatePageStatus(key, PreloadPageStatus.Error(error, count))

@@ -97,7 +97,7 @@ class BackupCreator(val context: Context) {
                     val dir =
                         storageManager.getAutomaticBackupsDirectory()
                             ?: throw IllegalStateException(
-                                "Couldn't create automatic backup folder"
+                                "Couldn't create automatic backup folder",
                             )
 
                     // Delete older backups

@@ -92,7 +92,7 @@ fun FilterBrowseSheet(
     themeColorState: ThemeColorState = defaultThemeColorState(),
 ) {
     CompositionLocalProvider(
-        LocalRippleConfiguration provides themeColorState.rippleConfiguration
+        LocalRippleConfiguration provides themeColorState.rippleConfiguration,
     ) {
         var originalLanguageExpanded by remember { mutableStateOf(false) }
         var contentRatingExpanded by remember { mutableStateOf(false) }
@@ -109,7 +109,7 @@ fun FilterBrowseSheet(
                 mutableStateOf(
                     savedFilters
                         .firstOrNull { Json.decodeFromString<DexFilters>(it.dexFilters) == filters }
-                        ?.name ?: ""
+                        ?.name ?: "",
                 )
             }
 
@@ -334,7 +334,7 @@ fun FilterBrowseSheet(
                     shape = RoundedCornerShape(Size.extraLarge),
                     colors =
                         ButtonDefaults.textButtonColors(
-                            contentColor = MaterialTheme.colorScheme.primary
+                            contentColor = MaterialTheme.colorScheme.primary,
                         ),
                 ) {
                     Icon(imageVector = Icons.Default.RestartAlt, contentDescription = null)
@@ -355,7 +355,7 @@ fun FilterBrowseSheet(
                         shape = RoundedCornerShape(Size.extraLarge),
                         colors =
                             ButtonDefaults.textButtonColors(
-                                contentColor = MaterialTheme.colorScheme.primary
+                                contentColor = MaterialTheme.colorScheme.primary,
                             ),
                     ) {
                         Icon(imageVector = Icons.Default.Save, contentDescription = null)
@@ -372,7 +372,7 @@ fun FilterBrowseSheet(
                     shape = RoundedCornerShape(Size.extraLarge),
                     colors =
                         ButtonDefaults.elevatedButtonColors(
-                            containerColor = MaterialTheme.colorScheme.primary
+                            containerColor = MaterialTheme.colorScheme.primary,
                         ),
                 ) {
                     Icon(

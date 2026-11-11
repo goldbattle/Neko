@@ -14,7 +14,7 @@ import androidx.room.PrimaryKey
                 parentColumns = ["id"],
                 childColumns = ["manga_id"],
                 onDelete = ForeignKey.CASCADE,
-            )
+            ),
         ],
 )
 data class MangaAggregateEntity(

@@ -104,7 +104,7 @@ fun CrashScreen(
                     Modifier.padding(vertical = Size.small)
                         .clip(MaterialTheme.shapes.small)
                         .fillMaxWidth()
-                        .background(MaterialTheme.colorScheme.surfaceVariant)
+                        .background(MaterialTheme.colorScheme.surfaceVariant),
             ) {
                 Text(
                     text = exception.toString(),

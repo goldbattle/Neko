@@ -74,7 +74,7 @@ internal class LibrarySettingsScreen(
                         subtitle = stringResource(R.string.when_sorting_ignore_articles),
                     ),
                     Preference.PreferenceItem.InfoPreference(
-                        stringResource(R.string.display_options_can_be)
+                        stringResource(R.string.display_options_can_be),
                     ),
                     Preference.PreferenceItem.ListPreference(
                         pref = libraryPreferences.chapterScanlatorFilterOption(),

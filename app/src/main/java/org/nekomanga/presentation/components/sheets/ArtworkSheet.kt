@@ -76,7 +76,8 @@ fun ArtworkSheet(
         var currentImage by
             remember(alternativeArtwork) {
                 mutableStateOf(
-                    alternativeArtwork.firstOrNull { it.active } ?: alternativeArtwork.firstOrNull()
+                    alternativeArtwork.firstOrNull { it.active }
+                        ?: alternativeArtwork.firstOrNull(),
                 )
             }
 
@@ -227,7 +228,7 @@ private fun ArtworkThumbnail(
         modifier =
             Modifier.size(thumbnailSize)
                 .clip(RoundedCornerShape(Shapes.coverRadius))
-                .clickable(onClick = onClick)
+                .clickable(onClick = onClick),
     ) {
         AsyncImage(
             model = request,
@@ -258,9 +259,9 @@ private fun BoxScope.VolumeLabel(volume: String, thumbnailSize: Dp, gradientHeig
                 .height(gradientHeight)
                 .background(
                     Brush.verticalGradient(
-                        colors = listOf(Color.Transparent, MaterialTheme.colorScheme.onSurface)
-                    )
-                )
+                        colors = listOf(Color.Transparent, MaterialTheme.colorScheme.onSurface),
+                    ),
+                ),
     )
     Text(
         text = volume,
@@ -276,7 +277,7 @@ private fun ActiveIndicator(themeColorState: ThemeColorState) {
         modifier =
             Modifier.padding(Size.tiny)
                 .clip(CircleShape)
-                .background(MaterialTheme.colorScheme.surface)
+                .background(MaterialTheme.colorScheme.surface),
     ) {
         Icon(
             imageVector = Icons.Filled.Star,

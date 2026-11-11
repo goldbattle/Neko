@@ -122,7 +122,7 @@ object ImageUtil {
     }
 
     internal fun tachiyomi.decoder.ImageType.isAnimatedAndSupported(
-        sdkInt: Int = Build.VERSION.SDK_INT
+        sdkInt: Int = Build.VERSION.SDK_INT,
     ): Boolean {
         return when (format) {
             Format.Gif -> true
@@ -521,7 +521,7 @@ object ImageUtil {
             val optimalSplitHeight = imageHeight / partCount
 
             Timber.d(
-                "Splitting image with height of $imageHeight into $partCount part with estimated ${optimalSplitHeight}px height per split"
+                "Splitting image with height of $imageHeight into $partCount part with estimated ${optimalSplitHeight}px height per split",
             )
 
             return mutableListOf<SplitData>().apply {
@@ -734,6 +734,6 @@ object ImageUtil {
     private val SUPPLEMENTARY_MIMETYPE_MAPPING =
         mapOf(
             // https://issuetracker.google.com/issues/182703810
-            "image/jxl" to "jxl"
+            "image/jxl" to "jxl",
         )
 }

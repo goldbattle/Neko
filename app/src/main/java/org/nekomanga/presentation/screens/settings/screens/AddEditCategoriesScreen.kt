@@ -109,7 +109,7 @@ internal class AddEditCategoriesScreen(
             AddEditCategoryDialog(
                 title =
                     stringResource(
-                        id = if (isEditing) R.string.edit_category else R.string.new_category
+                        id = if (isEditing) R.string.edit_category else R.string.new_category,
                     ),
                 text = categoryDialogText,
                 errorText = errorText,
@@ -190,12 +190,12 @@ internal class AddEditCategoriesScreen(
                                                     onDragStarted = {
                                                         hapticFeedback.performHapticFeedback(
                                                             HapticFeedbackType
-                                                                .GestureThresholdActivate
+                                                                .GestureThresholdActivate,
                                                         )
                                                     },
                                                     onDragStopped = {
                                                         hapticFeedback.performHapticFeedback(
-                                                            HapticFeedbackType.GestureEnd
+                                                            HapticFeedbackType.GestureEnd,
                                                         )
                                                     },
                                                     interactionSource = interactionSource,
@@ -213,7 +213,7 @@ internal class AddEditCategoriesScreen(
                                             onClick = {
                                                 editingCategoryId = category.id
                                                 categoryDialogText = category.name
-                                            }
+                                            },
                                         ) {
                                             Icon(
                                                 imageVector = Icons.Filled.Edit,

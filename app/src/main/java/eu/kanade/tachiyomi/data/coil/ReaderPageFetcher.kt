@@ -397,7 +397,7 @@ class ReaderPageSplitFetcher(private val split: ReaderPageSplit, private val opt
         private fun trimCacheForFullDecode(imageWidth: Int, imageHeight: Int, sampleSize: Int) {
             val expectedBytes = fallbackDecodeBytes(imageWidth, imageHeight, sampleSize)
             fallbackBitmapCache.trimToSize(
-                (fallbackBitmapCache.maxSize() - expectedBytes).coerceAtLeast(0).toInt()
+                (fallbackBitmapCache.maxSize() - expectedBytes).coerceAtLeast(0).toInt(),
             )
         }
 
@@ -488,7 +488,7 @@ class ReaderPageSplitFetcher(private val split: ReaderPageSplit, private val opt
             )
         } else {
             error(
-                "Failed to decode webtoon slice for page ${split.page.index} at offset ${split.topOffset}"
+                "Failed to decode webtoon slice for page ${split.page.index} at offset ${split.topOffset}",
             )
         }
     }

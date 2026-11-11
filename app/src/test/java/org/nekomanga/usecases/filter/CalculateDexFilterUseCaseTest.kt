@@ -26,7 +26,7 @@ class CalculateDexFilterUseCaseTest {
                 Filter.ContentRating(MangaContentRating.Suggestive, false),
                 Filter.ContentRating(MangaContentRating.Erotica, false),
                 Filter.ContentRating(MangaContentRating.Pornographic, false),
-            )
+            ),
     ): DexFilters {
         return DexFilters(contentRatings = contentRatings)
     }

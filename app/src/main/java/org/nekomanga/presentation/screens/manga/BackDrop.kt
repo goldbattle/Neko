@@ -46,7 +46,7 @@ fun BackDrop(
                     Modifier.matchParentSize()
                         .background(themeColorState.primaryColor.copy(alpha = .25f))
                         // Apply the animated alpha from the transition
-                        .alpha(backdropOverlayAlpha)
+                        .alpha(backdropOverlayAlpha),
             )
         }
 

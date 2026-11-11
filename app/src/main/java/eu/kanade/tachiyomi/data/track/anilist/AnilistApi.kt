@@ -136,7 +136,7 @@ class AnilistApi(val client: OkHttpClient, interceptor: AnilistInterceptor) {
                         with(json) {
                             authClient
                                 .newCall(
-                                    POST(apiUrl, body = payload.toString().toRequestBody(jsonMime))
+                                    POST(apiUrl, body = payload.toString().toRequestBody(jsonMime)),
                                 )
                                 .await()
                                 .parseAs<JsonObject>()

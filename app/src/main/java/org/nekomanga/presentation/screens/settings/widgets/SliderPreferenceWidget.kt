@@ -53,7 +53,7 @@ fun SliderPreferenceWidget(
             },
         subcomponent = {
             Column(
-                modifier = Modifier.fillMaxWidth().padding(horizontal = PrefsHorizontalPadding)
+                modifier = Modifier.fillMaxWidth().padding(horizontal = PrefsHorizontalPadding),
             ) {
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
@@ -63,7 +63,7 @@ fun SliderPreferenceWidget(
                         text = title,
                         style =
                             MaterialTheme.typography.titleMedium.copy(
-                                fontWeight = FontWeight.Normal
+                                fontWeight = FontWeight.Normal,
                             ),
                         modifier = Modifier.weight(1f),
                     )

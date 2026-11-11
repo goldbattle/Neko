@@ -12,7 +12,7 @@ import eu.kanade.tachiyomi.ui.reader.model.ViewerChapters
  * Decoupled from Android View and ViewPager hierarchies.
  */
 class ReaderPagerController(
-    private val buildPagerItemsUseCase: BuildPagerItemsUseCase = BuildPagerItemsUseCase()
+    private val buildPagerItemsUseCase: BuildPagerItemsUseCase = BuildPagerItemsUseCase(),
 ) {
 
     var prevTransition: ChapterTransition.Prev? = null

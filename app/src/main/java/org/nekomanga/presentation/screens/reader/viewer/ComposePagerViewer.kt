@@ -92,7 +92,7 @@ fun ComposePagerViewer(
                         activePanDelegate = null
                     }
                     currentConfig.onActivePanDelegateChanged?.invoke(delegate, active)
-                }
+                },
             )
         }
 
@@ -315,7 +315,7 @@ fun ComposePagerViewer(
                     onNavigateToChapter = { ch, target ->
                         config.onNavigateToChapter?.invoke(ch, target)
                     },
-                )
+                ),
     ) {
         if (config.isVertical) {
             VerticalPager(

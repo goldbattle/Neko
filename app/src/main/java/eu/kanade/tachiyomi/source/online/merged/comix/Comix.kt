@@ -385,7 +385,7 @@ class Comix : ReducedHttpSource() {
     }
 
     override suspend fun fetchChapters(
-        mangaUrl: String
+        mangaUrl: String,
     ): Result<List<SChapterStatusPair>, ResultError> {
         val mangaSlug = mangaUrl.removePrefix("/")
 
@@ -823,7 +823,7 @@ class Comix : ReducedHttpSource() {
             handler.post {
                 runCatching {
                     webView?.evaluateJavascript(
-                        "JSON.stringify(window.__comixCipherCaptures||null)"
+                        "JSON.stringify(window.__comixCipherCaptures||null)",
                     ) { value ->
                         raw = value
                         latch.release()

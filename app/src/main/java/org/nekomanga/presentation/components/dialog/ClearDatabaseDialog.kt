@@ -44,7 +44,7 @@ fun ClearDatabaseDialog(onDismiss: () -> Unit, onConfirm: (Boolean) -> Unit) {
                 onClick = {
                     onConfirm(excludeReadChecked)
                     onDismiss()
-                }
+                },
             ) {
                 Text(text = stringResource(id = R.string.ok))
             }

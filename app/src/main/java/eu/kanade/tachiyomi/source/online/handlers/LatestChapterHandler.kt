@@ -57,7 +57,7 @@ class LatestChapterHandler {
     }
 
     private suspend fun latestChapterParse(
-        chapterListDto: ChapterListDto
+        chapterListDto: ChapterListDto,
     ): Result<MangaListPage, ResultError> {
         return runCatching {
             val result =
@@ -117,7 +117,7 @@ class LatestChapterHandler {
                         MangaListPage(
                             sourceManga = mangaList.toList(),
                             hasNextPage = hasMoreResults,
-                        )
+                        ),
                     )
                 }
         }

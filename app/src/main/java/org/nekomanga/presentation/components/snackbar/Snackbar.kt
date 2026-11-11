@@ -25,7 +25,7 @@ fun NekoSnackbarHost(snackbarHostState: SnackbarHostState, snackbarColor: Snackb
                                 snackbarColor?.actionColor ?: MaterialTheme.colorScheme.onSurface,
                             style =
                                 MaterialTheme.typography.labelLarge.copy(
-                                    fontWeight = FontWeight.Medium
+                                    fontWeight = FontWeight.Medium,
                                 ),
                         )
                     }

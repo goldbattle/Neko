@@ -113,7 +113,7 @@ class MaxBitmapBytesTest {
                 Precision.INEXACT,
                 Size.ORIGINAL,
                 limited,
-            )
+            ),
         )
     }
 
@@ -129,7 +129,7 @@ class MaxBitmapBytesTest {
                 Precision.EXACT,
                 textureBox,
                 limited,
-            )
+            ),
         )
     }
 
@@ -138,11 +138,11 @@ class MaxBitmapBytesTest {
         val box = Size(4096, 4096)
         val pagerLimit = byteLimitedMaxSize(8016, 6000, Size.ORIGINAL, maxBytes)
         assertFalse(
-            isByteLimited(8016, 6000, box, Scale.FIT, Precision.INEXACT, Size.ORIGINAL, pagerLimit)
+            isByteLimited(8016, 6000, box, Scale.FIT, Precision.INEXACT, Size.ORIGINAL, pagerLimit),
         )
         val webtoonLimit = byteLimitedMaxSize(8016, 6000, box, maxBytes)
         assertFalse(
-            isByteLimited(8016, 6000, Size.ORIGINAL, Scale.FIT, Precision.EXACT, box, webtoonLimit)
+            isByteLimited(8016, 6000, Size.ORIGINAL, Scale.FIT, Precision.EXACT, box, webtoonLimit),
         )
     }
 
@@ -161,7 +161,7 @@ class MaxBitmapBytesTest {
                 Precision.INEXACT,
                 Size.ORIGINAL,
                 pagerLimit,
-            )
+            ),
         )
         val webtoonLimit = byteLimitedMaxSize(2000, 20_000, box, maxBytes)
         assertTrue(
@@ -173,7 +173,7 @@ class MaxBitmapBytesTest {
                 Precision.EXACT,
                 box,
                 webtoonLimit,
-            )
+            ),
         )
     }
 
@@ -189,7 +189,7 @@ class MaxBitmapBytesTest {
                 Precision.EXACT,
                 textureBox,
                 limited,
-            )
+            ),
         )
     }
 

@@ -4,7 +4,7 @@ import eu.kanade.tachiyomi.ui.manga.TrackingConstants
 import eu.kanade.tachiyomi.ui.manga.TrackingUpdate
 
 class UpdateTrackChapter(
-    private val updateTrackingService: UpdateTrackingService = UpdateTrackingService()
+    private val updateTrackingService: UpdateTrackingService = UpdateTrackingService(),
 ) {
     suspend fun await(
         newChapterNumber: Int,

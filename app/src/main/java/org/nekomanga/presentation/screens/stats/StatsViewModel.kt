@@ -247,7 +247,7 @@ class StatsViewModel() : ViewModel() {
                         totalReadDuration = totalDuration,
                         totalChapters = totalCount,
                         sortedTagPairs = sortedSeries,
-                    )
+                    ),
             )
         }
     }

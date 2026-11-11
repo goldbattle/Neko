@@ -206,7 +206,10 @@ class ChapterCache(private val context: Context) {
         val deletedSize = clear()
         withContext(Dispatchers.Main) {
             context.toast(
-                context.getString(R.string.deleted_, Formatter.formatFileSize(context, deletedSize))
+                context.getString(
+                    R.string.deleted_,
+                    Formatter.formatFileSize(context, deletedSize),
+                ),
             )
         }
     }

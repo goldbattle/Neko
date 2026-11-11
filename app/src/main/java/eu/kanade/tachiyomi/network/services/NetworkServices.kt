@@ -57,7 +57,7 @@ class NetworkServices {
                     .newBuilder()
                     .connectTimeout(2, TimeUnit.SECONDS)
                     .readTimeout(2, TimeUnit.SECONDS)
-                    .build()
+                    .build(),
             )
             .build()
             .create(ThirdPartySimilarService::class.java)
@@ -69,7 +69,7 @@ class NetworkServices {
                     .newBuilder()
                     .connectTimeout(2, TimeUnit.SECONDS)
                     .readTimeout(2, TimeUnit.SECONDS)
-                    .build()
+                    .build(),
             )
             .build()
             .create(SimilarService::class.java)

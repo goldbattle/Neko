@@ -285,7 +285,7 @@ class KitsuApi(private val client: OkHttpClient, interceptor: KitsuInterceptor) 
 
         @GET("users")
         suspend fun getCurrentUser(
-            @Query("filter[self]", encoded = true) self: Boolean = true
+            @Query("filter[self]", encoded = true) self: Boolean = true,
         ): JsonObject
     }
 

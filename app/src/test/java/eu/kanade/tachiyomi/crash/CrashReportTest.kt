@@ -75,7 +75,7 @@ class CrashReportTest {
                     logcat = { out ->
                         out.writeText("I/neko: partial\n")
                         throw IOException("logcat did not finish in 3 seconds")
-                    }
+                    },
                 )
                 .saveCrash("head\n")
 

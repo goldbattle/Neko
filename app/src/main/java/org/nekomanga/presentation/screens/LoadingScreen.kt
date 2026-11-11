@@ -26,7 +26,7 @@ fun LoadingScreen(showLoadingIcon: Boolean = true) {
 @Preview
 @Composable
 private fun LoadingScreenPreview(
-    @PreviewParameter(ThemeConfigProvider::class) themeConfig: ThemeConfig
+    @PreviewParameter(ThemeConfigProvider::class) themeConfig: ThemeConfig,
 ) {
     ThemedPreviews(themeConfig) { LoadingScreen() }
 }

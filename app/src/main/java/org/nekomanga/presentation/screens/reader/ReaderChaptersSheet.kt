@@ -248,11 +248,12 @@ private fun ChapterListItem(
                     painter =
                         painterResource(
                             if (model.isBookmarked) R.drawable.ic_bookmark_24dp
-                            else R.drawable.ic_bookmark_border_24dp
+                            else R.drawable.ic_bookmark_border_24dp,
                         ),
                     contentDescription =
                         stringResource(
-                            if (model.isBookmarked) R.string.bookmarked else R.string.not_bookmarked
+                            if (model.isBookmarked) R.string.bookmarked
+                            else R.string.not_bookmarked,
                         ),
                     tint = bookmarkColor,
                 )
@@ -264,7 +265,7 @@ private fun ChapterListItem(
 @Preview
 @Composable
 private fun ReaderChaptersSheetPreview(
-    @PreviewParameter(ThemeConfigProvider::class) themeConfig: ThemeConfig
+    @PreviewParameter(ThemeConfigProvider::class) themeConfig: ThemeConfig,
 ) {
     ThemedPreviews(themeConfig) {
         val quickActions = buildReaderChaptersQuickActions()

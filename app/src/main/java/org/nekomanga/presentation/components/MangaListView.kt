@@ -246,7 +246,9 @@ fun MangaRow(
             Box(
                 modifier =
                     Modifier.fillMaxSize()
-                        .background(MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.6f))
+                        .background(
+                            MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.6f),
+                        ),
             )
         }
     }

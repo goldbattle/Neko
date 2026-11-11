@@ -93,7 +93,7 @@ fun MangaDetailsHeader(
                     backdropSize = mangaDetailScreenState.general.backdropSize,
                 )
                 Column(
-                    modifier = Modifier.align(Alignment.BottomStart).graphicsLayer(alpha = alpha)
+                    modifier = Modifier.align(Alignment.BottomStart).graphicsLayer(alpha = alpha),
                 ) {
                     InformationBlock(
                         themeColorState = themeColorState,
@@ -212,7 +212,7 @@ private fun QuickReadButton(
         Spacer(modifier = Modifier.size(Size.medium))
         CompositionLocalProvider(
             LocalRippleConfiguration provides
-                nekoRippleConfiguration(themeColorState.containerColor)
+                nekoRippleConfiguration(themeColorState.containerColor),
         ) {
             ElevatedButton(
                 onClick = onClick,
@@ -220,7 +220,7 @@ private fun QuickReadButton(
                 modifier = Modifier.fillMaxWidth().padding(horizontal = Size.small),
                 colors =
                     ButtonDefaults.elevatedButtonColors(
-                        containerColor = themeColorState.primaryColor
+                        containerColor = themeColorState.primaryColor,
                     ),
             ) {
                 Text(

@@ -444,7 +444,7 @@ class PagerScrollAnchorResolverTest {
                 999L,
                 isRtl = true,
                 PagerScrollAnchorResolver.ChapterBoundary.START,
-            )
+            ),
         )
     }
 }

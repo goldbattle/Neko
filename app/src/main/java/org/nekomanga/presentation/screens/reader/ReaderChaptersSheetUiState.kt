@@ -134,7 +134,7 @@ fun buildReaderChaptersQuickActions(
                 id = ReaderQuickActionId.Chapters,
                 iconRes = R.drawable.ic_format_list_numbered_24dp,
                 tooltipRes = R.string.chapters,
-            )
+            ),
         )
     }
     if (isCommentsVisible) {
@@ -143,7 +143,7 @@ fun buildReaderChaptersQuickActions(
                 id = ReaderQuickActionId.Comments,
                 iconRes = R.drawable.ic_view_comments_24p,
                 tooltipRes = R.string.comments,
-            )
+            ),
         )
     }
     if (isWebViewVisible) {
@@ -152,7 +152,7 @@ fun buildReaderChaptersQuickActions(
                 id = ReaderQuickActionId.WebView,
                 iconRes = R.drawable.ic_open_in_webview_24dp,
                 tooltipRes = R.string.open_in_webview,
-            )
+            ),
         )
     }
     if (isReadingModeVisible) {
@@ -161,7 +161,7 @@ fun buildReaderChaptersQuickActions(
                 id = ReaderQuickActionId.ReadingMode,
                 iconRes = readingModeIconRes,
                 tooltipRes = R.string.reading_mode,
-            )
+            ),
         )
     }
     if (isRotationVisible) {
@@ -170,7 +170,7 @@ fun buildReaderChaptersQuickActions(
                 id = ReaderQuickActionId.Rotation,
                 iconRes = rotationIconRes,
                 tooltipRes = R.string.rotation,
-            )
+            ),
         )
     }
     if (isCropBordersVisible) {
@@ -181,7 +181,7 @@ fun buildReaderChaptersQuickActions(
                 tooltipRes = R.string.crop_borders,
                 toggleStyle = ButtonToggleStyle.PrimaryWhenToggled,
                 isToggled = cropBorders,
-            )
+            ),
         )
     }
     if (isGrayscaleVisible) {
@@ -192,7 +192,7 @@ fun buildReaderChaptersQuickActions(
                 tooltipRes = R.string.grayscale_toggle,
                 toggleStyle = ButtonToggleStyle.PrimaryWhenToggled,
                 isToggled = grayscale,
-            )
+            ),
         )
     }
     if (isDoublePageVisible) {
@@ -201,7 +201,7 @@ fun buildReaderChaptersQuickActions(
                 id = ReaderQuickActionId.DoublePage,
                 iconRes = doublePageIconRes,
                 tooltipRes = R.string.double_pages,
-            )
+            ),
         )
     }
     if (isShiftPageVisible) {
@@ -210,7 +210,7 @@ fun buildReaderChaptersQuickActions(
                 id = ReaderQuickActionId.ShiftPage,
                 iconRes = shiftPageIconRes,
                 tooltipRes = R.string.shift_one_page_over,
-            )
+            ),
         )
     }
     if (isDisplayOptionsVisible) {
@@ -219,7 +219,7 @@ fun buildReaderChaptersQuickActions(
                 id = ReaderQuickActionId.DisplayOptions,
                 iconRes = R.drawable.ic_tune_24dp,
                 tooltipRes = R.string.display_options,
-            )
+            ),
         )
     }
     return actions

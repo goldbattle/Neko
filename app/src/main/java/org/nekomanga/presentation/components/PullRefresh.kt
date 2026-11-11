@@ -69,7 +69,7 @@ fun PullRefresh(
             modifier =
                 Modifier.conditional(blurBackground) {
                     this.blur(Size.medium).clickable(enabled = false) {}
-                }
+                },
         ) {
             content()
         }
@@ -78,7 +78,7 @@ fun PullRefresh(
         Box(
             modifier =
                 Modifier.fillMaxSize()
-                    .background(Color.Black.copy(alpha = NekoColors.mediumAlphaLowContrast))
+                    .background(Color.Black.copy(alpha = NekoColors.mediumAlphaLowContrast)),
         )
     }
 }

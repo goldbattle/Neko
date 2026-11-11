@@ -55,7 +55,7 @@ class DownloaderRunningFlowTest {
         Injekt.addSingleton(
             mockk<MangaDetailsPreferences> {
                 every { sortChapterOrder().get() } returns Manga.CHAPTER_SORTING_SOURCE
-            }
+            },
         )
 
         val activeDownloads =

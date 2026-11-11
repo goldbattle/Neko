@@ -54,7 +54,7 @@ class Toonily : ReducedHttpSource() {
                         "$baseUrl/wp-admin/admin-ajax.php",
                         searchHeaders,
                         searchFormBuilder(sanitizedQuery).build(),
-                    )
+                    ),
                 )
                 .await()
         if (!response.isSuccessful) {
@@ -85,7 +85,7 @@ class Toonily : ReducedHttpSource() {
         }
 
     override suspend fun fetchChapters(
-        mangaUrl: String
+        mangaUrl: String,
     ): Result<List<SChapterStatusPair>, ResultError> {
         val response =
             client.newCall(POST("${baseUrl}${mangaUrl}ajax/chapters", searchHeaders)).await()
@@ -98,7 +98,7 @@ class Toonily : ReducedHttpSource() {
     }
 
     private fun parseChapterList(
-        response: Response
+        response: Response,
     ): Result<List<SChapterStatusPair>, ResultError> {
         val document = response.asJsoup()
         response.closeQuietly()
@@ -182,7 +182,7 @@ class Toonily : ReducedHttpSource() {
                         parseChapterDate(it)
                     }
                     ?: parseChapterDate(
-                        element.select("span.chapter-release-date").firstOrNull()?.text()
+                        element.select("span.chapter-release-date").firstOrNull()?.text(),
                     )
 
             chapter to false
@@ -216,7 +216,7 @@ class Toonily : ReducedHttpSource() {
         response.closeQuietly()
         return document
             .select(
-                "div.page-break, li.blocks-gallery-item, .reading-content .text-left:not(:has(.blocks-gallery-item)) img"
+                "div.page-break, li.blocks-gallery-item, .reading-content .text-left:not(:has(.blocks-gallery-item)) img",
             )
             .mapIndexed { index, element ->
                 Page(

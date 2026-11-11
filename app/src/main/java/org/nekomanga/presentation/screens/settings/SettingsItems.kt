@@ -225,7 +225,7 @@ fun TriStateItem(
                     when (onClick) {
                         null ->
                             MaterialTheme.colorScheme.onSurface.copy(
-                                alpha = NekoColors.disabledAlphaLowContrast
+                                alpha = NekoColors.disabledAlphaLowContrast,
                             )
                         else -> MaterialTheme.colorScheme.primary
                     }
@@ -305,7 +305,7 @@ private fun BaseSettingsItem(
                 .then(
                     if (isSelected) {
                         Modifier.background(color = MaterialTheme.colorScheme.secondaryContainer)
-                    } else Modifier
+                    } else Modifier,
                 )
                 .padding(horizontal = horizontalPadding, vertical = verticalPadding),
         verticalAlignment = Alignment.CenterVertically,

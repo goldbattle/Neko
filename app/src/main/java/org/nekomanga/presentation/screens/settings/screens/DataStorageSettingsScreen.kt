@@ -96,7 +96,7 @@ internal class DataStorageSettingsScreen(
             preferenceItems =
                 listOf(
                     Preference.PreferenceItem.InfoPreference(
-                        stringResource(R.string.storage_usage_info)
+                        stringResource(R.string.storage_usage_info),
                     ),
                     Preference.PreferenceItem.CustomPreference(
                         title = "",

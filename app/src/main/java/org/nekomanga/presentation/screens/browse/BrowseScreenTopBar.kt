@@ -35,7 +35,7 @@ fun BrowseScreenTopBar(
                             onClick = openSheetClick,
                         ),
                         mainDropDown,
-                    )
+                    ),
             )
         },
         scrollBehavior = scrollBehavior,

@@ -156,7 +156,7 @@ class AlternativeMangaCoverFetcher(
                     sourceLazy.value.headers
                         .newBuilder()
                         .add("x-request-id", "Neko-" + UUID.randomUUID())
-                        .build()
+                        .build(),
                 )
 
         when {

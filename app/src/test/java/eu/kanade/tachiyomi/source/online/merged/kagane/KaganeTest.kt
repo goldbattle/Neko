@@ -61,7 +61,7 @@ class KaganeTest {
             .message("HTTP $code")
             .headers(headers)
             .body(
-                body.toResponseBody((headers["Content-Type"] ?: "application/json").toMediaType())
+                body.toResponseBody((headers["Content-Type"] ?: "application/json").toMediaType()),
             )
             .build()
     }
@@ -73,11 +73,13 @@ class KaganeTest {
         Injekt = InjektScope(DefaultRegistrar())
         val client = OkHttpClient.Builder().addInterceptor(server).build()
         Injekt.addSingleton(
-            mockk<NetworkHelper>(relaxed = true) { every { cloudFlareClient } returns client }
+            mockk<NetworkHelper>(relaxed = true) { every { cloudFlareClient } returns client },
         )
         Injekt.addSingleton(Json { ignoreUnknownKeys = true })
         Injekt.addSingleton(
-            mockk<MangaDexPreferences>(relaxed = true) { every { dataSaver().get() } returns false }
+            mockk<MangaDexPreferences>(relaxed = true) {
+                every { dataSaver().get() } returns false
+            },
         )
         kagane = Kagane()
     }

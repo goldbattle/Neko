@@ -46,7 +46,7 @@ fun BaseSheet(
                     .fillMaxWidth()
                     .requiredHeightIn(minSheetHeight.dp, maxSheetHeight.dp)
                     .verticalScroll(scrollState)
-                    .clearFocusOnTap()
+                    .clearFocusOnTap(),
         ) {
             content()
             Gap(bottomPaddingAroundContent)

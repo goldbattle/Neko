@@ -21,20 +21,20 @@ fun reorderChapters(sourceChapters: List<Chapter>): List<Chapter> {
     zeroVolume =
         zeroVolume.sortedWith(
             compareByDescending<Chapter> { getChapterNum(it) == null }
-                .thenByDescending { getChapterNum(it) }
+                .thenByDescending { getChapterNum(it) },
         )
 
     var (nullVolume, withVolume) = nonZeroVolume.partition { getVolumeNum(it) == null }
     nullVolume =
         nullVolume.sortedWith(
             compareByDescending<Chapter> { getChapterNum(it) == null }
-                .thenByDescending { getChapterNum(it) }
+                .thenByDescending { getChapterNum(it) },
         )
     withVolume =
         withVolume.sortedWith(
             compareByDescending<Chapter> { getVolumeNum(it) }
                 .thenByDescending { getChapterNum(it) == null }
-                .thenByDescending { getChapterNum(it) }
+                .thenByDescending { getChapterNum(it) },
         )
 
     val comp = compareBy<Chapter> { getChapterNum(it) != null }.thenBy { getChapterNum(it) }

@@ -141,7 +141,7 @@ private suspend fun settleAppBar(
     if (flingAnimationSpec != null && abs(velocity) > 1f) {
         var lastValue = 0f
         AnimationState(initialValue = 0f, initialVelocity = velocity).animateDecay(
-            flingAnimationSpec
+            flingAnimationSpec,
         ) {
             val delta = value - lastValue
             val initialHeightOffset = state.heightOffset

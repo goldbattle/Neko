@@ -39,7 +39,7 @@ class AboutViewModel : ViewModel() {
             AboutScreenState(
                 buildTime = getFormattedBuildTime(),
                 incognitoMode = securityPreferences.incognitoMode().get(),
-            )
+            ),
         )
     val aboutScreenState: StateFlow<AboutScreenState> = _aboutScreenState.asStateFlow()
 
@@ -50,7 +50,7 @@ class AboutViewModel : ViewModel() {
     fun notOnlineSnackbar() {
         viewModelScope.launch {
             appSnackbarManager.showSnackbar(
-                SnackbarState(messageRes = R.string.no_network_connection)
+                SnackbarState(messageRes = R.string.no_network_connection),
             )
         }
     }
@@ -63,7 +63,7 @@ class AboutViewModel : ViewModel() {
             _aboutScreenState.update { it.copy(checkingForUpdates = true) }
 
             appSnackbarManager.showSnackbar(
-                SnackbarState(messageRes = R.string.checking_for_updates)
+                SnackbarState(messageRes = R.string.checking_for_updates),
             )
 
             val update = runCatching {
@@ -76,7 +76,7 @@ class AboutViewModel : ViewModel() {
                 }
                 is AppUpdateResult.NoNewUpdate -> {
                     appSnackbarManager.showSnackbar(
-                        SnackbarState(messageRes = R.string.no_new_updates_available)
+                        SnackbarState(messageRes = R.string.no_new_updates_available),
                     )
                 }
                 is AppUpdateResult.NewUpdate -> {
@@ -130,8 +130,8 @@ class AboutViewModel : ViewModel() {
                     SnackbarState(
                         messageRes =
                             if (newValue) R.string.developer_mode_enabled
-                            else R.string.developer_mode_disabled
-                    )
+                            else R.string.developer_mode_disabled,
+                    ),
                 )
             }
         }
@@ -144,7 +144,7 @@ class AboutViewModel : ViewModel() {
                     SnackbarState(
                         messageRes = R.string._copied_to_clipboard,
                         fieldRes = R.string.build_information,
-                    )
+                    ),
                 )
             }
         }

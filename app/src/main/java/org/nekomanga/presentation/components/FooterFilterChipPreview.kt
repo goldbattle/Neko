@@ -15,7 +15,7 @@ import org.nekomanga.presentation.theme.ThemedPreviews
 @Preview
 @Composable
 private fun FooterFilterChipPreview(
-    @PreviewParameter(ThemeConfigProvider::class) themeConfig: ThemeConfig
+    @PreviewParameter(ThemeConfigProvider::class) themeConfig: ThemeConfig,
 ) {
     ThemedPreviews(themeConfig) {
         Row(horizontalArrangement = Arrangement.spacedBy(Size.small)) {

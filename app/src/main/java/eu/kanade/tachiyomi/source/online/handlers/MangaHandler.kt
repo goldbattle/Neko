@@ -189,7 +189,7 @@ class MangaHandler {
                                     )
 
                             false -> chapterListDto.data
-                        }
+                        },
                     )
                 }
                 .andThen { results ->
@@ -239,7 +239,7 @@ class MangaHandler {
             .andThen {
                 Ok(
                     it.statistics[chapterUUID]?.comments?.threadId?.toString()
-                        ?: return@andThen Err("No thread exists")
+                        ?: return@andThen Err("No thread exists"),
                 )
             }
             .orElse {

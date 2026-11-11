@@ -146,7 +146,7 @@ class LibraryUpdateJobQueueTest {
                     // A new title from the site would rename the manga's folders
                     SManga.create().apply { title = "" },
                     sChapters = emptyList(),
-                )
+                ),
             )
 
         // The job's own read at the start of doWork waits here, with the job already running. The

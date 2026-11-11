@@ -33,7 +33,7 @@ fun FooterFilterChip(
                         text = name,
                         style =
                             MaterialTheme.typography.labelLarge.copy(
-                                fontWeight = FontWeight.Medium
+                                fontWeight = FontWeight.Medium,
                             ),
                     )
                 }

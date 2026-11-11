@@ -100,7 +100,7 @@ object DatabaseMigrations {
                 `language_filter_flag` TEXT, `dynamic_cover` TEXT
             )
             """
-                .trimIndent()
+                .trimIndent(),
         )
 
         // 2. Categories (Parent)
@@ -111,7 +111,7 @@ object DatabaseMigrations {
                 `flags` INTEGER NOT NULL, `manga_order` TEXT NOT NULL
             )
             """
-                .trimIndent()
+                .trimIndent(),
         )
 
         // 3. Chapters (Child of Manga)
@@ -127,7 +127,7 @@ object DatabaseMigrations {
                 FOREIGN KEY(`manga_id`) REFERENCES `manga`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE
             )
             """
-                .trimIndent()
+                .trimIndent(),
         )
 
         // 4. History (Child of Chapters)
@@ -138,7 +138,7 @@ object DatabaseMigrations {
                 FOREIGN KEY(`chapter_id`) REFERENCES `chapters`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE
             )
             """
-                .trimIndent()
+                .trimIndent(),
         )
 
         // 5. Manga Categories (Child of Manga & Categories)
@@ -150,7 +150,7 @@ object DatabaseMigrations {
                 FOREIGN KEY(`category_id`) REFERENCES `categories`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE
             )
             """
-                .trimIndent()
+                .trimIndent(),
         )
 
         // 6. Manga Aggregate (Child of Manga)
@@ -161,7 +161,7 @@ object DatabaseMigrations {
                 FOREIGN KEY(`manga_id`) REFERENCES `manga`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE
             )
             """
-                .trimIndent()
+                .trimIndent(),
         )
 
         // 7. Track (Child of Manga)
@@ -175,7 +175,7 @@ object DatabaseMigrations {
                 FOREIGN KEY(`manga_id`) REFERENCES `manga`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE
             )
             """
-                .trimIndent()
+                .trimIndent(),
         )
 
         // 8. Artwork (Child of Manga)
@@ -187,7 +187,7 @@ object DatabaseMigrations {
                 FOREIGN KEY(`manga_id`) REFERENCES `manga`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE
             )
             """
-                .trimIndent()
+                .trimIndent(),
         )
 
         // 9. Merge Manga (Child of Manga)
@@ -199,21 +199,21 @@ object DatabaseMigrations {
                 FOREIGN KEY(`manga_id`) REFERENCES `manga`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE
             )
             """
-                .trimIndent()
+                .trimIndent(),
         )
 
         // 10. Independent tables
         db.execSQL(
-            "CREATE TABLE IF NOT EXISTS `browse_filter` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT NOT NULL, `filters` TEXT NOT NULL, `is_default` INTEGER NOT NULL)"
+            "CREATE TABLE IF NOT EXISTS `browse_filter` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT NOT NULL, `filters` TEXT NOT NULL, `is_default` INTEGER NOT NULL)",
         )
         db.execSQL(
-            "CREATE TABLE IF NOT EXISTS `manga_similar` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `manga_id` TEXT NOT NULL, `matched_ids` TEXT NOT NULL)"
+            "CREATE TABLE IF NOT EXISTS `manga_similar` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `manga_id` TEXT NOT NULL, `matched_ids` TEXT NOT NULL)",
         )
         db.execSQL(
-            "CREATE TABLE IF NOT EXISTS `scanlator_group` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT NOT NULL, `uuid` TEXT NOT NULL, `description` TEXT)"
+            "CREATE TABLE IF NOT EXISTS `scanlator_group` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT NOT NULL, `uuid` TEXT NOT NULL, `description` TEXT)",
         )
         db.execSQL(
-            "CREATE TABLE IF NOT EXISTS `uploader` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `username` TEXT NOT NULL, `uuid` TEXT NOT NULL)"
+            "CREATE TABLE IF NOT EXISTS `uploader` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `username` TEXT NOT NULL, `uuid` TEXT NOT NULL)",
         )
     }
 
@@ -397,33 +397,33 @@ object DatabaseMigrations {
         db.execSQL("CREATE INDEX IF NOT EXISTS `index_manga_favorite` ON `manga` (`favorite`)")
         db.execSQL("CREATE INDEX IF NOT EXISTS `index_manga_url` ON `manga` (`url`)")
         db.execSQL(
-            "CREATE INDEX IF NOT EXISTS `index_manga_categories_manga_id` ON `manga_categories` (`manga_id`)"
+            "CREATE INDEX IF NOT EXISTS `index_manga_categories_manga_id` ON `manga_categories` (`manga_id`)",
         )
         db.execSQL(
-            "CREATE INDEX IF NOT EXISTS `index_manga_categories_category_id` ON `manga_categories` (`category_id`)"
+            "CREATE INDEX IF NOT EXISTS `index_manga_categories_category_id` ON `manga_categories` (`category_id`)",
         )
         db.execSQL(
-            "CREATE INDEX IF NOT EXISTS `index_manga_similar_manga_id` ON `manga_similar` (`manga_id`)"
+            "CREATE INDEX IF NOT EXISTS `index_manga_similar_manga_id` ON `manga_similar` (`manga_id`)",
         )
         db.execSQL("CREATE INDEX IF NOT EXISTS `index_track_manga_id` ON `track` (`manga_id`)")
         db.execSQL(
-            "CREATE UNIQUE INDEX IF NOT EXISTS `index_track_manga_id_track_service_id` ON `track` (`manga_id`, `track_service_id`)"
+            "CREATE UNIQUE INDEX IF NOT EXISTS `index_track_manga_id_track_service_id` ON `track` (`manga_id`, `track_service_id`)",
         )
         db.execSQL(
-            "CREATE INDEX IF NOT EXISTS `index_merge_manga_manga_id` ON `merge_manga` (`manga_id`)"
+            "CREATE INDEX IF NOT EXISTS `index_merge_manga_manga_id` ON `merge_manga` (`manga_id`)",
         )
         db.execSQL(
-            "CREATE UNIQUE INDEX IF NOT EXISTS `index_scanlator_group_uuid` ON `scanlator_group` (`uuid`)"
+            "CREATE UNIQUE INDEX IF NOT EXISTS `index_scanlator_group_uuid` ON `scanlator_group` (`uuid`)",
         )
         db.execSQL("CREATE UNIQUE INDEX IF NOT EXISTS `index_uploader_uuid` ON `uploader` (`uuid`)")
         db.execSQL(
-            "CREATE UNIQUE INDEX IF NOT EXISTS `index_history_chapter_id` ON `history` (`chapter_id`)"
+            "CREATE UNIQUE INDEX IF NOT EXISTS `index_history_chapter_id` ON `history` (`chapter_id`)",
         )
         db.execSQL(
-            "CREATE INDEX IF NOT EXISTS `index_chapters_manga_id` ON `chapters` (`manga_id`)"
+            "CREATE INDEX IF NOT EXISTS `index_chapters_manga_id` ON `chapters` (`manga_id`)",
         )
         db.execSQL(
-            "CREATE INDEX IF NOT EXISTS `index_chapters_manga_id_read` ON `chapters` (`manga_id`, `read`)"
+            "CREATE INDEX IF NOT EXISTS `index_chapters_manga_id_read` ON `chapters` (`manga_id`, `read`)",
         )
     }
 

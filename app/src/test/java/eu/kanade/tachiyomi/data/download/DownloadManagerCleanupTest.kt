@@ -73,10 +73,10 @@ class DownloadManagerCleanupTest {
             mockk<StorageManager> {
                 every { getDownloadsDirectory() } returns UniFile.fromFile(downloadsDir)
                 every { baseDirChanges } returns MutableSharedFlow()
-            }
+            },
         )
         Injekt.addSingleton(
-            mockk<MangaRepository> { coEvery { getMangaList() } returns emptyList() }
+            mockk<MangaRepository> { coEvery { getMangaList() } returns emptyList() },
         )
 
         val preferences =

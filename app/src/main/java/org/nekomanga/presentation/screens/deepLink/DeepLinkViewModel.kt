@@ -86,7 +86,7 @@ class DeepLinkViewModel() : ViewModel() {
     }
 
     suspend fun getDisplayListFromList(
-        listUuid: String
+        listUuid: String,
     ): Result<SerializableDisplayScreenType, ResultError> {
         return mangaDex.fetchList(listUuid).map { resultListPage ->
             resultListPage.displayScreenType.toSerializable()
@@ -94,7 +94,7 @@ class DeepLinkViewModel() : ViewModel() {
     }
 
     suspend fun getDisplayAuthorFromId(
-        authorUuid: String
+        authorUuid: String,
     ): Result<SerializableDisplayScreenType, ResultError> {
         return mangaDex.getAuthorNameByUuid(authorUuid).map { authorName ->
             DisplayScreenType.AuthorWithUuid(UiText.String(authorName), authorUuid).toSerializable()
@@ -102,7 +102,7 @@ class DeepLinkViewModel() : ViewModel() {
     }
 
     suspend fun getDisplayGroupFromId(
-        groupUuid: String
+        groupUuid: String,
     ): Result<SerializableDisplayScreenType, ResultError> {
         return mangaDex.getScanlatorGroupNameByUuid(groupUuid).map { groupName ->
             DisplayScreenType.GroupByUuid(UiText.String(groupName), groupUuid).toSerializable()
@@ -144,8 +144,8 @@ class DeepLinkViewModel() : ViewModel() {
         } else {
             Err(
                 ResultError.Generic(
-                    "Unable to map MangaDex manga, no mapping entry found for $name ID"
-                )
+                    "Unable to map MangaDex manga, no mapping entry found for $name ID",
+                ),
             )
         }
     }

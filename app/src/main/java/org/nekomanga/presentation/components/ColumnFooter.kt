@@ -110,7 +110,7 @@ fun ColumnScope.SearchFooter(
                         focusManager.clearFocus()
                         search(title)
                     }
-                }
+                },
             ),
     )
 }

@@ -40,7 +40,10 @@ class SearchHandler {
             .andThen { mangaDto ->
                 val sourceManga =
                     listOf(
-                        mangaDto.data.toSourceManga(mangaDexPreferences.coverQuality().get(), false)
+                        mangaDto.data.toSourceManga(
+                            mangaDexPreferences.coverQuality().get(),
+                            false,
+                        ),
                     )
                 Ok(MangaListPage(sourceManga = sourceManga, hasNextPage = false))
             }
@@ -196,7 +199,7 @@ class SearchHandler {
                                     .distinctBy { it.id }
                                     .map { it.toSourceManga(thumbQuality) }
                                     .toList(),
-                        )
+                        ),
                     )
                 }
         }
@@ -236,7 +239,7 @@ class SearchHandler {
                                         )
                                     }
                                     .toList(),
-                        )
+                        ),
                     )
                 }
         }

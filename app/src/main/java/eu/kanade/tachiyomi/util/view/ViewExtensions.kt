@@ -72,7 +72,7 @@ fun View.snack(
 object RecyclerWindowInsetsListener : View.OnApplyWindowInsetsListener {
     override fun onApplyWindowInsets(v: View, insets: WindowInsets): WindowInsets {
         v.updatePaddingRelative(
-            bottom = WindowInsetsCompat.toWindowInsetsCompat(insets).getInsets(systemBars()).bottom
+            bottom = WindowInsetsCompat.toWindowInsetsCompat(insets).getInsets(systemBars()).bottom,
         )
         return insets
     }
@@ -97,7 +97,7 @@ fun View.checkHeightThen(f: () -> Unit) {
                     f()
                 }
             }
-        }
+        },
     )
 }
 
@@ -112,7 +112,7 @@ fun View.requestApplyInsetsWhenAttached() {
                 }
 
                 override fun onViewDetachedFromWindow(v: View) = Unit
-            }
+            },
         )
     }
 }

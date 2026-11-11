@@ -210,7 +210,7 @@ internal fun PreferenceItem(item: Preference.PreferenceItem<*>, highlightKey: St
                                 color = MaterialTheme.colorScheme.onSurface,
                                 style =
                                     MaterialTheme.typography.titleMedium.copy(
-                                        fontWeight = FontWeight.Normal
+                                        fontWeight = FontWeight.Normal,
                                     ),
                             )
                         }

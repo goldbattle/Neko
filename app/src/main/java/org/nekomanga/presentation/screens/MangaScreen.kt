@@ -246,7 +246,7 @@ fun MangaScreen(
                                 }
                             }
                         context.startActivity(
-                            Intent.createChooser(intent, context.getString(R.string.share))
+                            Intent.createChooser(intent, context.getString(R.string.share)),
                         )
                     } catch (e: Exception) {
                         context.toast(e.message.orUnknownError(context))
@@ -274,7 +274,7 @@ fun MangaScreen(
                                         type = "image/*"
                                     }
                                 context.startActivity(
-                                    Intent.createChooser(intent, context.getString(R.string.share))
+                                    Intent.createChooser(intent, context.getString(R.string.share)),
                                 )
                             } catch (e: Exception) {
                                 context.toast(e.message.orUnknownError(context))
@@ -301,11 +301,11 @@ fun MangaScreen(
                     if (
                         chapterItems.size == 1 &&
                             MdConstants.UnsupportedOfficialGroupList.contains(
-                                chapterItems[0].chapter.scanlator
+                                chapterItems[0].chapter.scanlator,
                             )
                     ) {
                         context.toast(
-                            "${chapterItems[0].chapter.scanlator} not supported, try WebView"
+                            "${chapterItems[0].chapter.scanlator} not supported, try WebView",
                         )
                     } else {
                         mangaViewModel.downloadChapters(chapterItems, downloadAction)
@@ -322,7 +322,7 @@ fun MangaScreen(
                             if (
                                 chapter.scanlator != null &&
                                     MdConstants.UnsupportedOfficialGroupList.contains(
-                                        chapter.scanlator
+                                        chapter.scanlator,
                                     )
                             ) {
                                 context.toast("${chapter.scanlator} not supported, try WebView")
@@ -332,7 +332,7 @@ fun MangaScreen(
                                 context.toast("Chapter is not available")
                             } else {
                                 context.startActivity(
-                                    ReaderActivity.newIntent(context, manga, chapter)
+                                    ReaderActivity.newIntent(context, manga, chapter),
                                 )
                             }
                         }
@@ -408,7 +408,7 @@ private fun MangaScreenWrapper(
                 actionColor = themeColorState.primaryColor,
                 containerColor = themeColorState.containerColor,
                 contentColor = themeColorState.onContainerColor,
-            )
+            ),
         )
     }
 
@@ -470,7 +470,7 @@ private fun MangaScreenWrapper(
                                 addingToLibrary = true,
                                 setCategories = categoryActions.set,
                                 addToLibraryClick = { onToggleFavorite(false) },
-                            )
+                            ),
                         )
                     }
                 } else {
@@ -673,8 +673,8 @@ private fun VerticalLayout(
                     onCategoriesClick = {
                         onOpenSheet(
                             DetailsBottomSheetScreen.CategoriesSheet(
-                                setCategories = categoryActions.set
-                            )
+                                setCategories = categoryActions.set,
+                            ),
                         )
                     },
                     onTrackingClick = { onOpenSheet(DetailsBottomSheetScreen.TrackingSheet) },
@@ -751,8 +751,8 @@ private fun SideBySideLayout(
                     onCategoriesClick = {
                         onOpenSheet(
                             DetailsBottomSheetScreen.CategoriesSheet(
-                                setCategories = categoryActions.set
-                            )
+                                setCategories = categoryActions.set,
+                            ),
                         )
                     },
                     onTrackingClick = { onOpenSheet(DetailsBottomSheetScreen.TrackingSheet) },

@@ -51,7 +51,7 @@ fun OnboardingScreen(finishedOnBoarding: () -> Unit) {
                 when (isLastStep) {
                     true -> R.string.onboarding_action_finish
                     false -> R.string.onboarding_action_next
-                }
+                },
             ),
         tint = MaterialTheme.colorScheme.primary,
         canAccept = steps[currentStep].isComplete,
@@ -69,7 +69,7 @@ fun OnboardingScreen(finishedOnBoarding: () -> Unit) {
                 Modifier.padding(vertical = Size.small)
                     .clip(MaterialTheme.shapes.small)
                     .fillMaxSize()
-                    .background(MaterialTheme.colorScheme.surfaceVariant)
+                    .background(MaterialTheme.colorScheme.surfaceVariant),
         ) {
             AnimatedContent(
                 targetState = currentStep,

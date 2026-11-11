@@ -176,7 +176,7 @@ private fun chapterSwipeAction(
                         val isLocked =
                             chapterItem.chapter.isUnavailable ||
                                 MdConstants.UnsupportedOfficialGroupList.contains(
-                                    chapterItem.chapter.scanlator
+                                    chapterItem.chapter.scanlator,
                                 )
                         if (isLocked) return null
                         Triple(Icons.Default.Download, R.string.download) {
@@ -310,14 +310,14 @@ private fun ChapterRowContent(
                                     R.plurals.pages_left,
                                     chapterItem.chapter.pagesLeft,
                                     chapterItem.chapter.pagesLeft,
-                                )
+                                ),
                             )
                         } else {
                             statuses.add(
                                 context.getString(
                                     R.string.page_,
                                     chapterItem.chapter.lastPageRead + 1,
-                                )
+                                ),
                             )
                         }
                     }
@@ -480,7 +480,7 @@ private fun buildChapterDropdownItems(
                 SimpleDropDownItem.Action(
                     text = UiText.StringResource(R.string.open_in_webview),
                     onClick = onWebView,
-                )
+                ),
             )
         }
 
@@ -498,7 +498,7 @@ private fun buildChapterDropdownItems(
                             onClick = { markPrevious(false) },
                         ),
                     ),
-            )
+            ),
         )
 
         val scanlatorItems =
@@ -523,7 +523,7 @@ private fun buildChapterDropdownItems(
                 SimpleDropDownItem.Parent(
                     text = UiText.StringResource(R.string.block_scanlator),
                     children = scanlatorItems,
-                )
+                ),
             )
         }
 
@@ -532,7 +532,7 @@ private fun buildChapterDropdownItems(
                 SimpleDropDownItem.Action(
                     text = UiText.StringResource(R.string.comments),
                     onClick = onComment,
-                )
+                ),
             )
         }
     }

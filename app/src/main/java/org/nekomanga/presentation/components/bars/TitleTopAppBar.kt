@@ -52,7 +52,7 @@ fun TitleTopAppBar(
             ),
     ) {
         Box(
-            modifier = Modifier.fillMaxWidth().statusBarsPadding().padding(horizontal = Size.small)
+            modifier = Modifier.fillMaxWidth().statusBarsPadding().padding(horizontal = Size.small),
         ) {
             val titleModifier =
                 if (onTitleClick != null) {
@@ -90,7 +90,7 @@ fun TitleTopAppBar(
                         text = subtitle,
                         style =
                             MaterialTheme.typography.titleMedium.copy(
-                                color = onColor.copy(alpha = 0.7f)
+                                color = onColor.copy(alpha = 0.7f),
                             ),
                         textAlign = TextAlign.Center,
                         modifier = Modifier.fillMaxWidth(),

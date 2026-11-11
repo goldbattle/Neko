@@ -60,7 +60,7 @@ fun GestureNavigationOverlay(
                         down.consume()
                         currentOnDismiss()
                     }
-                }
+                },
         ) {
             val width = maxWidth
             val height = maxHeight
@@ -92,7 +92,7 @@ fun GestureNavigationOverlay(
                             style =
                                 LocalTextStyle.current.copy(
                                     drawStyle =
-                                        Stroke(miter = 10f, width = 6f, join = StrokeJoin.Round)
+                                        Stroke(miter = 10f, width = 6f, join = StrokeJoin.Round),
                                 ),
                         )
                         Text(

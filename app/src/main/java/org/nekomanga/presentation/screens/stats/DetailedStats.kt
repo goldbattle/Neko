@@ -677,7 +677,7 @@ private fun DetailedCard(manga: StatsConstants.DetailedStatManga, modifier: Modi
     ElevatedCard(modifier = modifier.padding(horizontal = Size.medium, vertical = Size.small)) {
         Column(
             modifier =
-                Modifier.fillMaxWidth().padding(horizontal = Size.small, vertical = Size.tiny)
+                Modifier.fillMaxWidth().padding(horizontal = Size.small, vertical = Size.tiny),
         ) {
             Text(
                 text = manga.title,
@@ -740,7 +740,7 @@ private fun Line(label: String, value: String) {
                     fontWeight = FontWeight.SemiBold,
                     color =
                         MaterialTheme.colorScheme.onSurface.copy(
-                            alpha = NekoColors.mediumAlphaHighContrast
+                            alpha = NekoColors.mediumAlphaHighContrast,
                         ),
                 ),
         )
@@ -823,14 +823,14 @@ private fun StatCard(
     totalReadDuration: Long,
 ) {
     ElevatedCard(
-        modifier = Modifier.fillMaxWidth().padding(horizontal = Size.medium, vertical = Size.small)
+        modifier = Modifier.fillMaxWidth().padding(horizontal = Size.medium, vertical = Size.small),
     ) {
         val labelStyle =
             MaterialTheme.typography.labelSmall.copy(
                 fontWeight = FontWeight.SemiBold,
                 color =
                     MaterialTheme.colorScheme.onSurface.copy(
-                        alpha = NekoColors.mediumAlphaHighContrast
+                        alpha = NekoColors.mediumAlphaHighContrast,
                     ),
             )
         val valueStyle = MaterialTheme.typography.bodyMedium

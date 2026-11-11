@@ -111,7 +111,7 @@ fun ReaderChapter.State?.toPreloadState(): ChapterTransitionUiModel.PreloadState
 
 /** This model with its target chapter in [state], or this model when nothing changes. */
 fun ChapterTransitionUiModel.withPreloadState(
-    state: ChapterTransitionUiModel.PreloadState
+    state: ChapterTransitionUiModel.PreloadState,
 ): ChapterTransitionUiModel {
     val target =
         when (this) {

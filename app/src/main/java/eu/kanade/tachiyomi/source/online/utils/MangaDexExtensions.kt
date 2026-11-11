@@ -14,7 +14,7 @@ fun MangaDataDto.toBasicManga(coverQuality: Int = 0, useNoCoverUrl: Boolean = tr
                 MdUtil.getTitle(
                     this@toBasicManga.attributes.title,
                     this@toBasicManga.attributes.originalLanguage,
-                )
+                ),
             )
 
         thumbnail_url =
@@ -52,7 +52,7 @@ fun MangaDataDto.toSourceManga(
                 MdUtil.getTitle(
                     this@toSourceManga.attributes.title,
                     this@toSourceManga.attributes.originalLanguage,
-                )
+                ),
             ),
         displayText = displayText,
         displayTextRes = displayTextRes,

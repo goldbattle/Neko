@@ -138,8 +138,8 @@ fun HistoryCard(
                         MaterialTheme.typography.labelMedium.copy(
                             color =
                                 MaterialTheme.colorScheme.onSurface.copy(
-                                    alpha = NekoColors.mediumAlphaLowContrast
-                                )
+                                    alpha = NekoColors.mediumAlphaLowContrast,
+                                ),
                         ),
                 )
                 Gap(Size.small)
@@ -151,7 +151,7 @@ fun HistoryCard(
                         modifier =
                             Modifier.fillMaxWidth().padding(vertical = Size.small).clickable {
                                 chapterClick(chapterItem.chapter.id)
-                            }
+                            },
                     ) {
                         Row(
                             modifier = Modifier.fillMaxWidth(),
@@ -159,7 +159,7 @@ fun HistoryCard(
                         ) {
                             Column(
                                 modifier =
-                                    Modifier.weight(1f).fillMaxWidth().padding(start = Size.small)
+                                    Modifier.weight(1f).fillMaxWidth().padding(start = Size.small),
                             ) {
                                 val textColor =
                                     getReadTextColor(
@@ -342,7 +342,7 @@ private fun Buttons(
                                             onClick = deleteAllHistoryClick,
                                         ),
                                     ),
-                            )
+                            ),
                         )
                         .toList(),
             )

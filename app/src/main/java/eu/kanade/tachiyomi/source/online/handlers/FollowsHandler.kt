@@ -64,7 +64,7 @@ class FollowsHandler {
                                     false -> listOf(mangaListDto)
                                 }
                                 .map { it.data }
-                                .flatten()
+                                .flatten(),
                         )
                     }
                     .andThen { allResults ->

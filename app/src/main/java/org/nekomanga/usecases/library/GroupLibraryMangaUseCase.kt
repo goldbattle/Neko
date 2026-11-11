@@ -82,7 +82,7 @@ class GroupLibraryMangaUseCase {
         val distinctList = libraryMangaList.distinctBy { it.displayManga.mangaId }.toList()
 
         return listOf(
-            LibraryCategoryItem(categoryItem = allCategoryItem, libraryItems = distinctList)
+            LibraryCategoryItem(categoryItem = allCategoryItem, libraryItems = distinctList),
         )
     }
 

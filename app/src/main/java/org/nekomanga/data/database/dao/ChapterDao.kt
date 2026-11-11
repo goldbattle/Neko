@@ -54,7 +54,7 @@ interface ChapterDao {
         last_page_read = :lastPage,
         pages_left = :pagesLeft
         WHERE id = :id
-    """
+    """,
     )
     suspend fun updateProgress(
         id: Long,
@@ -65,7 +65,7 @@ interface ChapterDao {
     )
 
     @Query(
-        "UPDATE chapters SET source_order = :order WHERE mangadex_chapter_id = :chapterId AND manga_id = :mangaId"
+        "UPDATE chapters SET source_order = :order WHERE mangadex_chapter_id = :chapterId AND manga_id = :mangaId",
     )
     suspend fun updateSourceOrder(chapterId: String, mangaId: Long, order: Int)
 
@@ -89,7 +89,7 @@ interface ChapterDao {
         ORDER BY
             CASE WHEN :sortByFetched = 1 THEN chapters.date_fetch ELSE chapters.date_upload END DESC
         LIMIT :limit OFFSET :offset
-    """
+    """,
     )
     fun observeRecentChapters(
         search: String,
@@ -118,7 +118,7 @@ interface ChapterDao {
         ORDER BY
             CASE WHEN :sortByFetched = 1 THEN chapters.date_fetch ELSE chapters.date_upload END DESC
         LIMIT :limit OFFSET :offset
-    """
+    """,
     )
     suspend fun getRecentChapters(
         search: String,
@@ -133,7 +133,7 @@ interface ChapterDao {
 
     // 1. Replicates ChapterBackupPutResolver
     @Query(
-        "UPDATE chapters SET read = :read, bookmark = :bookmark, last_page_read = :lastPageRead WHERE mangadex_chapter_id = :mangadexChapterId"
+        "UPDATE chapters SET read = :read, bookmark = :bookmark, last_page_read = :lastPageRead WHERE mangadex_chapter_id = :mangadexChapterId",
     )
     suspend fun updateChapterBackupByMangadexId(
         mangadexChapterId: String,
@@ -158,7 +158,7 @@ interface ChapterDao {
 
     // 2. Replicates ChapterKnownBackupPutResolver
     @Query(
-        "UPDATE chapters SET read = :read, bookmark = :bookmark, last_page_read = :lastPageRead WHERE id = :id"
+        "UPDATE chapters SET read = :read, bookmark = :bookmark, last_page_read = :lastPageRead WHERE id = :id",
     )
     suspend fun updateKnownChapterBackupById(
         id: Long,

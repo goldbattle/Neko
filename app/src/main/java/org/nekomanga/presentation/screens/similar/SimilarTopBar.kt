@@ -37,8 +37,8 @@ fun SimilarTopBar(
                             title = UiText.StringResource(R.string.settings),
                             icon = Icons.Outlined.Tune,
                             onClick = onSettingClick,
-                        )
-                    )
+                        ),
+                    ),
             )
         },
     )

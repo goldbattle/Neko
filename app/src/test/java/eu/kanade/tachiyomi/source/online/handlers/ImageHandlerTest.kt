@@ -57,11 +57,11 @@ class ImageHandlerTest {
             mockk<NetworkHelper> {
                 every { cdnClient } returns client
                 every { headers } returns Headers.headersOf()
-            }
+            },
         )
         val port443 = mockk<Preference<Boolean>> { every { get() } returns true }
         Injekt.addSingleton(
-            mockk<MangaDexPreferences> { every { usePort443ForImageServer() } returns port443 }
+            mockk<MangaDexPreferences> { every { usePort443ForImageServer() } returns port443 },
         )
         val atHome =
             AtHomeDto(REFRESHED_BASE_URL, AtHomeChapterDto("hash", emptyList(), emptyList()))
@@ -70,7 +70,7 @@ class ImageHandlerTest {
         Injekt.addSingleton(
             mockk<NetworkServices> {
                 every { atHomeService } returns this@ImageHandlerTest.atHomeService
-            }
+            },
         )
     }
 

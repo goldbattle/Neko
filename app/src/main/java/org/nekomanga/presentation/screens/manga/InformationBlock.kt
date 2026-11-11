@@ -233,7 +233,7 @@ fun InformationBlock(
                 onClick = { showEstimatedMissingChapters = !showEstimatedMissingChapters },
             )
             AnimatedVisibility(
-                visible = showEstimatedMissingChapters && !estimatedMissingChapters.isNullOrBlank()
+                visible = showEstimatedMissingChapters && !estimatedMissingChapters.isNullOrBlank(),
             ) {
                 NoRippleText(
                     modifier = Modifier.padding(top = Size.tiny),
@@ -280,7 +280,7 @@ private fun LanguageFlag(langFlag: String) {
         Image(
             painter =
                 rememberDrawablePainter(
-                    drawable = AppCompatResources.getDrawable(context, mdLang.iconResId)
+                    drawable = AppCompatResources.getDrawable(context, mdLang.iconResId),
                 ),
             modifier = Modifier.height(Size.large).clip(RoundedCornerShape(Size.tiny)),
             contentDescription = mdLang.prettyPrint,

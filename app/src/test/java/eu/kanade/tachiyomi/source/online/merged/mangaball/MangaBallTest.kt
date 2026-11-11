@@ -125,7 +125,7 @@ class MangaBallTest {
         val chapter =
             json
                 .decodeFromString<ChapterListResponse>(
-                    """{"data":[{"id":"a","lang":"en","number":1,"group":{"id":"lugia","name":"Lugia"}}]}"""
+                    """{"data":[{"id":"a","lang":"en","number":1,"group":{"id":"lugia","name":"Lugia"}}]}""",
                 )
                 .data[0]
                 .toSChapter(listOf("en"))!!
@@ -138,7 +138,7 @@ class MangaBallTest {
         val chapter =
             json
                 .decodeFromString<ChapterListResponse>(
-                    """{"data":[{"id":"a","lang":"en","number":1,"group":{"id":null,"name":null}}]}"""
+                    """{"data":[{"id":"a","lang":"en","number":1,"group":{"id":null,"name":null}}]}""",
                 )
                 .data[0]
                 .toSChapter(listOf("en"))!!
@@ -150,7 +150,7 @@ class MangaBallTest {
     fun `chapter without a language is skipped`() {
         json
             .decodeFromString<ChapterListResponse>(
-                """{"data":[{"id":"a","lang":null,"number":1}]}"""
+                """{"data":[{"id":"a","lang":null,"number":1}]}""",
             )
             .data[0]
             .toSChapter(listOf("en")) shouldBe null
@@ -173,7 +173,7 @@ class MangaBallTest {
     fun `missing chapter has no pages`() {
         json
             .decodeFromString<ChapterDetailResponse>(
-                """{"status":"error","message":"Chapter not found","data":null}"""
+                """{"status":"error","message":"Chapter not found","data":null}""",
             )
             .toPageList() shouldBe emptyList()
     }

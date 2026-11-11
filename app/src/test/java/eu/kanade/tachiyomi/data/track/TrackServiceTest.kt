@@ -349,7 +349,7 @@ class TrackServiceTest {
                         every { read } returns true
                         every { isRecognizedNumber } returns true
                         every { name } returns "Chapter 10.5"
-                    }
+                    },
                 )
 
             coEvery { mangaRepository.getMangaById(mangaId) } returns mockManga

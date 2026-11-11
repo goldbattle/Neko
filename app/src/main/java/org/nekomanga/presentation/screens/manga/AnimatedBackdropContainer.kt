@@ -146,9 +146,9 @@ fun AnimatedBackdropContainer(
                     .alpha(animatedGradientAlpha) // <-- Use the new animated alpha
                     .background(
                         Brush.verticalGradient(
-                            colors = listOf(Color.Transparent, MaterialTheme.colorScheme.surface)
-                        )
-                    )
+                            colors = listOf(Color.Transparent, MaterialTheme.colorScheme.surface),
+                        ),
+                    ),
         )
     }
 }

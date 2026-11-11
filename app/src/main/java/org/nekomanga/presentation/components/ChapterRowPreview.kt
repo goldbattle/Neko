@@ -40,7 +40,7 @@ private fun ChapterRowPreviewContent(chapterItem: ChapterItem) {
 @Preview
 @Composable
 private fun ChapterRowPreview(
-    @PreviewParameter(ChapterItemProvider::class) themedChapterItem: Themed<ChapterItem>
+    @PreviewParameter(ChapterItemProvider::class) themedChapterItem: Themed<ChapterItem>,
 ) {
     ThemedPreviews(themedChapterItem.themeConfig) {
         ChapterRowPreviewContent(themedChapterItem.value)
@@ -60,7 +60,7 @@ private class ChapterItemProvider : PreviewParameterProvider<Themed<ChapterItem>
                                 language = MdLang.ENGLISH.lang,
                                 scanlator = "ScanGroup A",
                                 dateUpload = System.currentTimeMillis(),
-                            )
+                            ),
                 ),
                 // 2. Read, Bookmarked, Japanese
                 ChapterItem(
@@ -74,7 +74,7 @@ private class ChapterItemProvider : PreviewParameterProvider<Themed<ChapterItem>
                                 language = MdLang.JAPANESE.lang,
                                 scanlator = "ScanGroup B",
                                 dateUpload = System.currentTimeMillis() - 86400000,
-                            )
+                            ),
                 ),
                 // 3. Downloading, Progress 45%
                 ChapterItem(
@@ -100,7 +100,7 @@ private class ChapterItemProvider : PreviewParameterProvider<Themed<ChapterItem>
                                 language = MdLang.ENGLISH.lang,
                                 isUnavailable = true,
                                 scanlator = "Official Publisher",
-                            )
+                            ),
                 ),
             )
             .withThemes()

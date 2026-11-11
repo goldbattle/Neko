@@ -83,7 +83,7 @@ internal val NekoMarkdownAnnotator: MarkdownAnnotator =
             } else {
                 false
             }
-        }
+        },
     )
 
 private fun CharSequence.isHtmlLineBreak(): Boolean {
@@ -232,7 +232,7 @@ private val markdownComponents =
                 LocalBulletListHandler provides
                     { _, _, _, _, _ ->
                         "${markers[ul.listDepth % markers.size]} "
-                    }
+                    },
             ) {
                 MarkdownBulletList(
                     content = ul.content,
@@ -291,8 +291,8 @@ private fun getMarkdownInlineContent() =
                                 tint = MaterialTheme.colorScheme.primary,
                             )
                         },
-                    )
-            )
+                    ),
+            ),
     )
 
 object SimpleMarkdownFlavourDescriptor : CommonMarkFlavourDescriptor() {

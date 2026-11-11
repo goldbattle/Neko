@@ -62,7 +62,7 @@ fun InfoScreen(
                             )
                         }
                         .windowInsetsPadding(NavigationBarDefaults.windowInsets)
-                        .padding(horizontal = Size.medium, vertical = Size.small)
+                        .padding(horizontal = Size.medium, vertical = Size.small),
             ) {
                 Button(
                     modifier = Modifier.fillMaxWidth(),
@@ -82,7 +82,7 @@ fun InfoScreen(
                     }
                 }
             }
-        }
+        },
     ) { paddingValues ->
         // Status bar scrim
         Box(
@@ -90,7 +90,7 @@ fun InfoScreen(
                 Modifier.zIndex(2f)
                     .background(MaterialTheme.colorScheme.background)
                     .fillMaxWidth()
-                    .height(paddingValues.calculateTopPadding())
+                    .height(paddingValues.calculateTopPadding()),
         )
 
         Column(
@@ -99,7 +99,7 @@ fun InfoScreen(
                     .fillMaxWidth()
                     .padding(paddingValues)
                     .padding(top = Size.large)
-                    .padding(horizontal = Size.medium)
+                    .padding(horizontal = Size.medium),
         ) {
             when (icon != null) {
                 true -> {

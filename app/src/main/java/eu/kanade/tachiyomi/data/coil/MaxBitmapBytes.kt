@@ -159,7 +159,7 @@ class MaxBitmapBytesDecoderFactory : Decoder.Factory {
         if (maxSize == options.maxBitmapSize) return null
         val limited =
             options.copy(
-                extras = options.extras.newBuilder().set(Extras.Key.maxBitmapSize, maxSize).build()
+                extras = options.extras.newBuilder().set(Extras.Key.maxBitmapSize, maxSize).build(),
             )
         val components = imageLoader.components
         val next = components.decoderFactories.indexOf(this) + 1

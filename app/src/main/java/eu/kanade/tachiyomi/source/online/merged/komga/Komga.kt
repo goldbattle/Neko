@@ -134,7 +134,7 @@ class Komga : MergedServerSource() {
     }
 
     override suspend fun fetchChapters(
-        mangaUrl: String
+        mangaUrl: String,
     ): Result<List<SChapterStatusPair>, ResultError> {
         return withContext(Dispatchers.IO) {
             com.github.michaelbull.result

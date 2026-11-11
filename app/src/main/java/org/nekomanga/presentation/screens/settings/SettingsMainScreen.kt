@@ -133,7 +133,7 @@ private fun mainContent(
                         icon = Icons.Outlined.Tune,
                         isSelected = selectedScreen == Screens.Settings.General,
                         onClick = { onNavigateClick(Screens.Settings.General) },
-                    )
+                    ),
                 )
                 add(
                     SettingsMenuItem(
@@ -141,7 +141,7 @@ private fun mainContent(
                         icon = Icons.Outlined.Palette,
                         isSelected = selectedScreen == Screens.Settings.Appearance,
                         onClick = { onNavigateClick(Screens.Settings.Appearance) },
-                    )
+                    ),
                 )
                 add(
                     SettingsMenuItem(
@@ -151,7 +151,7 @@ private fun mainContent(
                             selectedScreen == Screens.Settings.Library ||
                                 selectedScreen == Screens.Settings.Categories,
                         onClick = { onNavigateClick(Screens.Settings.Library) },
-                    )
+                    ),
                 )
                 add(
                     SettingsMenuItem(
@@ -159,7 +159,7 @@ private fun mainContent(
                         icon = Icons.Outlined.Folder,
                         isSelected = selectedScreen == Screens.Settings.DataStorage,
                         onClick = { onNavigateClick(Screens.Settings.DataStorage) },
-                    )
+                    ),
                 )
                 add(
                     SettingsMenuItem(
@@ -167,7 +167,7 @@ private fun mainContent(
                         icon = Icons.Outlined.Public,
                         isSelected = selectedScreen == Screens.Settings.MangaDex,
                         onClick = { onNavigateClick(Screens.Settings.MangaDex) },
-                    )
+                    ),
                 )
                 add(
                     SettingsMenuItem(
@@ -175,7 +175,7 @@ private fun mainContent(
                         icon = MergeIcon,
                         isSelected = selectedScreen == Screens.Settings.MergeSource,
                         onClick = { onNavigateClick(Screens.Settings.MergeSource) },
-                    )
+                    ),
                 )
                 add(
                     SettingsMenuItem(
@@ -183,7 +183,7 @@ private fun mainContent(
                         icon = Icons.AutoMirrored.Default.ChromeReaderMode,
                         isSelected = selectedScreen == Screens.Settings.Reader,
                         onClick = { onNavigateClick(Screens.Settings.Reader) },
-                    )
+                    ),
                 )
                 add(
                     SettingsMenuItem(
@@ -191,7 +191,7 @@ private fun mainContent(
                         icon = Icons.Outlined.Download,
                         isSelected = selectedScreen == Screens.Settings.Downloads,
                         onClick = { onNavigateClick(Screens.Settings.Downloads) },
-                    )
+                    ),
                 )
                 add(
                     SettingsMenuItem(
@@ -199,7 +199,7 @@ private fun mainContent(
                         icon = Icons.Outlined.Autorenew,
                         isSelected = selectedScreen == Screens.Settings.Tracking,
                         onClick = { onNavigateClick(Screens.Settings.Tracking) },
-                    )
+                    ),
                 )
                 add(
                     SettingsMenuItem(
@@ -207,7 +207,7 @@ private fun mainContent(
                         icon = Icons.Outlined.Security,
                         isSelected = selectedScreen == Screens.Settings.Security,
                         onClick = { onNavigateClick(Screens.Settings.Security) },
-                    )
+                    ),
                 )
                 add(
                     SettingsMenuItem(
@@ -215,7 +215,7 @@ private fun mainContent(
                         icon = Icons.Outlined.Code,
                         isSelected = selectedScreen == Screens.Settings.Advanced,
                         onClick = { onNavigateClick(Screens.Settings.Advanced) },
-                    )
+                    ),
                 )
                 if (BuildConfig.DEBUG || developerMode) {
                     add(
@@ -224,7 +224,7 @@ private fun mainContent(
                             icon = Icons.Outlined.BugReport,
                             isSelected = selectedScreen == Screens.Settings.Debug,
                             onClick = { onNavigateClick(Screens.Settings.Debug) },
-                        )
+                        ),
                     )
                 }
             }

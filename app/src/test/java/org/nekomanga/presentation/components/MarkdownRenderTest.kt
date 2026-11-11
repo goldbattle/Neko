@@ -55,7 +55,7 @@ class MarkdownRenderTest {
     @Test
     fun htmlLineBreakTagsRenderAsNewlines() {
         renderText(
-            "First line<br>Second line<br/>Third line<br />Fourth line<BR>Fifth line"
+            "First line<br>Second line<br/>Third line<br />Fourth line<BR>Fifth line",
         ) shouldBe "First line\nSecond line\nThird line\nFourth line\nFifth line"
     }
 

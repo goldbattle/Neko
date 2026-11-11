@@ -226,7 +226,7 @@ fun MangaGridItem(
                             onLongClick = { onLongClick(displayManga) },
                         )
                         .padding(Size.extraTiny)
-                        .semantics { this.contentDescription = contentDescription }
+                        .semantics { this.contentDescription = contentDescription },
             ) {
                 if (isComfortable) {
                     Column {
@@ -266,8 +266,8 @@ fun MangaGridItem(
                         Modifier.fillMaxSize()
                             .clip(RoundedCornerShape(Shapes.coverRadius))
                             .background(
-                                MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.6f)
-                            )
+                                MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.6f),
+                            ),
                 )
             }
         }
@@ -336,7 +336,7 @@ fun BoxScope.CompactGridItem(
                                     Color.Transparent,
                                     Color.Black.copy(NekoColors.veryLowContrast),
                                     Color.Black.copy(NekoColors.highAlphaLowContrast),
-                                )
+                                ),
                         ),
                     shape =
                         RoundedCornerShape(
@@ -344,7 +344,7 @@ fun BoxScope.CompactGridItem(
                             bottomEnd = Shapes.coverRadius,
                         ),
                 )
-                .matchParentSize()
+                .matchParentSize(),
     ) {
         Column(modifier = Modifier.fillMaxWidth().align(Alignment.BottomStart)) {
             MangaGridTitle(

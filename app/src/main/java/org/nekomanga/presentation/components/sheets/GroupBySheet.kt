@@ -32,7 +32,7 @@ fun GroupBySheet(
     bottomContentPadding: Dp = Size.medium,
 ) {
     CompositionLocalProvider(
-        LocalRippleConfiguration provides themeColorState.rippleConfiguration
+        LocalRippleConfiguration provides themeColorState.rippleConfiguration,
     ) {
         BaseSheet(themeColor = themeColorState, bottomPaddingAroundContent = bottomContentPadding) {
             val paddingModifier = Modifier.padding(horizontal = Size.small)

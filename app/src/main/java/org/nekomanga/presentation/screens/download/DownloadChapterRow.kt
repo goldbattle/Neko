@@ -116,8 +116,8 @@ private fun ChapterRow(
                     MaterialTheme.typography.bodyMedium.copy(
                         color =
                             MaterialTheme.colorScheme.onSurface.copy(
-                                alpha = NekoColors.mediumAlphaLowContrast
-                            )
+                                alpha = NekoColors.mediumAlphaLowContrast,
+                            ),
                     ),
                 maxLines = 1,
             )

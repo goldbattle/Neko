@@ -44,7 +44,7 @@ fun FilterChapterSheet(
     setAsGlobal: (MangaConstants.SetGlobal) -> Unit,
 ) {
     CompositionLocalProvider(
-        LocalRippleConfiguration provides themeColorState.rippleConfiguration
+        LocalRippleConfiguration provides themeColorState.rippleConfiguration,
     ) {
         BaseSheet(themeColor = themeColorState) {
             Sort(themeColorState = themeColorState, sortFilter, changeSort) {
@@ -190,7 +190,7 @@ private fun Filter(
                     MangaConstants.ChapterDisplayOptions(
                         displayType = MangaConstants.ChapterDisplayType.All,
                         displayState = ToggleableState(!filter.showAll),
-                    )
+                    ),
                 )
             },
         )
@@ -247,7 +247,7 @@ private fun Filter(
                                 true -> ToggleableState.Off
                                 false -> ToggleableState.On
                             },
-                    )
+                    ),
                 )
             },
         )
@@ -307,7 +307,7 @@ private fun Scanlator(
                     stringResource(
                         id =
                             if (isSourceFilter) R.string.filter_source
-                            else R.string.filter_scanlators
+                            else R.string.filter_scanlators,
                     ),
                 style = MaterialTheme.typography.labelLarge,
                 color = MaterialTheme.colorScheme.onSurface,

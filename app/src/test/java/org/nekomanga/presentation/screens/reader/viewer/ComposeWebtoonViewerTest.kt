@@ -127,7 +127,7 @@ class ComposeWebtoonViewerTest {
             ReaderUiItem.SplitPage(ReaderPageSplit(page = page0, topOffset = 0, splitHeight = 500))
         val splitPage0Bottom =
             ReaderUiItem.SplitPage(
-                ReaderPageSplit(page = page0, topOffset = 500, splitHeight = 500)
+                ReaderPageSplit(page = page0, topOffset = 500, splitHeight = 500),
             )
 
         assertTrue(areItemsEquivalent(itemPage0, splitPage0Top))
@@ -260,13 +260,13 @@ class ComposeWebtoonViewerTest {
         val items =
             listOf(
                 ReaderUiItem.SplitPage(
-                    ReaderPageSplit(tallPage, topOffset = 0, splitHeight = 1000)
+                    ReaderPageSplit(tallPage, topOffset = 0, splitHeight = 1000),
                 ),
                 ReaderUiItem.SplitPage(
-                    ReaderPageSplit(tallPage, topOffset = 1000, splitHeight = 1000)
+                    ReaderPageSplit(tallPage, topOffset = 1000, splitHeight = 1000),
                 ),
                 ReaderUiItem.SplitPage(
-                    ReaderPageSplit(tallPage, topOffset = 2000, splitHeight = 500)
+                    ReaderPageSplit(tallPage, topOffset = 2000, splitHeight = 500),
                 ),
                 ReaderUiItem.Page(nextPage),
             )
@@ -646,7 +646,7 @@ class ComposeWebtoonViewerTest {
                     onNavigateToChapter = { ch, target ->
                         navigatedChapter = ch
                         targetNav = target
-                    }
+                    },
                 )
         val mockLazyListState = mockk<LazyListState>(relaxed = true)
         io.mockk.every { mockLazyListState.canScrollForward } returns false
@@ -701,7 +701,7 @@ class ComposeWebtoonViewerTest {
                     onNavigateToChapter = { ch, target ->
                         navigatedChapter = ch
                         targetNav = target
-                    }
+                    },
                 )
         val mockLazyListState = mockk<LazyListState>(relaxed = true)
         io.mockk.every { mockLazyListState.canScrollBackward } returns false

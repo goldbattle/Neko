@@ -47,7 +47,7 @@ fun RemovedChaptersDialog(
                             } else {
                                 chapterNames.joinToString(", ")
                             },
-                        )
+                        ),
                 )
             },
             onDismissRequest = onDismiss,
@@ -59,7 +59,7 @@ fun RemovedChaptersDialog(
                     },
                     colors =
                         ButtonDefaults.textButtonColors(
-                            contentColor = themeColorState.primaryColor
+                            contentColor = themeColorState.primaryColor,
                         ),
                 ) {
                     Text(text = stringResource(id = R.string.delete))
@@ -70,7 +70,7 @@ fun RemovedChaptersDialog(
                     onClick = onDismiss,
                     colors =
                         ButtonDefaults.textButtonColors(
-                            contentColor = themeColorState.primaryColor
+                            contentColor = themeColorState.primaryColor,
                         ),
                 ) {
                     Text(text = stringResource(id = R.string.keep))

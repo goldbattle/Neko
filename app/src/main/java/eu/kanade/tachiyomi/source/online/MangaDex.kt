@@ -78,7 +78,7 @@ open class MangaDex : HttpSource() {
         return withIOContext {
             val response =
                 networkServices.service.randomManga(
-                    mangaDexPreferences.visibleContentRatings().get().toList()
+                    mangaDexPreferences.visibleContentRatings().get().toList(),
                 )
 
             val result =
@@ -87,7 +87,7 @@ open class MangaDex : HttpSource() {
                         it.data.toSourceManga(
                             mangaDexPreferences.coverQuality().get(),
                             useNoCoverUrl = false,
-                        )
+                        ),
                     )
                 }
 
@@ -142,7 +142,7 @@ open class MangaDex : HttpSource() {
                                     name = groupDto.attributes.name,
                                     uuid = groupDto.id,
                                     description = groupDto.attributes.description,
-                                )
+                                ),
                             )
                         }
                     }
@@ -210,8 +210,8 @@ open class MangaDex : HttpSource() {
                     fetchList(MdConstants.staffPicksId).andThen { listResults ->
                         Ok(
                             listResults.copy(
-                                sourceManga = listResults.sourceManga.shuffled().toList()
-                            )
+                                sourceManga = listResults.sourceManga.shuffled().toList(),
+                            ),
                         )
                     }
                 }
@@ -220,8 +220,8 @@ open class MangaDex : HttpSource() {
                     fetchList(MdConstants.nekoDevPicksId).andThen { listResults ->
                         Ok(
                             listResults.copy(
-                                sourceManga = listResults.sourceManga.shuffled().toList()
-                            )
+                                sourceManga = listResults.sourceManga.shuffled().toList(),
+                            ),
                         )
                     }
                 }
@@ -232,7 +232,7 @@ open class MangaDex : HttpSource() {
                             ListResults(
                                 displayScreenType = DisplayScreenType.PopularNewTitles,
                                 sourceManga = mangaListPage.sourceManga.shuffled().toList(),
-                            )
+                            ),
                         )
                     }
                 }
@@ -250,7 +250,7 @@ open class MangaDex : HttpSource() {
                                 ListResults(
                                     displayScreenType = DisplayScreenType.FeedUpdates,
                                     sourceManga = mangaListPage.sourceManga,
-                                )
+                                ),
                             )
                         }
                 }
@@ -267,7 +267,7 @@ open class MangaDex : HttpSource() {
                                 ListResults(
                                     displayScreenType = DisplayScreenType.LatestChapters,
                                     sourceManga = mangaListPage.sourceManga,
-                                )
+                                ),
                             )
                         }
                 }
@@ -278,7 +278,7 @@ open class MangaDex : HttpSource() {
                             ListResults(
                                 displayScreenType = DisplayScreenType.RecentlyAdded,
                                 sourceManga = mangaListPage.sourceManga,
-                            )
+                            ),
                         )
                     }
                 }

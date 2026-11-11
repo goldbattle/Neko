@@ -191,7 +191,7 @@ class DownloadCache(
     }
 
     suspend fun renewCache(
-        onProgress: ((progress: Int, total: Int, currentTitle: String?) -> Unit)? = null
+        onProgress: ((progress: Int, total: Int, currentTitle: String?) -> Unit)? = null,
     ) {
         TimberKt.d { "Renewing cache" }
 

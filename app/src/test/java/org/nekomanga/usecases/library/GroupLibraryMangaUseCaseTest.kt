@@ -269,7 +269,7 @@ class GroupLibraryMangaUseCaseTest {
                 LibraryCategoryItem(
                     categoryItem = expectedCategoryItem,
                     libraryItems = listOf(manga1, manga2),
-                )
+                ),
             )
 
         assertEquals(expected, result)
@@ -345,7 +345,7 @@ class GroupLibraryMangaUseCaseTest {
                 LibraryCategoryItem(
                     categoryItem = category1,
                     libraryItems = listOf(manga1),
-                )
+                ),
             )
 
         assertEquals(expected, result)
@@ -371,7 +371,7 @@ class GroupLibraryMangaUseCaseTest {
                 LibraryCategoryItem(
                     categoryItem = category1,
                     libraryItems = listOf(manga1),
-                )
+                ),
             )
 
         assertEquals(expected, result)
@@ -428,7 +428,7 @@ class GroupLibraryMangaUseCaseTest {
                 LibraryCategoryItem(
                     categoryItem = category1,
                     libraryItems = listOf(manga1),
-                )
+                ),
             )
 
         assertEquals(expected, result)
@@ -483,7 +483,7 @@ class GroupLibraryMangaUseCaseTest {
                 LibraryCategoryItem(
                     categoryItem = systemCategory,
                     libraryItems = listOf(manga1),
-                )
+                ),
             )
 
         assertEquals(expected, result)

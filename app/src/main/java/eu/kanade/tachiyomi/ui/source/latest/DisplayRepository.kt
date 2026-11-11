@@ -64,7 +64,7 @@ class DisplayRepository(
     }
 
     private suspend fun getAuthorPage(
-        authorSearch: String
+        authorSearch: String,
     ): Result<DisplayPageResult, ResultError> {
         return mangaDex.searchForAuthor(authorSearch).map { resultListPage ->
             val displayResult = resultListPage.results.map { it.toDisplayResult() }
@@ -128,7 +128,7 @@ class DisplayRepository(
                         DisplayPageResult(
                             hasNextPage = mangaListPage.hasNextPage,
                             displayManga = displayMangaList.toList(),
-                        )
+                        ),
                     )
                 },
                 failure = { Err(it) },
@@ -151,7 +151,7 @@ class DisplayRepository(
                         DisplayPageResult(
                             hasNextPage = mangaListPage.hasNextPage,
                             displayManga = displayMangaList.toList(),
-                        )
+                        ),
                     )
                 },
                 failure = { Err(it) },
@@ -182,7 +182,7 @@ class DisplayRepository(
                         DisplayPageResult(
                             hasNextPage = listResults.hasNextPage,
                             displayManga = displayMangaList.toList(),
-                        )
+                        ),
                     )
                 },
                 failure = { Err(it) },
@@ -210,7 +210,7 @@ class DisplayRepository(
                                 if (it.rating == rating) it.copy(state = true)
                                 else it.copy(state = false)
                             }
-                            .toList()
+                            .toList(),
                 )
             } else {
                 blankFilter.copy(
@@ -221,7 +221,7 @@ class DisplayRepository(
                                     it.copy(state = ToggleableState.On)
                                 else it
                             }
-                            .toList()
+                            .toList(),
                 )
             }
 
@@ -235,7 +235,7 @@ class DisplayRepository(
                         DisplayPageResult(
                             hasNextPage = mangaListPage.hasNextPage,
                             displayManga = displayMangaList.toList(),
-                        )
+                        ),
                     )
                 },
                 failure = { Err(it) },
@@ -253,7 +253,7 @@ class DisplayRepository(
                         DisplayPageResult(
                             hasNextPage = listResults.hasNextPage,
                             displayManga = displayMangaList.toList(),
-                        )
+                        ),
                     )
                 },
                 failure = { Err(it) },

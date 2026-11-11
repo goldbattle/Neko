@@ -186,7 +186,7 @@ private fun AboutWrapper(
                         text = stringResource(R.string.app_name),
                         style =
                             MaterialTheme.typography.headlineMedium.copy(
-                                fontWeight = FontWeight.Bold
+                                fontWeight = FontWeight.Bold,
                             ),
                         color = MaterialTheme.colorScheme.onSurface,
                     )

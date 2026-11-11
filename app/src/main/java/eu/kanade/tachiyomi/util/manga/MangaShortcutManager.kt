@@ -84,19 +84,19 @@ class MangaShortcutManager(
                     ShortcutInfo.Builder(context, "Manga-${item.id.toString() ?: item.title}")
                         .setShortLabel(
                             item.title.takeUnless { it.isBlank() }
-                                ?: context.getString(R.string.manga)
+                                ?: context.getString(R.string.manga),
                         )
                         .setLongLabel(
                             item.title.takeUnless { it.isBlank() }
-                                ?: context.getString(R.string.manga)
+                                ?: context.getString(R.string.manga),
                         )
                         .setIcon(icon)
                         .setIntent(
                             MainActivity.openMangaIntent(context, item.id!!, true)
                                 .addFlags(
                                     Intent.FLAG_ACTIVITY_CLEAR_TOP or
-                                        Intent.FLAG_ACTIVITY_SINGLE_TOP
-                                )
+                                        Intent.FLAG_ACTIVITY_SINGLE_TOP,
+                                ),
                         )
                         .build()
                 } catch (e: CancellationException) {

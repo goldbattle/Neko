@@ -71,7 +71,7 @@ internal class ReaderSettingsScreen(
                             mapOf(
                                 1 to
                                     stringResource(
-                                        R.string.no_animation
+                                        R.string.no_animation,
                                     ), // using a value of 0 breaks the image viewer, so
                                 250 to stringResource(R.string.normal),
                                 500 to stringResource(R.string.fast),
@@ -97,7 +97,7 @@ internal class ReaderSettingsScreen(
                                 .toMap(),
                     ),
                     Preference.PreferenceItem.InfoPreference(
-                        title = stringResource(R.string.certain_buttons_can_be_found)
+                        title = stringResource(R.string.certain_buttons_can_be_found),
                     ),
                 ),
         )
@@ -309,7 +309,7 @@ internal class ReaderSettingsScreen(
                                 .toMap(),
                     ),
                     Preference.PreferenceItem.InfoPreference(
-                        title = stringResource(R.string.automatic_can_still_switch)
+                        title = stringResource(R.string.automatic_can_still_switch),
                     ),
                     Preference.PreferenceItem.SwitchPreference(
                         pref = readerPreferences.automaticSplitsPage(),

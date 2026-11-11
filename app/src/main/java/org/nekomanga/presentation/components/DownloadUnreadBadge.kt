@@ -84,7 +84,7 @@ private fun SoloBadge(
                         color = NekoOutline.color,
                         shape = singleBadgeShape,
                     )
-                }
+                },
     ) {
         Text(
             modifier = Modifier.padding(vertical = NekoSize.tiny, horizontal = NekoSize.small),
@@ -153,7 +153,7 @@ private fun DoubleBadgeOneSide(
         modifier =
             modifier.clip(shape).background(color = backgroundColor).conditional(outline) {
                 this.border(width = NekoOutline.thickness, color = NekoOutline.color, shape = shape)
-            }
+            },
     ) {
         Text(
             modifier =
@@ -276,7 +276,7 @@ private class SlashedRoundedShape(
                         lineTo(0f, size.height)
                         close()
                     }
-                }
+                },
         )
     }
 }

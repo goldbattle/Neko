@@ -32,7 +32,7 @@ class CheckTallPageUseCaseTest {
         assertNull(useCase.computeSplits(page, outWidth = 0, outHeight = 1000, screenHeight = 1000))
         assertNull(useCase.computeSplits(page, outWidth = 1000, outHeight = 0, screenHeight = 1000))
         assertNull(
-            useCase.computeSplits(page, outWidth = -100, outHeight = 1000, screenHeight = 1000)
+            useCase.computeSplits(page, outWidth = -100, outHeight = 1000, screenHeight = 1000),
         )
     }
 
@@ -136,7 +136,7 @@ class CheckTallPageUseCaseTest {
                     page = page,
                     topOffset = 0,
                     splitHeight = 2000,
-                )
+                ),
             )
         page.precomputedSplits = dummySplits
         // Stream throws exception if called

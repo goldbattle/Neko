@@ -44,10 +44,10 @@ class DownloadManagerStartDownloadsTest {
         Injekt = InjektScope(DefaultRegistrar())
         Injekt.addSingleton(mockk<SourceManager> { every { mangaDex } returns mockk() })
         Injekt.addSingleton(
-            mockk<StorageManager> { every { baseDirChanges } returns MutableSharedFlow() }
+            mockk<StorageManager> { every { baseDirChanges } returns MutableSharedFlow() },
         )
         Injekt.addSingleton(
-            mockk<MangaRepository> { coEvery { getMangaList() } returns emptyList() }
+            mockk<MangaRepository> { coEvery { getMangaList() } returns emptyList() },
         )
 
         val preferences =

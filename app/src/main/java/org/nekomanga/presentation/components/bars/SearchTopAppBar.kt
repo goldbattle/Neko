@@ -73,7 +73,7 @@ fun SearchTopAppBar(
             ),
     ) {
         Box(
-            modifier = Modifier.fillMaxWidth().statusBarsPadding().padding(horizontal = Size.small)
+            modifier = Modifier.fillMaxWidth().statusBarsPadding().padding(horizontal = Size.small),
         ) {
             Row(
                 modifier = Modifier.fillMaxWidth().statusBarsPadding().heightIn(Size.appBarHeight),
@@ -114,7 +114,7 @@ fun SearchTopAppBar(
                                 disabledContainerColor = Color.Transparent,
                                 cursorColor =
                                     LocalContentColor.current.copy(
-                                        alpha = LocalContentAlpha.current
+                                        alpha = LocalContentAlpha.current,
                                     ),
                                 focusedIndicatorColor = Color.Transparent,
                                 unfocusedIndicatorColor = Color.Transparent,

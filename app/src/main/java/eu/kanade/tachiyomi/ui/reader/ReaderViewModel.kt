@@ -451,7 +451,7 @@ constructor(
                             it.chapter.id == (currentReaderChapter?.chapter?.id ?: chapterId)
                         }
                         (sortedChapterItems + selectedChapterItem).sortedWith(
-                            chapterItemSort.sortComparator(dbManga, true)
+                            chapterItemSort.sortComparator(dbManga, true),
                         )
                     }
 
@@ -747,8 +747,8 @@ constructor(
                                 R.string.theres_no_next_chapter
                             } else {
                                 R.string.theres_no_previous_chapter
-                            }
-                        )
+                            },
+                        ),
                     )
                 }
             } finally {
@@ -821,7 +821,7 @@ constructor(
                         ReaderNavCommand.SnapToPage(
                             pageIndex = targetPage,
                             chapterId = chapter.chapter.id,
-                        )
+                        ),
                     )
                 }
             }
@@ -1283,7 +1283,7 @@ constructor(
                 if (readerPreferences.folderPerManga().get() && directory != null) {
                     directory =
                         directory.createDirectory(
-                            DiskUtil.buildValidFilename(manga.displayTitle())
+                            DiskUtil.buildValidFilename(manga.displayTitle()),
                         )!!
                 }
                 directory ?: throw Exception("Error creating directory to save page")
@@ -1320,7 +1320,7 @@ constructor(
                 if (readerPreferences.folderPerManga().get()) {
                     directory =
                         directory.createDirectory(
-                            DiskUtil.buildValidFilename(manga.displayTitle())
+                            DiskUtil.buildValidFilename(manga.displayTitle()),
                         )!!
                 }
                 val file = saveImages(firstPage, secondPage, isLTR, bg, directory, manga)
@@ -1714,7 +1714,7 @@ constructor(
                 readingMode = ReadingModeType.fromPreference(currentManga?.readingModeType ?: 0),
                 orientation =
                     OrientationType.fromPreference(
-                        currentManga?.orientationType ?: OrientationType.DEFAULT.flagValue
+                        currentManga?.orientationType ?: OrientationType.DEFAULT.flagValue,
                     ),
                 readerTheme = readerPreferences.readerTheme().get(),
                 sliderPosition = readerPreferences.sliderPosition().get(),
@@ -1782,7 +1782,7 @@ constructor(
                                 ReadingModeType.fromPreference(manga?.readingModeType ?: 0),
                             orientation =
                                 OrientationType.fromPreference(
-                                    manga?.orientationType ?: OrientationType.DEFAULT.flagValue
+                                    manga?.orientationType ?: OrientationType.DEFAULT.flagValue,
                                 ),
                         )
                     }

@@ -51,7 +51,7 @@ fun WebviewTopBar(
                             )
                         } else {
                             AppBar.Empty
-                        }
+                        },
                     ) +
                         listOf(
                             if (navigator.canGoForward) {
@@ -62,7 +62,7 @@ fun WebviewTopBar(
                                 )
                             } else {
                                 AppBar.Empty
-                            }
+                            },
                         ) +
                         listOf(
                             AppBar.OverflowAction(
@@ -90,8 +90,8 @@ fun WebviewTopBar(
                                 )
                             } else {
                                 AppBar.Empty
-                            }
-                        )
+                            },
+                        ),
             )
         },
     )

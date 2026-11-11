@@ -25,7 +25,7 @@ fun LogoutDialog(sourceName: String, onDismiss: () -> Unit, onConfirm: () -> Uni
                 onClick = {
                     onConfirm()
                     onDismiss()
-                }
+                },
             ) {
                 Text(text = stringResource(id = R.string.sign_out))
             }

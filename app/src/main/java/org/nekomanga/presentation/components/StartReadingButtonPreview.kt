@@ -10,7 +10,7 @@ import org.nekomanga.presentation.theme.ThemedPreviews
 @Preview
 @Composable
 private fun StartReadingButtonPreview(
-    @PreviewParameter(ThemeConfigProvider::class) themeConfig: ThemeConfig
+    @PreviewParameter(ThemeConfigProvider::class) themeConfig: ThemeConfig,
 ) {
     ThemedPreviews(themeConfig) { StartReadingButton(onStartReadingClick = {}) }
 }

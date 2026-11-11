@@ -322,7 +322,8 @@ private fun Ungrouped(
                     feedUpdatesMangaList.indexOf(feedManga) // Used for pagination only
 
                 item(
-                    key = "$dateString-$chapterIndex-${feedManga.mangaId}-${chapterItem.chapter.id}"
+                    key =
+                        "$dateString-$chapterIndex-${feedManga.mangaId}-${chapterItem.chapter.id}",
                 ) {
                     ExpressiveListCard(
                         modifier = Modifier.padding(horizontal = Size.small),

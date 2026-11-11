@@ -26,7 +26,7 @@ interface CategoryDao {
         SELECT categories.* FROM categories
         JOIN manga_categories ON categories.id = manga_categories.category_id
         WHERE manga_categories.manga_id = :mangaId
-    """
+    """,
     )
     fun observeCategoriesForManga(mangaId: Long): Flow<List<CategoryEntity>>
 
@@ -35,7 +35,7 @@ interface CategoryDao {
         SELECT categories.* FROM categories
         JOIN manga_categories ON categories.id = manga_categories.category_id
         WHERE manga_categories.manga_id = :mangaId
-    """
+    """,
     )
     suspend fun getCategoriesForManga(mangaId: Long): List<CategoryEntity>
 

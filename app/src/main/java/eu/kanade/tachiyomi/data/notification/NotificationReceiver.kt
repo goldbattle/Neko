@@ -667,7 +667,7 @@ class NotificationReceiver : BroadcastReceiver() {
                     getPendingIntent(
                         manga.id.hashCode(),
                         PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
-                    )
+                    ),
                 )
             }
         }

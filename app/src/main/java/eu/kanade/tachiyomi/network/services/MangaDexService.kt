@@ -43,14 +43,14 @@ interface MangaDexService {
     suspend fun recentlyAdded(@QueryMap options: ProxyRetrofitQueryMap): ApiResponse<MangaListDto>
 
     @GET(
-        "${MdConstants.Api.manga}?&order[followedCount]=desc&includes[]=${MdConstants.Types.coverArt}&hasAvailableChapters=true"
+        "${MdConstants.Api.manga}?&order[followedCount]=desc&includes[]=${MdConstants.Types.coverArt}&hasAvailableChapters=true",
     )
     suspend fun popularNewReleases(
-        @QueryMap options: ProxyRetrofitQueryMap
+        @QueryMap options: ProxyRetrofitQueryMap,
     ): ApiResponse<MangaListDto>
 
     @GET(
-        "${MdConstants.Api.manga}/{id}?includes[]=${MdConstants.Types.coverArt}&includes[]=${MdConstants.Types.author}&includes[]=${MdConstants.Types.artist}"
+        "${MdConstants.Api.manga}/{id}?includes[]=${MdConstants.Types.coverArt}&includes[]=${MdConstants.Types.author}&includes[]=${MdConstants.Types.artist}",
     )
     suspend fun viewManga(@Path("id") id: String): ApiResponse<MangaDto>
 
@@ -59,7 +59,7 @@ interface MangaDexService {
 
     @GET("${MdConstants.Api.manga}/{id}/aggregate")
     suspend fun getAggregate(
-        @Path("id") mangaId: String
+        @Path("id") mangaId: String,
     ): ApiResponse<eu.kanade.tachiyomi.source.online.models.dto.AggregateDto>
 
     @GET("${MdConstants.Api.statistics}${MdConstants.Api.chapter}/{id}")
@@ -73,7 +73,7 @@ interface MangaDexService {
 
     @Headers("Cache-Control: no-cache")
     @GET(
-        "${MdConstants.Api.manga}/{id}/feed?limit=500&contentRating[]=${MdConstants.ContentRating.safe}&contentRating[]=${MdConstants.ContentRating.suggestive}&contentRating[]=${MdConstants.ContentRating.erotica}&contentRating[]=${MdConstants.ContentRating.pornographic}&includes[]=${MdConstants.Types.scanlator}&includes[]=${MdConstants.Types.uploader}&order[volume]=desc&order[chapter]=desc"
+        "${MdConstants.Api.manga}/{id}/feed?limit=500&contentRating[]=${MdConstants.ContentRating.safe}&contentRating[]=${MdConstants.ContentRating.suggestive}&contentRating[]=${MdConstants.ContentRating.erotica}&contentRating[]=${MdConstants.ContentRating.pornographic}&includes[]=${MdConstants.Types.scanlator}&includes[]=${MdConstants.Types.uploader}&order[volume]=desc&order[chapter]=desc",
     )
     suspend fun viewChapters(
         @Path("id") id: String,
@@ -108,7 +108,7 @@ interface MangaDexService {
     @Headers("Cache-Control: no-cache")
     @GET("${MdConstants.Api.manga}/random")
     suspend fun randomManga(
-        @Query("contentRating[]") contentRating: List<String>
+        @Query("contentRating[]") contentRating: List<String>,
     ): ApiResponse<MangaDto>
 
     @Headers("Cache-Control: no-cache")
@@ -118,7 +118,7 @@ interface MangaDexService {
     @Headers("Cache-Control: no-cache")
     @GET(MdConstants.Api.group)
     suspend fun scanlatorGroupByUuid(
-        @Query("ids[]") scanlatorUuid: String
+        @Query("ids[]") scanlatorUuid: String,
     ): ApiResponse<GroupListDto>
 
     @Headers("Cache-Control: no-cache")

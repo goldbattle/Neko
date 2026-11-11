@@ -103,7 +103,7 @@ class WeebCentral : ReducedHttpSource() {
     }
 
     override suspend fun fetchChapters(
-        mangaUrl: String
+        mangaUrl: String,
     ): Result<List<SChapterStatusPair>, ResultError> {
         val url =
             (baseUrl + mangaUrl)
@@ -187,7 +187,7 @@ class WeebCentral : ReducedHttpSource() {
 
                         date_upload =
                             dateFormat.tryParse(
-                                element.selectFirst("time[datetime]")?.attr("datetime")
+                                element.selectFirst("time[datetime]")?.attr("datetime"),
                             )
                         scanlator = WeebCentral.name
                         mangadex_chapter_id = url.substringAfter("chapters/")

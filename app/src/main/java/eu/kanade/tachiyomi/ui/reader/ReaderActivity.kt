@@ -422,7 +422,7 @@ class ReaderActivity : BaseMainActivity() {
                                             itemIndex = req.first,
                                             animated = req.second,
                                             item = currentViewer.items.getOrNull(req.first),
-                                        )
+                                        ),
                                     )
                                     currentViewer.requestedPagePosition = null
                                 }
@@ -453,7 +453,7 @@ class ReaderActivity : BaseMainActivity() {
                             remember(viewModel) {
                                 { forward: Boolean ->
                                     viewModel.sendNavigationCommand(
-                                        ReaderNavCommand.StepPage(forward)
+                                        ReaderNavCommand.StepPage(forward),
                                     )
                                 }
                             }
@@ -596,7 +596,7 @@ class ReaderActivity : BaseMainActivity() {
                                 .filterNotNull()
                                 .collect { req ->
                                     viewModel.sendNavigationCommand(
-                                        ReaderNavCommand.ScrollToItem(req.targetPage, req.animated)
+                                        ReaderNavCommand.ScrollToItem(req.targetPage, req.animated),
                                     )
                                     currentViewer.requestedPagePosition = null
                                 }
@@ -607,7 +607,7 @@ class ReaderActivity : BaseMainActivity() {
                                 .filterNotNull()
                                 .collect { delta ->
                                     viewModel.sendNavigationCommand(
-                                        ReaderNavCommand.ScrollByDelta(delta.toFloat())
+                                        ReaderNavCommand.ScrollByDelta(delta.toFloat()),
                                     )
                                     currentViewer.requestedScrollDelta = null
                                 }
@@ -661,7 +661,7 @@ class ReaderActivity : BaseMainActivity() {
                                 colorFilter = colorFilter,
                                 contentPadding =
                                     PaddingValues(
-                                        bottom = if (hasMargins) Size.medium else Size.none
+                                        bottom = if (hasMargins) Size.medium else Size.none,
                                     ),
                                 sidePaddingPercent = sidePaddingPercent,
                                 hasGaps = hasMargins,
@@ -705,7 +705,7 @@ class ReaderActivity : BaseMainActivity() {
                             remember(viewModel) {
                                 { forward: Boolean ->
                                     viewModel.sendNavigationCommand(
-                                        ReaderNavCommand.StepPage(forward)
+                                        ReaderNavCommand.StepPage(forward),
                                     )
                                 }
                             }
@@ -731,7 +731,7 @@ class ReaderActivity : BaseMainActivity() {
                                     drawRect(
                                         color =
                                             androidx.compose.ui.graphics.Color(
-                                                state.colorFilterOverlayColor
+                                                state.colorFilterOverlayColor,
                                             ),
                                         blendMode =
                                             when (state.colorFilterOverlayMode) {
@@ -743,7 +743,7 @@ class ReaderActivity : BaseMainActivity() {
                                                 else -> BlendMode.SrcOver
                                             },
                                     )
-                                }
+                                },
                         )
                     }
 
@@ -754,9 +754,9 @@ class ReaderActivity : BaseMainActivity() {
                                 Modifier.fillMaxSize()
                                     .background(
                                         androidx.compose.ui.graphics.Color.Black.copy(
-                                            alpha = state.brightnessOverlayAlpha
-                                        )
-                                    )
+                                            alpha = state.brightnessOverlayAlpha,
+                                        ),
+                                    ),
                         )
                     }
 
@@ -824,7 +824,7 @@ class ReaderActivity : BaseMainActivity() {
                             .preferenceCollectAsStateWithLifecycle()
                     val orientation =
                         OrientationType.fromPreference(
-                            state.manga?.orientationType ?: defaultOrientation
+                            state.manga?.orientationType ?: defaultOrientation,
                         )
                     val rotationIconRes = orientation.iconRes
 
@@ -856,7 +856,7 @@ class ReaderActivity : BaseMainActivity() {
                     val onRotationClick: () -> Unit = {
                         val currentRot =
                             OrientationType.fromPreference(
-                                state.manga?.orientationType ?: defaultOrientation
+                                state.manga?.orientationType ?: defaultOrientation,
                             )
                         val allRotations = OrientationType.entries
                         val nextRot =
@@ -1248,7 +1248,9 @@ class ReaderActivity : BaseMainActivity() {
                             modifier =
                                 Modifier.fillMaxSize()
                                     .background(
-                                        androidx.compose.ui.graphics.Color.Black.copy(alpha = 0.25f)
+                                        androidx.compose.ui.graphics.Color.Black.copy(
+                                            alpha = 0.25f,
+                                        ),
                                     ),
                             contentAlignment = Alignment.Center,
                         ) {
@@ -1745,7 +1747,7 @@ class ReaderActivity : BaseMainActivity() {
                                     ReadingModeType.VERTICAL.flagValue -> R.string.vertical_viewer
                                     ReadingModeType.WEBTOON.flagValue -> R.string.webtoon_style
                                     else -> R.string.left_to_right_viewer
-                                }
+                                },
                             )
                             .lowercase(Locale.getDefault()),
                     ),
@@ -1876,7 +1878,7 @@ class ReaderActivity : BaseMainActivity() {
             if (viewModel.manga!!.hideChapterTitle(mangaDetailsPreferences)) {
                 val number =
                     decimalFormat.format(
-                        viewerChapters.currChapter.chapter.chapter_number.toDouble()
+                        viewerChapters.currChapter.chapter.chapter_number.toDouble(),
                     )
                 getString(R.string.chapter_, number)
             } else {
@@ -2212,7 +2214,7 @@ class ReaderActivity : BaseMainActivity() {
                 Success -> R.string.cover_updated
                 AddToLibraryFirst -> R.string.must_be_in_library_to_edit
                 Error -> R.string.failed_to_update_cover
-            }
+            },
         )
     }
 
@@ -2234,7 +2236,7 @@ class ReaderActivity : BaseMainActivity() {
                                 val size =
                                     resources.getDimension(
                                         com.google.android.material.R.dimen
-                                            .design_snackbar_text_size
+                                            .design_snackbar_text_size,
                                     )
                                 val dRatio = intrinsicWidth / intrinsicHeight.toFloat()
                                 setBounds(0, 0, (size * dRatio).roundToInt(), size.roundToInt())
@@ -2410,7 +2412,7 @@ class ReaderActivity : BaseMainActivity() {
                 .onEach {
                     val isPaused =
                         !this@ReaderActivity.lifecycle.currentState.isAtLeast(
-                            Lifecycle.State.RESUMED
+                            Lifecycle.State.RESUMED,
                         )
                     if (isPaused) {
                         (viewer as? PagerViewer)?.config?.let { config ->

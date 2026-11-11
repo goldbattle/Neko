@@ -92,7 +92,7 @@ class HistoryRepositoryImpl(private val historyDao: HistoryDao) : HistoryReposit
     }
 
     override fun observeChapterHistoryByMangaId(
-        mangaId: Long
+        mangaId: Long,
     ): Flow<List<LegacyMangaChapterHistory>> {
         return historyDao.observeChapterHistoryByMangaId(mangaId).map {
             it.map {
@@ -106,7 +106,7 @@ class HistoryRepositoryImpl(private val historyDao: HistoryDao) : HistoryReposit
     }
 
     override suspend fun getChapterHistoryByMangaId(
-        mangaId: Long
+        mangaId: Long,
     ): List<LegacyMangaChapterHistory> {
         return historyDao.getChapterHistoryByMangaId(mangaId).map {
             LegacyMangaChapterHistory(
@@ -118,7 +118,7 @@ class HistoryRepositoryImpl(private val historyDao: HistoryDao) : HistoryReposit
     }
 
     override suspend fun getChapterHistoryByMangaIds(
-        mangaIds: List<Long>
+        mangaIds: List<Long>,
     ): List<LegacyMangaChapterHistory> {
         if (mangaIds.isEmpty()) return emptyList()
         return mangaIds.chunked(500).flatMap { chunk ->

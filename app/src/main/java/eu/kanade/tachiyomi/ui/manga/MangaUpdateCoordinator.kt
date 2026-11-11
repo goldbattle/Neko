@@ -107,7 +107,7 @@ class MangaUpdateCoordinator {
 
     /** Fetches and persists manga details and artwork from the source. */
     private suspend fun ProducerScope<MangaResult>.updateMangaDetailsAndPersist(
-        mangaItem: MangaItem
+        mangaItem: MangaItem,
     ) {
         sourceManager.mangaDex
             .getMangaDetails(mangaItem.uuid())
@@ -207,7 +207,7 @@ class MangaUpdateCoordinator {
 
     /** Fetches chapters from the main source and any merged sources concurrently. */
     private suspend fun ProducerScope<MangaResult>.fetchAndCombineChapters(
-        manga: Manga
+        manga: Manga,
     ): Triple<List<SChapter>, Set<String>, Boolean> = coroutineScope {
         val dexChaptersDeferred = async {
             sourceManager.mangaDex

@@ -34,7 +34,7 @@ class BiometricActivity : BaseThemedActivity() {
                     }
 
                     override fun onAuthenticationSucceeded(
-                        result: BiometricPrompt.AuthenticationResult
+                        result: BiometricPrompt.AuthenticationResult,
                     ) {
                         super.onAuthenticationSucceeded(result)
                         SecureActivityDelegate.locked = false
@@ -50,7 +50,7 @@ class BiometricActivity : BaseThemedActivity() {
                 .setTitle(getString(R.string.unlock_library))
                 .setAllowedAuthenticators(
                     BiometricManager.Authenticators.DEVICE_CREDENTIAL or
-                        BiometricManager.Authenticators.BIOMETRIC_WEAK
+                        BiometricManager.Authenticators.BIOMETRIC_WEAK,
                 )
                 .build()
 

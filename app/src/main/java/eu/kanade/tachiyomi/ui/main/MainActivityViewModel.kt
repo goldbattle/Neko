@@ -63,8 +63,8 @@ class MainActivityViewModel : ViewModel() {
                             downloadLink = url,
                             info = notes,
                             releaseLink = releaseLink,
-                        )
-                    )
+                        ),
+                    ),
             )
         }
     }

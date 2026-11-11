@@ -101,8 +101,8 @@ fun SplitPageLayout(
                         zoomableState.contentScale = contentScale
                         zoomableState.setContentLocation(
                             ZoomableContentLocation.scaledInsideAndCenterAligned(
-                                ComposeSize(img.width / 2f, img.height.toFloat())
-                            )
+                                ComposeSize(img.width / 2f, img.height.toFloat()),
+                            ),
                         )
                     }
                 },

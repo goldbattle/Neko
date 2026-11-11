@@ -133,7 +133,7 @@ class RestoreHelper(val context: Context) {
                     R.plurals.restore_categories,
                     categoriesAmount,
                     categoriesAmount,
-                )
+                ),
             )
         }
 
@@ -142,7 +142,7 @@ class RestoreHelper(val context: Context) {
                 R.string.restore_completed_successful,
                 restoreProgress.toString(),
                 restoreAmount.toString(),
-            )
+            ),
         )
 
         content.add(context.getString(R.string.restore_completed_errors, errors.size.toString()))
@@ -153,7 +153,7 @@ class RestoreHelper(val context: Context) {
                     R.string.restore_skipped,
                     skippedAmount.toString(),
                     totalAmount.toString(),
-                )
+                ),
             )
         }
 

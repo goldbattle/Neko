@@ -17,7 +17,7 @@ class InvalidHttpSource : ReducedHttpSource() {
     }
 
     override suspend fun fetchChapters(
-        mangaUrl: String
+        mangaUrl: String,
     ): Result<List<SChapterStatusPair>, ResultError> {
         return Err(ResultError.Generic("Invalid merge source unmerge"))
     }

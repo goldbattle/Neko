@@ -88,7 +88,10 @@ class CoverCache(
 
         withUIContext {
             context.toast(
-                context.getString(R.string.deleted_, Formatter.formatFileSize(context, deletedSize))
+                context.getString(
+                    R.string.deleted_,
+                    Formatter.formatFileSize(context, deletedSize),
+                ),
             )
         }
     }
@@ -105,7 +108,10 @@ class CoverCache(
         }
         withContext(Dispatchers.Main) {
             context.toast(
-                context.getString(R.string.deleted_, Formatter.formatFileSize(context, deletedSize))
+                context.getString(
+                    R.string.deleted_,
+                    Formatter.formatFileSize(context, deletedSize),
+                ),
             )
         }
         context.imageLoader.memoryCache?.clear()
@@ -126,7 +132,10 @@ class CoverCache(
         }
         withContext(Dispatchers.Main) {
             context.toast(
-                context.getString(R.string.deleted_, Formatter.formatFileSize(context, deletedSize))
+                context.getString(
+                    R.string.deleted_,
+                    Formatter.formatFileSize(context, deletedSize),
+                ),
             )
         }
     }

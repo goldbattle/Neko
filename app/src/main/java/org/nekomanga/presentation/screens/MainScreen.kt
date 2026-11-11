@@ -152,7 +152,7 @@ fun MainScreen(
                                 backStack.clear()
                                 backStack.add(Screens.Library())
                                 onboardingCompleted()
-                            }
+                            },
                         )
                     }
 

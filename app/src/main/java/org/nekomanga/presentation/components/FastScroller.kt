@@ -184,7 +184,7 @@ fun VerticalFastScroller(
                                 val layoutChanged =
                                     !anyScrollInProgressInner &&
                                         abs(
-                                            layoutChangeTracker.value - snapshot.scrollableSections
+                                            layoutChangeTracker.value - snapshot.scrollableSections,
                                         ) > 0.1
                                 layoutChangeTracker.value = snapshot.scrollableSections
 
@@ -285,7 +285,7 @@ fun VerticalFastScroller(
                                         )
                                     } else {
                                         Modifier
-                                    }
+                                    },
                                 )
                                 .then(
                                     if (
@@ -296,14 +296,17 @@ fun VerticalFastScroller(
                                         Modifier.systemGestureExclusion()
                                     } else {
                                         Modifier
-                                    }
+                                    },
                                 )
                                 .height(ThumbLength)
                                 .padding(horizontal = 8.dp)
                                 .padding(end = endContentPadding)
                                 .width(ThumbThickness)
                                 .alpha(alpha.value)
-                                .background(color = thumbColor, shape = MaterialTheme.shapes.medium)
+                                .background(
+                                    color = thumbColor,
+                                    shape = MaterialTheme.shapes.medium,
+                                ),
                     )
                 }
                 .map { it.measure(scrollerConstraints) }
@@ -505,7 +508,7 @@ fun VerticalGridFastScroller(
                                         )
                                     } else {
                                         Modifier
-                                    }
+                                    },
                                 )
                                 .then(
                                     if (
@@ -516,13 +519,16 @@ fun VerticalGridFastScroller(
                                         Modifier.systemGestureExclusion()
                                     } else {
                                         Modifier
-                                    }
+                                    },
                                 )
                                 .height(ThumbLength)
                                 .padding(end = endContentPadding)
                                 .width(ThumbThickness)
                                 .alpha(alpha.value)
-                                .background(color = thumbColor, shape = MaterialTheme.shapes.medium)
+                                .background(
+                                    color = thumbColor,
+                                    shape = MaterialTheme.shapes.medium,
+                                ),
                     )
                 }
                 .map { it.measure(scrollerConstraints) }

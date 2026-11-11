@@ -63,7 +63,7 @@ fun DefaultHeaderText(
                     this.stateDescription = stateDescription
                 }
                 .clickable(onClick = onClick)
-                .padding(vertical = Size.smedium)
+                .padding(vertical = Size.smedium),
     ) {
         Text(
             text = text,

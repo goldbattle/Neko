@@ -98,7 +98,7 @@ abstract class LibraryDao(private val database: RoomDatabase) {
             SELECT * FROM manga_categories
         ) AS MC
         ON MC.manga_id = M.id
-    """
+    """,
     )
     abstract fun getLibraryList(): List<LibraryMangaRaw>
 }

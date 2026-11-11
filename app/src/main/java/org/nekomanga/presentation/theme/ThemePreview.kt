@@ -14,7 +14,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 private fun NekoThemePreview(theme: Themes, isDark: Boolean, content: @Composable () -> Unit) {
     NekoTheme(
         colorScheme =
-            colorSchemeFromTheme(LocalContext.current, theme = theme, isSystemInDarkTheme = isDark)
+            colorSchemeFromTheme(LocalContext.current, theme = theme, isSystemInDarkTheme = isDark),
     ) {
         Surface(modifier = Modifier.padding(Size.tiny)) { content() }
     }

@@ -84,7 +84,7 @@ fun TrackingSearchSheet(
     ) {
         Column(
             modifier =
-                Modifier.fillMaxWidth().navigationBarsPadding().imePadding().clearFocusOnTap()
+                Modifier.fillMaxWidth().navigationBarsPadding().imePadding().clearFocusOnTap(),
         ) {
             Header(stringResource(id = R.string.select_an_entry), cancelClick)
 
@@ -221,8 +221,8 @@ private fun TrackSearchItem(
                     Modifier.height(IntrinsicSize.Min)
                         .fillMaxWidth()
                         .background(
-                            color = backdropColor.copy(alpha = NekoColors.highAlphaLowContrast)
-                        )
+                            color = backdropColor.copy(alpha = NekoColors.highAlphaLowContrast),
+                        ),
             ) {
                 IconButton(
                     onClick = {
@@ -246,7 +246,7 @@ private fun TrackSearchItem(
                         text = trackSearch.trackItem.title,
                         style =
                             MaterialTheme.typography.titleLarge.copy(
-                                fontWeight = FontWeight.SemiBold
+                                fontWeight = FontWeight.SemiBold,
                             ),
                         modifier = Modifier.fillMaxWidth(.9f),
                         color = MaterialTheme.colorScheme.onSurface,
@@ -258,7 +258,7 @@ private fun TrackSearchItem(
                                 text = stringResource(id = R.string.type),
                                 style =
                                     MaterialTheme.typography.bodyLarge.copy(
-                                        fontWeight = FontWeight.Medium
+                                        fontWeight = FontWeight.Medium,
                                     ),
                                 color = MaterialTheme.colorScheme.onSurface,
                             )
@@ -267,7 +267,7 @@ private fun TrackSearchItem(
                                 text = trackSearch.publishingType,
                                 color =
                                     MaterialTheme.colorScheme.onSurface.copy(
-                                        alpha = NekoColors.mediumAlphaHighContrast
+                                        alpha = NekoColors.mediumAlphaHighContrast,
                                     ),
                                 style = MaterialTheme.typography.bodyLarge,
                             )
@@ -280,7 +280,7 @@ private fun TrackSearchItem(
                                 text = stringResource(id = R.string.started),
                                 style =
                                     MaterialTheme.typography.bodyLarge.copy(
-                                        fontWeight = FontWeight.Medium
+                                        fontWeight = FontWeight.Medium,
                                     ),
                             )
                             Gap(Size.tiny)
@@ -288,7 +288,7 @@ private fun TrackSearchItem(
                                 text = trackSearch.startDate,
                                 color =
                                     MaterialTheme.colorScheme.onSurface.copy(
-                                        alpha = NekoColors.mediumAlphaHighContrast
+                                        alpha = NekoColors.mediumAlphaHighContrast,
                                     ),
                                 style = MaterialTheme.typography.bodyLarge,
                             )
@@ -307,7 +307,7 @@ private fun TrackSearchItem(
                         overflow = TextOverflow.Ellipsis,
                         color =
                             MaterialTheme.colorScheme.onSurface.copy(
-                                alpha = NekoColors.mediumAlphaHighContrast
+                                alpha = NekoColors.mediumAlphaHighContrast,
                             ),
                         style = MaterialTheme.typography.bodyLarge,
                     )

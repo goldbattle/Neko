@@ -87,13 +87,13 @@ fun LibraryScreenTopBar(
                                 onClick = displayOptionsClick,
                             ),
                             mainDropDown,
-                        )
+                        ),
                 )
             },
             underHeaderActions = {
                 AnimatedVisibility(
                     !libraryScreenState.selectedItems.isNotEmpty() &&
-                        libraryScreenState.showLibraryButtonBar
+                        libraryScreenState.showLibraryButtonBar,
                 ) {
                     LibraryButtonBar(
                         libraryScreenActions = libraryScreenActions,

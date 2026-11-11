@@ -33,7 +33,7 @@ fun ExternalLinksSheet(
     onLinkClick: (String, String) -> Unit,
 ) {
     CompositionLocalProvider(
-        LocalRippleConfiguration provides themeColorState.rippleConfiguration
+        LocalRippleConfiguration provides themeColorState.rippleConfiguration,
     ) {
         BaseSheet(themeColor = themeColorState) {
             Column(
@@ -89,7 +89,7 @@ private fun LinkCard(
                 text = externalLink.name,
                 style =
                     MaterialTheme.typography.bodyMedium.copy(
-                        color = Color(externalLink.onLogoColor)
+                        color = Color(externalLink.onLogoColor),
                     ),
             )
             Gap(12.dp)

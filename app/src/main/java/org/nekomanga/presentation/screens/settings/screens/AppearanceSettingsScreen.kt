@@ -83,7 +83,7 @@ internal class AppearanceSettingsScreen(
                                     ),
                                 textStyle =
                                     MaterialTheme.typography.titleMedium.copy(
-                                        fontWeight = FontWeight.Normal
+                                        fontWeight = FontWeight.Normal,
                                     ),
                                 nightMode = nightMode,
                                 nightModePreference = preferences.nightMode(),
@@ -195,7 +195,7 @@ internal class AppearanceSettingsScreen(
                         },
                     ),
                     Preference.PreferenceItem.InfoPreference(
-                        title = stringResource(R.string.by_default_side_nav_info)
+                        title = stringResource(R.string.by_default_side_nav_info),
                     ),
                 ),
         )

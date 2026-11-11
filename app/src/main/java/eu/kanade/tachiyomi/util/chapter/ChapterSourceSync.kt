@@ -129,7 +129,7 @@ suspend fun syncChaptersWithSource(
                             if (uuid != null && (uuid in chapterUUIDs || uuid in otherMangaUuids)) {
                                 if (fileName.startsWith("${Constants.LOCAL_SOURCE}_")) {
                                     file.renameTo(
-                                        fileName.removePrefix("${Constants.LOCAL_SOURCE}_")
+                                        fileName.removePrefix("${Constants.LOCAL_SOURCE}_"),
                                     )
                                 }
                                 return@mapNotNull null
@@ -143,7 +143,7 @@ suspend fun syncChaptersWithSource(
                                 fileName.substringAfter("${Constants.LOCAL_SOURCE}_")
                             val expectedFileName =
                                 DiskUtil.buildValidFilename(
-                                    "${Constants.LOCAL_SOURCE}_${fileNameSuffix}"
+                                    "${Constants.LOCAL_SOURCE}_${fileNameSuffix}",
                                 )
                             if (fileName != expectedFileName) {
                                 file.renameTo(expectedFileName)
@@ -163,13 +163,13 @@ suspend fun syncChaptersWithSource(
                         }
                         .sortedWith(
                             compareByDescending<SChapter> { getChapterNum(it) == null }
-                                .thenByDescending { getChapterNum(it) }
+                                .thenByDescending { getChapterNum(it) },
                         )
                 downloadManager.refreshCache()
                 listOf(rawSourceChapters, localSourceChapters)
                     .mergeSorted(
                         compareBy<SChapter> { getChapterNum(it) != null }
-                            .thenBy { getChapterNum(it) }
+                            .thenBy { getChapterNum(it) },
                     )
             } else {
                 val localSourceChapters =
@@ -179,13 +179,13 @@ suspend fun syncChaptersWithSource(
                         }
                         .sortedWith(
                             compareByDescending<Chapter> { getChapterNum(it) == null }
-                                .thenByDescending { getChapterNum(it) }
+                                .thenByDescending { getChapterNum(it) },
                         )
                         .map { dbChapter -> SChapter.create().apply { copyFrom(dbChapter) } }
                 listOf(rawSourceChapters, localSourceChapters)
                     .mergeSorted(
                         compareBy<SChapter> { getChapterNum(it) != null }
-                            .thenBy { getChapterNum(it) }
+                            .thenBy { getChapterNum(it) },
                     )
             }
     }

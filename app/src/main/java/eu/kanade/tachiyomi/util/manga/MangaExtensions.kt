@@ -257,19 +257,19 @@ fun SManga.getSlug(): String {
 
 /** resync homepage manga with db manga */
 suspend fun List<HomePageManga>.resyncHomePageManga(
-    mangaRepository: MangaRepository
+    mangaRepository: MangaRepository,
 ): List<HomePageManga> {
     return this.map { homePageManga ->
             homePageManga.copy(
                 displayManga =
-                    homePageManga.displayManga.resyncDisplayManga(mangaRepository).toList()
+                    homePageManga.displayManga.resyncDisplayManga(mangaRepository).toList(),
             )
         }
         .toList()
 }
 
 suspend fun List<DisplayManga>.resyncDisplayManga(
-    mangaRepository: MangaRepository
+    mangaRepository: MangaRepository,
 ): List<DisplayManga> {
     if (this.isEmpty()) return emptyList()
 
@@ -305,7 +305,7 @@ fun List<DisplayManga>.unique(): List<DisplayManga> {
 fun List<HomePageManga>.updateVisibility(prefs: PreferencesHelper): List<HomePageManga> {
     return this.map { homePageManga ->
             homePageManga.copy(
-                displayManga = homePageManga.displayManga.updateVisibility(prefs).toList()
+                displayManga = homePageManga.displayManga.updateVisibility(prefs).toList(),
             )
         }
         .toList()

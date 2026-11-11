@@ -60,7 +60,7 @@ class DownloaderCopyImageFromCacheTest {
                 every { changes() } returns emptyFlow()
             }
         Injekt.addSingleton(
-            mockk<ReaderPreferences> { every { preloadPageAmount() } returns preloadPageAmount }
+            mockk<ReaderPreferences> { every { preloadPageAmount() } returns preloadPageAmount },
         )
         val cacheRoot = folder.newFolder("cache")
         chapterCache = ChapterCache(mockk<Context> { every { cacheDir } returns cacheRoot })
@@ -138,7 +138,7 @@ class DownloaderCopyImageFromCacheTest {
             ("<!DOCTYPE html>\n<html><body>" +
                     "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"10\" height=\"10\"></svg>" +
                     "</body></html>")
-                .toByteArray()
+                .toByteArray(),
         )
 
         val file = copy()

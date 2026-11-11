@@ -79,7 +79,7 @@ class BrowseViewModel : ViewModel() {
                 filters = createInitialDexFilter(""),
                 defaultContentRatings = mangaDexPreferences.visibleContentRatings().get().toSet(),
                 screenType = BrowseScreenType.Homepage,
-            )
+            ),
         )
     val browseScreenState: StateFlow<BrowseScreenState> = _browseScreenState.asStateFlow()
 
@@ -132,7 +132,7 @@ class BrowseViewModel : ViewModel() {
                                 when (resultError) {
                                     is ResultError.Generic -> resultError.errorString
                                     else -> (resultError as ResultError.HttpError).message
-                                }
+                                },
                             ),
                     )
                 }
@@ -228,7 +228,7 @@ class BrowseViewModel : ViewModel() {
                                                 mangaList.updateVisibility(preferences).toList()
                                         }
                                         .toMap(),
-                            )
+                            ),
                     )
                 }
             }
@@ -353,16 +353,16 @@ class BrowseViewModel : ViewModel() {
                 QueryType.Author -> {
                     _navigateEvent.send(
                         NavigationEvent.NavigateToDisplay(
-                            DisplayScreenType.AuthorByName(UiText.String(currentQuery))
-                        )
+                            DisplayScreenType.AuthorByName(UiText.String(currentQuery)),
+                        ),
                     )
                 }
 
                 QueryType.Group -> {
                     _navigateEvent.send(
                         NavigationEvent.NavigateToDisplay(
-                            DisplayScreenType.GroupByName(UiText.String(currentQuery))
-                        )
+                            DisplayScreenType.GroupByName(UiText.String(currentQuery)),
+                        ),
                     )
                 }
 
@@ -372,8 +372,8 @@ class BrowseViewModel : ViewModel() {
                             DisplayScreenType.List(
                                 title = UiText.String(""),
                                 listUUID = currentQuery,
-                            )
-                        )
+                            ),
+                        ),
                     )
                 }
 
@@ -448,7 +448,7 @@ class BrowseViewModel : ViewModel() {
                                                     isVisible = isVisible,
                                                 ),
                                             )
-                                        }
+                                        },
                                 )
                         }
                         .toList()
@@ -616,7 +616,7 @@ class BrowseViewModel : ViewModel() {
                                         ->
                                         list.resyncDisplayManga(mangaRepository).toList()
                                     },
-                            )
+                            ),
                     )
                 }
             }

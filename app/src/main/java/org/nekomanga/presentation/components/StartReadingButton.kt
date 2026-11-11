@@ -37,7 +37,7 @@ fun StartReadingButton(modifier: Modifier = Modifier, onStartReadingClick: () ->
                             bottomStart = Size.tiny,
                             bottomEnd = Size.tiny,
                             topEnd = Shapes.coverRadius,
-                        )
+                        ),
                 )
                 .clickable(onClick = onStartReadingClick, role = Role.Button)
                 .semantics { contentDescription = contentDescriptionString }
@@ -53,7 +53,7 @@ fun StartReadingButton(modifier: Modifier = Modifier, onStartReadingClick: () ->
                         ),
                 )
                 .background(MaterialTheme.colorScheme.secondary)
-                .size(Size.extraLarge)
+                .size(Size.extraLarge),
     ) {
         Icon(
             modifier = Modifier.align(Alignment.Center).size(Size.large),

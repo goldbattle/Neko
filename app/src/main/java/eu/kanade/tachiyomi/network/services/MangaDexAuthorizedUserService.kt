@@ -52,7 +52,7 @@ interface MangaDexAuthorizedUserService {
 
     @GET(MdConstants.Api.readingStatusForAllManga)
     suspend fun readingStatusAllManga(
-        @Header("Cache-Control") cacheControl: String = "no-cache"
+        @Header("Cache-Control") cacheControl: String = "no-cache",
     ): ApiResponse<ReadingStatusMapDto>
 
     @GET(MdConstants.Api.readingStatusForAllManga)
@@ -87,7 +87,7 @@ interface MangaDexAuthorizedUserService {
 
     @POST(MdConstants.Api.createThread)
     suspend fun createForumThread(
-        @Body forumThreadDto: ForumThreadDto
+        @Body forumThreadDto: ForumThreadDto,
     ): ApiResponse<ForumThreadResponseDto>
 
     @Headers("Cache-Control: no-cache")

@@ -38,7 +38,7 @@ fun BrowseDisplayOptionsSheet(
     bottomContentPadding: Dp = Size.medium,
 ) {
     CompositionLocalProvider(
-        LocalRippleConfiguration provides themeColorState.rippleConfiguration
+        LocalRippleConfiguration provides themeColorState.rippleConfiguration,
     ) {
         val maxLazyHeight = LocalConfiguration.current.screenHeightDp * .9
 
@@ -107,7 +107,7 @@ fun BrowseDisplayOptionsSheet(
                                     LibraryEntryVisibility.SHOW_NOT_IN_LIBRARY,
                             onCheckedChange = {
                                 libraryEntryVisibilityClick(
-                                    LibraryEntryVisibility.SHOW_NOT_IN_LIBRARY
+                                    LibraryEntryVisibility.SHOW_NOT_IN_LIBRARY,
                                 )
                             },
                             shapes = ButtonGroupDefaults.connectedLeadingButtonShapes(),

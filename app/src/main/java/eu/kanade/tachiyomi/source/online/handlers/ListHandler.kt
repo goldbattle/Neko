@@ -58,7 +58,7 @@ class ListHandler {
                                     listUUID,
                                 ),
                                 listOf(),
-                            )
+                            ),
                         )
                     false -> {
                         val mangaIds =
@@ -111,7 +111,7 @@ class ListHandler {
                                         hasNextPage =
                                             (mangaListDto.limit + mangaListDto.offset) <
                                                 listDto.data.relationships.size,
-                                    )
+                                    ),
                                 )
                             }
                     }
@@ -150,7 +150,7 @@ class ListHandler {
                     ListResults(
                         displayScreenType = displayScreenType!!,
                         sourceManga = list.toList(),
-                    )
+                    ),
                 )
         }
     }

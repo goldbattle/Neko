@@ -15,7 +15,7 @@ import org.nekomanga.presentation.theme.withThemes
 @Preview
 @Composable
 private fun TriStateCheckboxRowPreview(
-    @PreviewParameter(ToggleableStateProvider::class) themedState: Themed<ToggleableState>
+    @PreviewParameter(ToggleableStateProvider::class) themedState: Themed<ToggleableState>,
 ) {
     ThemedPreviews(themeConfig = themedState.themeConfig) {
         Column {
@@ -38,7 +38,7 @@ private fun TriStateCheckboxRowPreview(
 @Preview
 @Composable
 private fun TriStateFilterChipPreview(
-    @PreviewParameter(ToggleableStateProvider::class) themedState: Themed<ToggleableState>
+    @PreviewParameter(ToggleableStateProvider::class) themedState: Themed<ToggleableState>,
 ) {
     ThemedPreviews(themeConfig = themedState.themeConfig) {
         Column {

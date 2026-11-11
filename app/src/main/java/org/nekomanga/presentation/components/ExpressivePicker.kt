@@ -134,11 +134,11 @@ fun <T> ExpressivePicker(
                 val style =
                     if (isSelected) {
                         MaterialTheme.typography.headlineMedium.copy(
-                            color = MaterialTheme.colorScheme.surface
+                            color = MaterialTheme.colorScheme.surface,
                         )
                     } else {
                         MaterialTheme.typography.titleLarge.copy(
-                            color = MaterialTheme.colorScheme.onSurface
+                            color = MaterialTheme.colorScheme.onSurface,
                         )
                     }
 
@@ -156,7 +156,7 @@ fun <T> ExpressivePicker(
                                         .background(
                                             color = themeColorState.primaryColor.copy(alpha = 0.8f),
                                             shape = MaterialShapes.Gem.toShape(),
-                                        )
+                                        ),
                             )
                         } else {
                             Box(
@@ -166,7 +166,7 @@ fun <T> ExpressivePicker(
                                         .background(
                                             color = themeColorState.primaryColor.copy(alpha = 0.8f),
                                             shape = MaterialShapes.Gem.toShape(),
-                                        )
+                                        ),
                             )
                         }
                     }
@@ -196,7 +196,7 @@ fun <T> ExpressivePicker(
                     .height(lineThickness)
                     .align(Alignment.TopCenter)
                     .padding(top = lineYOffset)
-                    .background(themeColorState.containerColor.copy(alpha = 0.5f))
+                    .background(themeColorState.containerColor.copy(alpha = 0.5f)),
         )
 
         // Bottom Line
@@ -206,7 +206,7 @@ fun <T> ExpressivePicker(
                     .height(lineThickness)
                     .align(Alignment.BottomCenter)
                     .padding(bottom = lineYOffset)
-                    .background(themeColorState.containerColor.copy(alpha = 0.5f))
+                    .background(themeColorState.containerColor.copy(alpha = 0.5f)),
         )
     }
 }
@@ -214,7 +214,7 @@ fun <T> ExpressivePicker(
 @Preview
 @Composable
 private fun PreviewNumberPicker(
-    @PreviewParameter(ThemeConfigProvider::class) themeConfig: ThemeConfig
+    @PreviewParameter(ThemeConfigProvider::class) themeConfig: ThemeConfig,
 ) {
     ThemedPreviews(themeConfig) {
         // --- Preview 1: Integer Range ---
@@ -235,7 +235,7 @@ private fun PreviewNumberPicker(
 @Preview
 @Composable
 private fun PreviewWeekPicker(
-    @PreviewParameter(ThemeConfigProvider::class) themeConfig: ThemeConfig
+    @PreviewParameter(ThemeConfigProvider::class) themeConfig: ThemeConfig,
 ) {
     ThemedPreviews(themeConfig) {
         // --- Preview 1: Integer Range ---

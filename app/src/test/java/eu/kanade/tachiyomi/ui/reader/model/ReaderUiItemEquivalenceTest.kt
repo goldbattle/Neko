@@ -94,7 +94,7 @@ class ReaderUiItemEquivalenceTest {
         val pageItem = ReaderUiItem.Page(page)
         val splitItem =
             ReaderUiItem.SplitPage(
-                ReaderPageSplit(page = page, topOffset = 1000, splitHeight = 1000)
+                ReaderPageSplit(page = page, topOffset = 1000, splitHeight = 1000),
             )
 
         assertFalse(pageItem.isEquivalentTo(splitItem))
@@ -106,15 +106,15 @@ class ReaderUiItemEquivalenceTest {
         val page = createPage(index = 2, chapterId = 10L)
         val splitA =
             ReaderUiItem.SplitPage(
-                ReaderPageSplit(page = page, topOffset = 500, splitHeight = 1000)
+                ReaderPageSplit(page = page, topOffset = 500, splitHeight = 1000),
             )
         val splitB =
             ReaderUiItem.SplitPage(
-                ReaderPageSplit(page = page, topOffset = 500, splitHeight = 1000)
+                ReaderPageSplit(page = page, topOffset = 500, splitHeight = 1000),
             )
         val splitDifferentOffset =
             ReaderUiItem.SplitPage(
-                ReaderPageSplit(page = page, topOffset = 1500, splitHeight = 1000)
+                ReaderPageSplit(page = page, topOffset = 1500, splitHeight = 1000),
             )
 
         assertTrue(splitA.isEquivalentTo(splitB))

@@ -147,7 +147,7 @@ class MangaDexLoginHelper {
                                     POST(
                                         url = MdConstants.Api.baseAuthUrl + MdConstants.Api.token,
                                         body = loginFormBody,
-                                    )
+                                    ),
                                 )
                                 .await()
                                 .parseAs<LoginResponseDto>()
@@ -199,7 +199,7 @@ class MangaDexLoginHelper {
                                         .add("Authorization", "Bearer $sessionToken")
                                         .build(),
                                 body = formBody,
-                            )
+                            ),
                         )
                         .await()
                     invalidate()

@@ -74,7 +74,7 @@ fun ReaderTransitionPage(
                         } else {
                             onTap(PointF(0.5f, 0.5f))
                         }
-                    }
+                    },
                 )
             }
         } else {
@@ -120,7 +120,7 @@ fun ReaderTransitionPage(
                             Modifier.claimTapNavigation(tapClaim).clickable(onClick = onCardClick)
                         } else {
                             Modifier
-                        }
+                        },
                     ),
         ) {
             Column(
@@ -187,11 +187,11 @@ fun ReaderTransitionPage(
             when (baseModel) {
                 is ChapterTransitionUiModel.Prev ->
                     baseModel.copy(
-                        toChapter = baseModel.toChapter?.copy(preloadState = preloadState)
+                        toChapter = baseModel.toChapter?.copy(preloadState = preloadState),
                     )
                 is ChapterTransitionUiModel.Next ->
                     baseModel.copy(
-                        toChapter = baseModel.toChapter?.copy(preloadState = preloadState)
+                        toChapter = baseModel.toChapter?.copy(preloadState = preloadState),
                     )
             }
         }
@@ -321,7 +321,7 @@ private fun DownloadStatusIcon(isDownloaded: Boolean) {
     Icon(
         painter =
             painterResource(
-                if (isDownloaded) R.drawable.ic_file_download_24dp else R.drawable.ic_cloud_24dp
+                if (isDownloaded) R.drawable.ic_file_download_24dp else R.drawable.ic_cloud_24dp,
             ),
         contentDescription = null,
         tint = MaterialTheme.colorScheme.primary,

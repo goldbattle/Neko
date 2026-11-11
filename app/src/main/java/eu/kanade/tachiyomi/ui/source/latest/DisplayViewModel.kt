@@ -62,7 +62,7 @@ class DisplayViewModel(val displayScreenType: DisplayScreenType) : ViewModel() {
                     libraryPreferences.layout().get() != LibraryDisplayMode.CompactGrid,
                 rawColumnCount = libraryPreferences.gridSize().get(),
                 libraryEntryVisibility = preferences.browseDisplayMode().get(),
-            )
+            ),
         )
     val displayScreenState: StateFlow<DisplayScreenState> = _displayScreenState.asStateFlow()
 
@@ -185,7 +185,7 @@ class DisplayViewModel(val displayScreenType: DisplayScreenType) : ViewModel() {
                             buildList {
                                 addAll(it.allDisplayManga)
                                 set(index, tempDisplayManga)
-                            }
+                            },
                     )
                 }
 
@@ -200,7 +200,7 @@ class DisplayViewModel(val displayScreenType: DisplayScreenType) : ViewModel() {
                                 buildList {
                                     addAll(it.filteredDisplayManga)
                                     set(filteredIndex, tempDisplayManga)
-                                }
+                                },
                         )
                     }
                 }
@@ -210,7 +210,7 @@ class DisplayViewModel(val displayScreenType: DisplayScreenType) : ViewModel() {
                 _displayScreenState.update {
                     it.copy(
                         filteredDisplayManga =
-                            it.allDisplayManga.filterVisibility(preferences).toList()
+                            it.allDisplayManga.filterVisibility(preferences).toList(),
                     )
                 }
             }

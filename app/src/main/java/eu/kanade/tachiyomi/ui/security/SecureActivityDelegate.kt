@@ -44,7 +44,7 @@ object SecureActivityDelegate {
                 BiometricManager.from(activity)
                     .canAuthenticate(
                         BiometricManager.Authenticators.DEVICE_CREDENTIAL or
-                            BiometricManager.Authenticators.BIOMETRIC_WEAK
+                            BiometricManager.Authenticators.BIOMETRIC_WEAK,
                     ) == BiometricManager.BIOMETRIC_SUCCESS
         ) {
             if (isAppLocked()) {

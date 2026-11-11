@@ -53,7 +53,7 @@ fun ChapterHeader(
                         text = filterText,
                         color =
                             MaterialTheme.colorScheme.onSurface.copy(
-                                alpha = NekoColors.mediumAlphaLowContrast
+                                alpha = NekoColors.mediumAlphaLowContrast,
                             ),
                         style = MaterialTheme.typography.bodyMedium,
                         modifier = Modifier.requiredWidthIn(max = 200.dp).padding(end = Size.small),

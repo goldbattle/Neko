@@ -171,7 +171,8 @@ fun FeedChapterTitleLine(
                 false -> {
                     val painter =
                         rememberDrawablePainter(
-                            drawable = AppCompatResources.getDrawable(LocalContext.current, iconRes)
+                            drawable =
+                                AppCompatResources.getDrawable(LocalContext.current, iconRes),
                         )
                     Image(
                         painter = painter,

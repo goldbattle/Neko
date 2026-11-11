@@ -111,7 +111,7 @@ class ReducedHttpSourceTest {
             coEvery { source.fetchChapters(MANGA_URL) } returns Ok(emptyList())
             storedChapters(
                 listOf(Kagane.name, "MangaPlus", "Group A")
-                    .joinToString(Constants.SCANLATOR_SEPARATOR)
+                    .joinToString(Constants.SCANLATOR_SEPARATOR),
             )
 
             source.fetchMergedChapters(mergeManga, chapterRepository).getError() shouldBe

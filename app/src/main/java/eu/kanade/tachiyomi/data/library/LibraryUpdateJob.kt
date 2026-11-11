@@ -441,7 +441,7 @@ class LibraryUpdateJob(private val context: Context, workerParameters: WorkerPar
                     }
                         .mergeSorted(
                             compareBy<SChapter> { getChapterNum(it) != null }
-                                .thenBy { getChapterNum(it) }
+                                .thenBy { getChapterNum(it) },
                         )
                         .filter {
                             val scanlators = ChapterUtil.getScanlators(it.scanlator)
@@ -588,7 +588,7 @@ class LibraryUpdateJob(private val context: Context, workerParameters: WorkerPar
                                                     .mapNotNull {
                                                         if (
                                                             chapterIds.contains(
-                                                                it.mangadex_chapter_id
+                                                                it.mangadex_chapter_id,
                                                             ) && !it.read
                                                         ) {
                                                             it.read = true
@@ -622,7 +622,7 @@ class LibraryUpdateJob(private val context: Context, workerParameters: WorkerPar
                                             .mapNotNull {
                                                 if (
                                                     readChapters.contains(
-                                                        Pair(it.scanlator, it.url)
+                                                        Pair(it.scanlator, it.url),
                                                     ) && !it.read
                                                 ) {
                                                     it.read = true

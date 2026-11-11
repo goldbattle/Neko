@@ -16,7 +16,7 @@ class AndroidStorageFolderProvider(private val context: Context) : FolderProvide
                 when (BuildConfig.DEBUG) {
                     true -> context.getString(R.string.app_name) + "_debug"
                     false -> context.getString(R.string.app_name)
-                }
+                },
         )
     }
 

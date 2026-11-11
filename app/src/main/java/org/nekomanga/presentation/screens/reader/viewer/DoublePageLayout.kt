@@ -213,7 +213,7 @@ fun DoublePageLayout(
             DoublePageContentLocation(
                 contentSize = ComposeSize(renderedWidthPx, renderedHeightPx),
                 alignment = rowAlignment,
-            )
+            ),
         )
 
         if (

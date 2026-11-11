@@ -227,7 +227,7 @@ tasks.withType<KotlinCompile> {
                 "-opt-in=androidx.compose.foundation.ExperimentalFoundationApi",
                 "-opt-in=coil3.annotation.ExperimentalCoilApi",
                 "-opt-in=kotlinx.serialization.ExperimentalSerializationApi",
-            )
+            ),
         )
     }
 }

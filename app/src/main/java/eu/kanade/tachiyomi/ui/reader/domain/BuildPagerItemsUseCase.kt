@@ -252,7 +252,7 @@ class BuildPagerItemsUseCase {
                             val first = chunk.first()!!
                             val second = chunk.getOrNull(1)
                             ReaderUiItem.Page(first, second)
-                        }
+                        },
                     )
                 }
 

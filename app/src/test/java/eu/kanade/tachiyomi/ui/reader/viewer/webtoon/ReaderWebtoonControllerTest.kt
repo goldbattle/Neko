@@ -295,7 +295,7 @@ class ReaderWebtoonControllerTest {
         assertEquals(7, initialItems.size)
         assertTrue(initialItems[6] is ReaderUiItem.Transition)
         assertTrue(
-            (initialItems[6] as ReaderUiItem.Transition).transition is ChapterTransition.Next
+            (initialItems[6] as ReaderUiItem.Transition).transition is ChapterTransition.Next,
         )
 
         // Next chapter finishes loading
@@ -370,7 +370,7 @@ class ReaderWebtoonControllerTest {
         assertEquals(13, chapter2Items.size)
         assertTrue(chapter2Items[2] is ReaderUiItem.Transition)
         assertTrue(
-            (chapter2Items[2] as ReaderUiItem.Transition).transition is ChapterTransition.Prev
+            (chapter2Items[2] as ReaderUiItem.Transition).transition is ChapterTransition.Prev,
         )
         assertEquals(2L, chapter2Items[3].chapterId)
         assertEquals(3L, chapter2Items[8].chapterId)

@@ -177,7 +177,7 @@ class ReaderPreloadControllerTest {
         // Memory window is capped to MAX_MEMORY_PRELOAD_PAGES (4)
         assertTrue(result.memoryRange.last <= ReaderPreloadControllerImpl.MAX_MEMORY_PRELOAD_SLICES)
         assertTrue(
-            result.memoryIndices.size <= ReaderPreloadControllerImpl.MAX_MEMORY_PRELOAD_SLICES + 1
+            result.memoryIndices.size <= ReaderPreloadControllerImpl.MAX_MEMORY_PRELOAD_SLICES + 1,
         )
     }
 

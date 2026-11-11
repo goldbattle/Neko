@@ -185,9 +185,9 @@ class MangaViewModel(val mangaId: Long) : ViewModel() {
                 general = MangaConstants.MangaScreenGeneralState(),
                 manga =
                     MangaConstants.MangaScreenMangaState(
-                        currentArtwork = createInitialCurrentArtwork()
+                        currentArtwork = createInitialCurrentArtwork(),
                     ),
-            )
+            ),
         )
 
     val mangaDetailScreenState: StateFlow<MangaConstants.MangaDetailScreenState> =
@@ -687,7 +687,7 @@ class MangaViewModel(val mangaId: Long) : ViewModel() {
                     if (allInfo.mangaItem.initialized) {
                         viewModelScope.launchIO {
                             mangaUseCases.updateMangaStatusAndMissingCount(
-                                allInfo.mangaItem.toManga()
+                                allInfo.mangaItem.toManga(),
                             )
                         }
                     }
@@ -703,7 +703,7 @@ class MangaViewModel(val mangaId: Long) : ViewModel() {
                     SnackbarState(
                         messageRes = R.string.no_network_connection,
                         snackBarColor = _mangaDetailScreenState.value.general.snackbarColor,
-                    )
+                    ),
                 )
                 return@launchIO
             }
@@ -727,7 +727,7 @@ class MangaViewModel(val mangaId: Long) : ViewModel() {
                             SnackbarState(
                                 message = it,
                                 snackBarColor = _mangaDetailScreenState.value.general.snackbarColor,
-                            )
+                            ),
                         )
                     }
                 }
@@ -740,7 +740,7 @@ class MangaViewModel(val mangaId: Long) : ViewModel() {
                                     messageRes = result.id,
                                     snackBarColor =
                                         _mangaDetailScreenState.value.general.snackbarColor,
-                                )
+                                ),
                             )
                         }
 
@@ -772,8 +772,8 @@ class MangaViewModel(val mangaId: Long) : ViewModel() {
                                                     general =
                                                         it.general.copy(
                                                             removedChapters =
-                                                                removedChapters.toList()
-                                                        )
+                                                                removedChapters.toList(),
+                                                        ),
                                                 )
                                             }
                                         }
@@ -844,7 +844,7 @@ class MangaViewModel(val mangaId: Long) : ViewModel() {
                             action = {},
                             dismissAction = { launchConfirmed { delete() } },
                             snackBarColor = _mangaDetailScreenState.value.general.snackbarColor,
-                        )
+                        ),
                     )
                 } else {
                     delete()
@@ -854,7 +854,7 @@ class MangaViewModel(val mangaId: Long) : ViewModel() {
                     SnackbarState(
                         messageRes = R.string.no_chapters_to_delete,
                         snackBarColor = _mangaDetailScreenState.value.general.snackbarColor,
-                    )
+                    ),
                 )
             }
         }
@@ -951,7 +951,7 @@ class MangaViewModel(val mangaId: Long) : ViewModel() {
                                                 snackBarColor =
                                                     _mangaDetailScreenState.value.general
                                                         .snackbarColor,
-                                            )
+                                            ),
                                         )
                                     }
                                 }
@@ -980,7 +980,7 @@ class MangaViewModel(val mangaId: Long) : ViewModel() {
                         },
                         dismissAction = { launchConfirmed { finalizeChapters() } },
                         snackBarColor = _mangaDetailScreenState.value.general.snackbarColor,
-                    )
+                    ),
                 )
             } else {
                 finalizeChapters()
@@ -1079,7 +1079,7 @@ class MangaViewModel(val mangaId: Long) : ViewModel() {
                         actionLabelRes = R.string.add,
                         action = { toggleFavorite(true) },
                         snackBarColor = _mangaDetailScreenState.value.general.snackbarColor,
-                    )
+                    ),
                 )
             }
         }
@@ -1105,7 +1105,7 @@ class MangaViewModel(val mangaId: Long) : ViewModel() {
                             fieldRes = serviceNameRes,
                             messageRes = R.string.error_refreshing_,
                             snackBarColor = _mangaDetailScreenState.value.general.snackbarColor,
-                        )
+                        ),
                     )
                 },
                 onChaptersToMarkRead = { chaptersToMark ->
@@ -1155,7 +1155,7 @@ class MangaViewModel(val mangaId: Long) : ViewModel() {
                     track = it.track.copy(loggedInTrackService = loggedInServices),
                     manga =
                         it.manga.copy(
-                            dynamicCovers = mangaDetailsPreferences.dynamicCovers().get()
+                            dynamicCovers = mangaDetailsPreferences.dynamicCovers().get(),
                         ),
                     merge = it.merge.copy(validMergeTypes = validMergeTypes),
                 )
@@ -1414,7 +1414,7 @@ class MangaViewModel(val mangaId: Long) : ViewModel() {
                         messageRes = R.string._copied_to_clipboard,
                         message = message,
                         snackBarColor = _mangaDetailScreenState.value.general.snackbarColor,
-                    )
+                    ),
                 )
             }
         }
@@ -1434,7 +1434,7 @@ class MangaViewModel(val mangaId: Long) : ViewModel() {
                     actionLabelRes = R.string.undo,
                     action = { setAltTitle(previousTitle) },
                     snackBarColor = _mangaDetailScreenState.value.general.snackbarColor,
-                )
+                ),
             )
         }
     }
@@ -1540,7 +1540,7 @@ class MangaViewModel(val mangaId: Long) : ViewModel() {
                 SnackbarState(
                     message = trackingUpdate.message,
                     snackBarColor = _mangaDetailScreenState.value.general.snackbarColor,
-                )
+                ),
             )
         }
     }
@@ -1573,8 +1573,8 @@ class MangaViewModel(val mangaId: Long) : ViewModel() {
                                 state.copy(
                                     merge =
                                         state.merge.copy(
-                                            mergeSearchResult = MergeSearchResult.NoResult
-                                        )
+                                            mergeSearchResult = MergeSearchResult.NoResult,
+                                        ),
                                 )
 
                             false ->
@@ -1582,8 +1582,8 @@ class MangaViewModel(val mangaId: Long) : ViewModel() {
                                     merge =
                                         state.merge.copy(
                                             mergeSearchResult =
-                                                MergeSearchResult.Success(mergedMangaResults)
-                                        )
+                                                MergeSearchResult.Success(mergedMangaResults),
+                                        ),
                                 )
                         }
                     },
@@ -1591,8 +1591,8 @@ class MangaViewModel(val mangaId: Long) : ViewModel() {
                         state.copy(
                             merge =
                                 state.merge.copy(
-                                    mergeSearchResult = MergeSearchResult.Error(errorMessage)
-                                )
+                                    mergeSearchResult = MergeSearchResult.Error(errorMessage),
+                                ),
                         )
                     },
                 )
@@ -1629,8 +1629,8 @@ class MangaViewModel(val mangaId: Long) : ViewModel() {
                                 chapterUseCases.calculateChapterFilter(
                                     state.chapters.chapterFilter,
                                     filterOption,
-                                )
-                        )
+                                ),
+                        ),
                 )
             }
         }
@@ -1662,7 +1662,7 @@ class MangaViewModel(val mangaId: Long) : ViewModel() {
                     MangaConstants.ChapterDisplayType.Unread ->
                         base.copy(
                             readFilter =
-                                getTriState(Manga.CHAPTER_SHOW_UNREAD, Manga.CHAPTER_SHOW_READ)
+                                getTriState(Manga.CHAPTER_SHOW_UNREAD, Manga.CHAPTER_SHOW_READ),
                         )
 
                     MangaConstants.ChapterDisplayType.Bookmarked ->
@@ -1671,7 +1671,7 @@ class MangaViewModel(val mangaId: Long) : ViewModel() {
                                 getTriState(
                                     Manga.CHAPTER_SHOW_BOOKMARKED,
                                     Manga.CHAPTER_SHOW_NOT_BOOKMARKED,
-                                )
+                                ),
                         )
 
                     MangaConstants.ChapterDisplayType.Downloaded ->
@@ -1680,7 +1680,7 @@ class MangaViewModel(val mangaId: Long) : ViewModel() {
                                 getTriState(
                                     Manga.CHAPTER_SHOW_DOWNLOADED,
                                     Manga.CHAPTER_SHOW_NOT_DOWNLOADED,
-                                )
+                                ),
                         )
 
                     MangaConstants.ChapterDisplayType.Available ->
@@ -1689,12 +1689,12 @@ class MangaViewModel(val mangaId: Long) : ViewModel() {
                                 getTriState(
                                     Manga.CHAPTER_SHOW_AVAILABLE,
                                     Manga.CHAPTER_SHOW_UNAVAILABLE,
-                                )
+                                ),
                         )
 
                     MangaConstants.ChapterDisplayType.HideTitles ->
                         base.copy(
-                            hideChapterTitles = filterOption.displayState == ToggleableState.On
+                            hideChapterTitles = filterOption.displayState == ToggleableState.On,
                         )
                 }
             }
@@ -1795,7 +1795,7 @@ class MangaViewModel(val mangaId: Long) : ViewModel() {
             _mangaDetailScreenState.update {
                 it.copy(
                     general =
-                        it.general.copy(vibrantColor = MangaCoverMetadata.getVibrantColor(mangaId))
+                        it.general.copy(vibrantColor = MangaCoverMetadata.getVibrantColor(mangaId)),
                 )
             }
         }
@@ -1826,7 +1826,7 @@ class MangaViewModel(val mangaId: Long) : ViewModel() {
                                 message = message,
                                 prefixRes = prefixRes,
                                 snackBarColor = _mangaDetailScreenState.value.general.snackbarColor,
-                            )
+                            ),
                         )
                     }
                 },
@@ -1847,7 +1847,7 @@ class MangaViewModel(val mangaId: Long) : ViewModel() {
                         SnackbarState(
                             messageRes = R.string.cover_saved,
                             snackBarColor = _mangaDetailScreenState.value.general.snackbarColor,
-                        )
+                        ),
                     )
                 }
             } catch (e: Exception) {
@@ -1856,7 +1856,7 @@ class MangaViewModel(val mangaId: Long) : ViewModel() {
                     SnackbarState(
                         messageRes = R.string.error_saving_cover,
                         snackBarColor = _mangaDetailScreenState.value.general.snackbarColor,
-                    )
+                    ),
                 )
             }
         }
@@ -1943,7 +1943,7 @@ class MangaViewModel(val mangaId: Long) : ViewModel() {
                         SnackbarState(
                             message = "No network connection, cannot open comments",
                             snackBarColor = _mangaDetailScreenState.value.general.snackbarColor,
-                        )
+                        ),
                     )
 
                 false -> {
@@ -1960,7 +1960,7 @@ class MangaViewModel(val mangaId: Long) : ViewModel() {
                     }
                     if (threadId == null) {
                         appSnackbarManager.showSnackbar(
-                            SnackbarState(messageRes = R.string.comments_unavailable)
+                            SnackbarState(messageRes = R.string.comments_unavailable),
                         )
                     } else {
                         val url = MdConstants.forumUrl + threadId
@@ -2009,7 +2009,7 @@ class MangaViewModel(val mangaId: Long) : ViewModel() {
                             SnackbarState(
                                 "Error trying to mark chapters read from MangaDex $it",
                                 snackBarColor = _mangaDetailScreenState.value.general.snackbarColor,
-                            )
+                            ),
                         )
                     }
                 }
@@ -2042,7 +2042,7 @@ class MangaViewModel(val mangaId: Long) : ViewModel() {
                     SnackbarState(
                         message = download.errorMessage,
                         snackBarColor = _mangaDetailScreenState.value.general.snackbarColor,
-                    )
+                    ),
                 )
             }
             _mangaDetailScreenState.update { state ->
@@ -2072,7 +2072,7 @@ class MangaViewModel(val mangaId: Long) : ViewModel() {
                                     downloadStatus = download.status,
                                     downloadProgress = download.progress,
                                     chapters = state.general.searchChapters,
-                                )
+                                ),
                         ),
                 )
             }
@@ -2131,7 +2131,7 @@ class MangaViewModel(val mangaId: Long) : ViewModel() {
                                         downloadStatus = Download.State.NOT_DOWNLOADED,
                                         downloadProgress = 0,
                                         chapters = state.general.searchChapters,
-                                    )
+                                    ),
                             ),
                     )
                 }
@@ -2163,7 +2163,7 @@ class MangaViewModel(val mangaId: Long) : ViewModel() {
                         }
                     },
                     snackBarColor = _mangaDetailScreenState.value.general.snackbarColor,
-                )
+                ),
             )
         }
     }

@@ -129,7 +129,7 @@ private fun parseChapterCount(
                 val uploader = groupString.substring(restStartIndex, countSepIndex)
                 val countStr =
                     groupString.substring(
-                        countSepIndex + LibraryDao.RAW_CHAPTER_COUNT_SEPARATOR.length
+                        countSepIndex + LibraryDao.RAW_CHAPTER_COUNT_SEPARATOR.length,
                     )
                 val currentGroupCount = countStr.toIntOrNull() ?: 0
                 val scanlators = ChapterUtil.getScanlators(scanlator)

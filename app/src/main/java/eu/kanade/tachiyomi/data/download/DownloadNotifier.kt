@@ -73,7 +73,7 @@ internal class DownloadNotifier(
                     clearActions()
                     // Open download manager when clicked
                     setContentIntent(
-                        NotificationHandler.openDownloadManagerPendingActivity(context)
+                        NotificationHandler.openDownloadManagerPendingActivity(context),
                     )
                     color = ContextCompat.getColor(context, R.color.colorSecondary)
                     isDownloading = true
@@ -123,7 +123,7 @@ internal class DownloadNotifier(
                     // Open download manager when clicked
                     color = ContextCompat.getColor(context, R.color.iconOutline)
                     setContentIntent(
-                        NotificationHandler.openDownloadManagerPendingActivity(context)
+                        NotificationHandler.openDownloadManagerPendingActivity(context),
                     )
                     isDownloading = true
                     // Pause action
@@ -243,16 +243,17 @@ internal class DownloadNotifier(
         synchronized(notificationBuilder) {
             with(errorNotificationBuilder) {
                 setContentTitle(
-                    mangaTitle?.plus(": $chapter") ?: context.getString(R.string.download_error)
+                    mangaTitle?.plus(": $chapter") ?: context.getString(R.string.download_error),
                 )
                 setContentText(
-                    error ?: context.getString(R.string.could_not_download_unexpected_error)
+                    error ?: context.getString(R.string.could_not_download_unexpected_error),
                 )
                 setStyle(
                     NotificationCompat.BigTextStyle()
                         .bigText(
-                            error ?: context.getString(R.string.could_not_download_unexpected_error)
-                        )
+                            error
+                                ?: context.getString(R.string.could_not_download_unexpected_error),
+                        ),
                 )
                 setSmallIcon(android.R.drawable.stat_sys_warning)
                 setCategory(NotificationCompat.CATEGORY_ERROR)
@@ -265,11 +266,11 @@ internal class DownloadNotifier(
                             0,
                             customIntent,
                             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
-                        )
+                        ),
                     )
                 } else {
                     setContentIntent(
-                        NotificationHandler.openDownloadManagerPendingActivity(context)
+                        NotificationHandler.openDownloadManagerPendingActivity(context),
                     )
                 }
                 color = ContextCompat.getColor(context, R.color.iconOutline)
@@ -322,7 +323,7 @@ internal class DownloadNotifier(
                             R.string.reindexing_downloads_progress,
                             progress,
                             total,
-                        )
+                        ),
                     )
                     setProgress(total, progress, false)
                 } else {
@@ -347,7 +348,7 @@ internal class DownloadNotifier(
             context
                 .notificationBuilder(Notifications.Channel.Downloader.Progress) {
                     setLargeIcon(
-                        BitmapFactory.decodeResource(context.resources, R.mipmap.ic_launcher)
+                        BitmapFactory.decodeResource(context.resources, R.mipmap.ic_launcher),
                     )
                     setSmallIcon(R.drawable.ic_neko_notification)
                     setAutoCancel(true)
@@ -355,7 +356,7 @@ internal class DownloadNotifier(
                     setContentText(context.getString(R.string.reindex_downloads_complete))
                     color = ContextCompat.getColor(context, R.color.iconOutline)
                     setContentIntent(
-                        NotificationHandler.openDownloadManagerPendingActivity(context)
+                        NotificationHandler.openDownloadManagerPendingActivity(context),
                     )
                     setTimeoutAfter(5_000L)
                 }

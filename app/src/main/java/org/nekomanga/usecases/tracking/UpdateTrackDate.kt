@@ -5,7 +5,7 @@ import eu.kanade.tachiyomi.ui.manga.TrackingUpdate
 import java.time.ZoneId
 
 class UpdateTrackDate(
-    private val updateTrackingService: UpdateTrackingService = UpdateTrackingService()
+    private val updateTrackingService: UpdateTrackingService = UpdateTrackingService(),
 ) {
     suspend fun await(trackDateChange: TrackingConstants.TrackDateChange): TrackingUpdate {
         val date =

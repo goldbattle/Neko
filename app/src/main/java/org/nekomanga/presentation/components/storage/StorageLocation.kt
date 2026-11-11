@@ -25,13 +25,13 @@ import tachiyomi.core.util.storage.displayablePath
 
 @Composable
 fun storageLocationPicker(
-    storageDirPref: Preference<String>
+    storageDirPref: Preference<String>,
 ): ManagedActivityResultLauncher<Uri?, Uri?> {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
 
     return rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.OpenDocumentTree()
+        contract = ActivityResultContracts.OpenDocumentTree(),
     ) { uri ->
         if (uri != null) {
             val flags =
@@ -62,7 +62,7 @@ fun storageLocationPicker(
                                 context.getString(
                                     R.string.invalid_location,
                                     directory.displayablePath,
-                                )
+                                ),
                             )
                         }
                     }

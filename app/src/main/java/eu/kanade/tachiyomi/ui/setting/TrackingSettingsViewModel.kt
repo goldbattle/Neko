@@ -41,7 +41,7 @@ class TrackingSettingsViewModel : ViewModel() {
                 mal = trackManager.myAnimeList.toTrackServiceItem(),
                 mangaUpdates = trackManager.mangaUpdates.toTrackServiceItem(),
                 mangaBaka = trackManager.mangaBaka.toTrackServiceItem(),
-            )
+            ),
         )
 
     val state = _state.asStateFlow()

@@ -144,7 +144,7 @@ class PreferencesHelper(val context: Context, val preferenceStore: PreferenceSto
     fun mangabakaCodeVerifier() = this.preferenceStore.getString("mangabaka_code_verifier", "")
 
     fun dateFormat(
-        format: String = this.preferenceStore.getString(Keys.dateFormat, "").get()
+        format: String = this.preferenceStore.getString(Keys.dateFormat, "").get(),
     ): DateFormat =
         when (format) {
             "" -> DateFormat.getDateInstance(DateFormat.SHORT)

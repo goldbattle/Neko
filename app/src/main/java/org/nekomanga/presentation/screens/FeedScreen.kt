@@ -143,7 +143,7 @@ fun FeedScreen(
                 downloadClick = { chapterItem, feedManga, downloadAction ->
                     if (
                         MdConstants.UnsupportedOfficialGroupList.contains(
-                            chapterItem.chapter.scanlator
+                            chapterItem.chapter.scanlator,
                         )
                     ) {
                         context.toast("${chapterItem.chapter.scanlator} not supported, try WebView")
@@ -213,7 +213,7 @@ private fun FeedWrapper(
     var downloadScreenVisible by
         remember(feedScreenState.showingDownloads, feedScreenState.downloads.size) {
             mutableStateOf(
-                feedScreenState.showingDownloads && feedScreenState.downloads.isNotEmpty()
+                feedScreenState.showingDownloads && feedScreenState.downloads.isNotEmpty(),
             )
         }
 
@@ -373,7 +373,7 @@ private fun FeedWrapper(
                                     text = name,
                                     style =
                                         MaterialTheme.typography.labelLarge.copy(
-                                            fontWeight = FontWeight.Medium
+                                            fontWeight = FontWeight.Medium,
                                         ),
                                 )
                             }

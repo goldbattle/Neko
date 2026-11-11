@@ -261,7 +261,7 @@ class DownloadCacheTest {
             assertEquals(1, cache.getDownloadCount(manga))
             assertTrue(cache.isChapterDownloaded(chapter(FINISHED_UUID), manga, skipCache = false))
             assertFalse(
-                cache.isChapterDownloaded(chapter(UNFINISHED_UUID), manga, skipCache = false)
+                cache.isChapterDownloaded(chapter(UNFINISHED_UUID), manga, skipCache = false),
             )
             cache.scope.cancel()
         }
@@ -297,7 +297,7 @@ class DownloadCacheTest {
                     chapter(SAME_TITLE_MANGA_UUID),
                     sameTitleManga,
                     skipCache = false,
-                )
+                ),
             )
             cache.scope.cancel()
         }

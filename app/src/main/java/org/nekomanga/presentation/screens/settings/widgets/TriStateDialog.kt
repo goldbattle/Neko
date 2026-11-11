@@ -118,7 +118,7 @@ fun <T> TriStateListDialog(
                                                 State.UNCHECKED -> R.string.not_selected
                                                 State.CHECKED -> R.string.selected
                                                 State.INVERSED -> R.string.disabled
-                                            }
+                                            },
                                         ),
                                 )
                                 Text(text = itemLabel(item))
@@ -148,7 +148,7 @@ fun <T> TriStateListDialog(
                         if (selected[index] == State.INVERSED) category else null
                     }
                     onValueChanged(included, excluded)
-                }
+                },
             ) {
                 Text(text = stringResource(R.string.ok))
             }

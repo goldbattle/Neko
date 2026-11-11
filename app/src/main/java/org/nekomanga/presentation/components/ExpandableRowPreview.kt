@@ -27,7 +27,7 @@ private class ExpandableRowStateProvider : PreviewParameterProvider<Themed<Expan
 @Preview
 @Composable
 private fun ExpandableRowPreview(
-    @PreviewParameter(ExpandableRowStateProvider::class) themedState: Themed<ExpandableRowState>
+    @PreviewParameter(ExpandableRowStateProvider::class) themedState: Themed<ExpandableRowState>,
 ) {
     ThemedPreviews(themedState.themeConfig) {
         val state = themedState.value

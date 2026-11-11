@@ -62,7 +62,7 @@ fun DisplayOptionsSheet(
     themeColorState: ThemeColorState = defaultThemeColorState(),
 ) {
     CompositionLocalProvider(
-        LocalRippleConfiguration provides themeColorState.rippleConfiguration
+        LocalRippleConfiguration provides themeColorState.rippleConfiguration,
     ) {
         BaseSheet(themeColor = themeColorState) {
             val paddingModifier = Modifier.padding(horizontal = Size.small)

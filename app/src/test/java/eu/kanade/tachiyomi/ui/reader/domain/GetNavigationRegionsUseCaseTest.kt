@@ -243,7 +243,7 @@ class GetNavigationRegionsUseCaseTest {
                         Region(
                             rect = NormalizedRect(0.33f, 0f, 0.66f, 0.33f),
                             type = NavigationRegion.MENU,
-                        )
+                        ),
                     )
             }
 

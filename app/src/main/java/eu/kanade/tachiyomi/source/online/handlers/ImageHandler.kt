@@ -35,7 +35,7 @@ import uy.kohesive.injekt.injectLazy
 
 class ImageHandler(
     // chapter id and its latest at home server, read and written by concurrent page loads
-    private val tokenTracker: MutableMap<String, AtHomeServer> = ConcurrentHashMap()
+    private val tokenTracker: MutableMap<String, AtHomeServer> = ConcurrentHashMap(),
 ) {
     /** An at home base url and the time it was requested. */
     data class AtHomeServer(val baseUrl: String, val time: Long)

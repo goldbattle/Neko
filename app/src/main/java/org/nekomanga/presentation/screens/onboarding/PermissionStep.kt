@@ -58,7 +58,7 @@ internal class PermissionStep : OnboardingStep {
                         PackageManager.PERMISSION_GRANTED
                 } else {
                     true
-                }
+                },
             )
         }
 
@@ -66,7 +66,7 @@ internal class PermissionStep : OnboardingStep {
             mutableStateOf(
                 context
                     .getSystemService<PowerManager>()!!
-                    .isIgnoringBatteryOptimizations(context.packageName)
+                    .isIgnoringBatteryOptimizations(context.packageName),
             )
         }
 

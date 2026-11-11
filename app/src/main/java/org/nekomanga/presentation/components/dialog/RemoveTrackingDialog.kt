@@ -58,7 +58,7 @@ fun RemoveTrackingDialog(
                     },
                     colors =
                         ButtonDefaults.textButtonColors(
-                            contentColor = themeColorState.primaryColor
+                            contentColor = themeColorState.primaryColor,
                         ),
                 ) {
                     Text(text = stringResource(id = R.string.remove))
@@ -69,7 +69,7 @@ fun RemoveTrackingDialog(
                     onClick = onDismiss,
                     colors =
                         ButtonDefaults.textButtonColors(
-                            contentColor = themeColorState.primaryColor
+                            contentColor = themeColorState.primaryColor,
                         ),
                 ) {
                     Text(text = stringResource(id = R.string.cancel))

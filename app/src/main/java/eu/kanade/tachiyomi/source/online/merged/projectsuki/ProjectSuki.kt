@@ -75,7 +75,7 @@ class ProjectSuki : ReducedHttpSource() {
     }
 
     override suspend fun fetchChapters(
-        mangaUrl: String
+        mangaUrl: String,
     ): Result<List<SChapterStatusPair>, ResultError> {
         return try {
             val response = client.newCall(GET(baseUrl + mangaUrl, headers)).await()
@@ -174,7 +174,7 @@ class ProjectSuki : ReducedHttpSource() {
                 if (count > 0) Triple(id, title, count) else null
             }
             .sortedWith(
-                compareByDescending<Triple<String, String, Int>> { it.third }.thenBy { it.second }
+                compareByDescending<Triple<String, String, Int>> { it.third }.thenBy { it.second },
             )
             .map { (id, title, _) ->
                 SManga.create().apply {

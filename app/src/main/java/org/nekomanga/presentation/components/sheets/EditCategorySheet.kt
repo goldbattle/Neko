@@ -56,7 +56,7 @@ fun EditCategorySheet(
     addToLibraryClick: () -> Unit = {},
 ) {
     CompositionLocalProvider(
-        LocalRippleConfiguration provides themeColorState.rippleConfiguration
+        LocalRippleConfiguration provides themeColorState.rippleConfiguration,
     ) {
         var showAddCategoryDialog by rememberSaveable { mutableStateOf(false) }
         var newCategoryText by rememberSaveable { mutableStateOf("") }
@@ -121,7 +121,7 @@ fun EditCategorySheet(
                         text = stringResource(id = R.string.plus_new_category),
                         style =
                             MaterialTheme.typography.titleSmall.copy(
-                                color = themeColorState.primaryColor
+                                color = themeColorState.primaryColor,
                             ),
                     )
                 }
@@ -130,7 +130,7 @@ fun EditCategorySheet(
             Divider()
 
             LazyColumn(
-                modifier = Modifier.fillMaxWidth().requiredHeightIn(Size.none, maxLazyHeight.dp)
+                modifier = Modifier.fillMaxWidth().requiredHeightIn(Size.none, maxLazyHeight.dp),
             ) {
                 items(items = categories, key = { category -> category.id }) {
                     category: CategoryItem ->
@@ -155,7 +155,7 @@ fun EditCategorySheet(
                     onClick = cancelClick,
                     colors =
                         ButtonDefaults.textButtonColors(
-                            contentColor = themeColorState.primaryColor
+                            contentColor = themeColorState.primaryColor,
                         ),
                 ) {
                     Text(
@@ -171,7 +171,7 @@ fun EditCategorySheet(
                     },
                     colors =
                         ButtonDefaults.elevatedButtonColors(
-                            containerColor = themeColorState.primaryColor
+                            containerColor = themeColorState.primaryColor,
                         ),
                 ) {
                     Text(

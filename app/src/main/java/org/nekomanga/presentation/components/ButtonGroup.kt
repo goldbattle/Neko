@@ -62,7 +62,7 @@ fun <T> ButtonGroup(
 @Preview
 @Composable
 private fun ButtonGroupPreview(
-    @PreviewParameter(ThemeConfigProvider::class) themeConfig: ThemeConfig
+    @PreviewParameter(ThemeConfigProvider::class) themeConfig: ThemeConfig,
 ) {
     ThemedPreviews(themeConfig) {
         // Define the items for the button group

@@ -254,7 +254,7 @@ private fun WebtoonPageContent(
                     Modifier.fillMaxWidth()
                         .then(
                             if (intrinsicRatio > 0f) Modifier.aspectRatio(intrinsicRatio)
-                            else Modifier
+                            else Modifier,
                         ),
                 onSuccess = { state ->
                     loadError = false

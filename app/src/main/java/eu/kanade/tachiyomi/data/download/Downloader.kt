@@ -560,8 +560,8 @@ class Downloader(
             val response = source.getImage(page)
             emit(saveImage(context, response, tmpDir, filename))
         }
-            // Retry 3 times, waiting 2, 4 and 8 seconds between attempts.
-            .retryWhen { _, attempt ->
+        // Retry 3 times, waiting 2, 4 and 8 seconds between attempts.
+        .retryWhen { _, attempt ->
                 if (attempt < 3) {
                     delay((2L shl attempt.toInt()) * 1000)
                     true
@@ -583,7 +583,7 @@ class Downloader(
                         context.getString(
                             R.string.download_notifier_split_page_not_found,
                             page.number,
-                        )
+                        ),
                     )
 
             // Check if the original page was previously split before then skip.
@@ -774,7 +774,7 @@ class Downloader(
             val tmpFile =
                 tmpDir.createFile("$filename$TMP_FILE_SUFFIX")
                     ?: throw Exception(
-                        context.getString(R.string.download_notifier_cannot_create_file)
+                        context.getString(R.string.download_notifier_cannot_create_file),
                     )
             cacheFile.inputStream().use { input ->
                 tmpFile.openOutputStream().use { output -> input.copyTo(output) }
@@ -808,7 +808,7 @@ class Downloader(
             val zip =
                 mangaDir.createFile(zipName)
                     ?: throw Exception(
-                        context.getString(R.string.download_notifier_cannot_create_file)
+                        context.getString(R.string.download_notifier_cannot_create_file),
                     )
             // On failure, remove the partial cbz and keep the pages in tmpDir for the next try.
             try {
@@ -834,7 +834,7 @@ class Downloader(
                 }
                 if (!zip.renameTo("$dirname.cbz")) {
                     throw Exception(
-                        context.getString(R.string.download_notifier_cannot_create_file)
+                        context.getString(R.string.download_notifier_cannot_create_file),
                     )
                 }
             } catch (e: Exception) {
@@ -864,7 +864,7 @@ class Downloader(
             val file =
                 tmpDir.createFile("$filename$TMP_FILE_SUFFIX")
                     ?: throw Exception(
-                        context.getString(R.string.download_notifier_cannot_create_file)
+                        context.getString(R.string.download_notifier_cannot_create_file),
                     )
             try {
                 response.body.source().saveTo(file.openOutputStream())
@@ -873,11 +873,11 @@ class Downloader(
                 val extension =
                     findImageExtension { file.openInputStream() }
                         ?: throw Exception(
-                            context.getString(R.string.download_notifier_page_not_image)
+                            context.getString(R.string.download_notifier_page_not_image),
                         )
                 if (!file.renameTo("$filename.$extension")) {
                     throw Exception(
-                        context.getString(R.string.download_notifier_cannot_create_file)
+                        context.getString(R.string.download_notifier_cannot_create_file),
                     )
                 }
             } catch (e: Exception) {

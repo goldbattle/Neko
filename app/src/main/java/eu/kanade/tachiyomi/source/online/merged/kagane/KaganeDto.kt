@@ -174,7 +174,7 @@ class ChapterBook(
         private val CHAPTER_NO_REGEX = Regex("""^(\d+(?:\.\d+)?)""")
         private val TITLE_NUMBER_REGEX =
             Regex(
-                """(?i)^ch(?:apter)?\.?\s*(\d+(?:\.\d+)?)\s*(?:-\s*vol(?:ume)?\.?\s*(\d+(?:\.\d+)?))?(.*)$"""
+                """(?i)^ch(?:apter)?\.?\s*(\d+(?:\.\d+)?)\s*(?:-\s*vol(?:ume)?\.?\s*(\d+(?:\.\d+)?))?(.*)$""",
             )
     }
 }

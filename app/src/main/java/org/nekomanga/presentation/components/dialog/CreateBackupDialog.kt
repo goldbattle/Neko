@@ -136,7 +136,7 @@ fun CreateBackupDialog(
 @Preview
 @Composable
 private fun CreateBackupDialogPreview(
-    @PreviewParameter(ThemeConfigProvider::class) themeConfig: ThemeConfig
+    @PreviewParameter(ThemeConfigProvider::class) themeConfig: ThemeConfig,
 ) {
     ThemedPreviews(themeConfig) {
         CreateBackupDialog(

@@ -47,7 +47,7 @@ fun FeedScreenTopBar(
                             title = UiText.StringResource(R.string.settings),
                             icon = Icons.Outlined.Tune,
                             onClick = openSheetClick,
-                        )
+                        ),
                     )
                 }
                 add(mainDropDown)
@@ -81,7 +81,7 @@ fun FeedScreenTopBar(
                                 onClick = openSheetClick,
                             ),
                             mainDropDown,
-                        )
+                        ),
                 )
             },
             scrollBehavior = scrollBehavior,

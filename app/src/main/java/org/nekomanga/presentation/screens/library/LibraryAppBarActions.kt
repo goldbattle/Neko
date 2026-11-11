@@ -49,7 +49,7 @@ fun LibraryAppBarActions(
                                             onClick = {
                                                 downloadChapters(
                                                     MangaConstants.DownloadAction
-                                                        .DownloadNextUnread(1)
+                                                        .DownloadNextUnread(1),
                                                 )
                                             },
                                         ),
@@ -58,7 +58,7 @@ fun LibraryAppBarActions(
                                             onClick = {
                                                 downloadChapters(
                                                     MangaConstants.DownloadAction
-                                                        .DownloadNextUnread(5)
+                                                        .DownloadNextUnread(5),
                                                 )
                                             },
                                         ),
@@ -67,7 +67,7 @@ fun LibraryAppBarActions(
                                             onClick = {
                                                 downloadChapters(
                                                     MangaConstants.DownloadAction
-                                                        .DownloadNextUnread(10)
+                                                        .DownloadNextUnread(10),
                                                 )
                                             },
                                         ),
@@ -76,7 +76,7 @@ fun LibraryAppBarActions(
                                             onClick = {
                                                 downloadChapters(
                                                     MangaConstants.DownloadAction
-                                                        .DownloadNextUnread(20)
+                                                        .DownloadNextUnread(20),
                                                 )
                                             },
                                         ),

@@ -51,7 +51,7 @@ fun RestoreDialog(uri: Uri, onDismiss: () -> Unit, onConfirm: () -> Unit) {
                 onClick = {
                     onConfirm()
                     onDismiss()
-                }
+                },
             ) {
                 Text(text = stringResource(id = R.string.restore))
             }

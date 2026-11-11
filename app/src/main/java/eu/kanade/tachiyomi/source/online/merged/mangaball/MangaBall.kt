@@ -66,7 +66,7 @@ class MangaBall : ReducedHttpSource() {
     }
 
     override suspend fun fetchChapters(
-        mangaUrl: String
+        mangaUrl: String,
     ): Result<List<SChapterStatusPair>, ResultError> {
         return try {
             val id = mangaUrl.substringAfterLast("-")
@@ -77,7 +77,7 @@ class MangaBall : ReducedHttpSource() {
                             "$baseUrl/api/v1/chapter/chapter-listing-by-title-id",
                             headers,
                             titleIdBody(id),
-                        )
+                        ),
                     )
                     .await()
             if (!response.isSuccessful) {

@@ -152,7 +152,7 @@ class BackupNotifier(private val context: Context) {
                     errorCount,
                     timeString,
                     errorCount,
-                )
+                ),
             )
 
             // Clear old actions if they exist

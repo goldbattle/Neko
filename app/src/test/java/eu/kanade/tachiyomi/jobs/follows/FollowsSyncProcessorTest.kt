@@ -81,17 +81,19 @@ class FollowsSyncProcessorTest {
             mockk<SourceManager> {
                 every { mangaDex } returns source
                 every { isMangadex(any()) } answers { callOriginal() }
-            }
+            },
         )
         Injekt.addSingleton(categoryRepository)
         Injekt.addSingleton(
             mockk<MangaDexPreferences> {
                 every { mangaDexPullToLibraryIndices().get() } returns
                     setOf(FollowStatus.READING.int.toString())
-            }
+            },
         )
         Injekt.addSingleton(
-            mockk<LibraryPreferences> { every { defaultCategory().get() } returns DEFAULT_CATEGORY }
+            mockk<LibraryPreferences> {
+                every { defaultCategory().get() } returns DEFAULT_CATEGORY
+            },
         )
         Injekt.addSingleton<MangaRepository>(
             MangaRepositoryImpl(
@@ -100,7 +102,7 @@ class FollowsSyncProcessorTest {
                 mangaDexPreferences = mockk<MangaDexPreferences>(),
                 libraryPreferences = mockk<LibraryPreferences>(),
                 ioDispatcher = UnconfinedTestDispatcher(),
-            )
+            ),
         )
     }
 

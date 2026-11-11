@@ -35,7 +35,7 @@ fun LibrarySortSheet(
     themeColorState: ThemeColorState = defaultThemeColorState(),
 ) {
     CompositionLocalProvider(
-        LocalRippleConfiguration provides themeColorState.rippleConfiguration
+        LocalRippleConfiguration provides themeColorState.rippleConfiguration,
     ) {
         val maxLazyHeight = LocalConfiguration.current.screenHeightDp * .6
 
@@ -51,7 +51,7 @@ fun LibrarySortSheet(
             )
             Gap(Size.medium)
             LazyColumn(
-                modifier = Modifier.fillMaxWidth().requiredHeightIn(Size.none, maxLazyHeight.dp)
+                modifier = Modifier.fillMaxWidth().requiredHeightIn(Size.none, maxLazyHeight.dp),
             ) {
                 items(
                     items = LibrarySort.filteredEntries(),
@@ -60,7 +60,7 @@ fun LibrarySortSheet(
                     val textColor =
                         if (currentLibrarySort == librarySort)
                             MaterialTheme.colorScheme.onSurface.copy(
-                                alpha = NekoColors.disabledAlphaHighContrast
+                                alpha = NekoColors.disabledAlphaHighContrast,
                             )
                         else MaterialTheme.colorScheme.onSurface
 

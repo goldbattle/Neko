@@ -58,7 +58,7 @@ class MangaUpdatesApi(interceptor: MangaUpdatesInterceptor, private val client: 
                 POST(
                     url = "$baseUrl/v1/lists/series",
                     body = body.toString().toRequestBody(contentType),
-                )
+                ),
             )
             .await()
     }
@@ -70,7 +70,7 @@ class MangaUpdatesApi(interceptor: MangaUpdatesInterceptor, private val client: 
                 POST(
                     url = "$baseUrl/v1/lists/series/delete",
                     body = body.toString().toRequestBody(contentType),
-                )
+                ),
             )
             .await()
             .let {
@@ -85,7 +85,7 @@ class MangaUpdatesApi(interceptor: MangaUpdatesInterceptor, private val client: 
                 POST(
                     url = "$baseUrl/v1/lists/series/update",
                     body = body.toString().toRequestBody(contentType),
-                )
+                ),
             )
             .await()
 
@@ -121,7 +121,7 @@ class MangaUpdatesApi(interceptor: MangaUpdatesInterceptor, private val client: 
                     PUT(
                         url = "$baseUrl/v1/series/${track.media_id}/rating",
                         body = body.toString().toRequestBody(contentType),
-                    )
+                    ),
                 )
                 .await()
         } else {
@@ -165,7 +165,7 @@ class MangaUpdatesApi(interceptor: MangaUpdatesInterceptor, private val client: 
                     POST(
                         url = "$baseUrl/v1/series/search",
                         body = body.toString().toRequestBody(contentType),
-                    )
+                    ),
                 )
                 .await()
                 .parseAs<JsonObject>()
@@ -189,7 +189,7 @@ class MangaUpdatesApi(interceptor: MangaUpdatesInterceptor, private val client: 
                     PUT(
                         url = "$baseUrl/v1/account/login",
                         body = body.toString().toRequestBody(contentType),
-                    )
+                    ),
                 )
                 .await()
                 .parseAs<JsonObject>()

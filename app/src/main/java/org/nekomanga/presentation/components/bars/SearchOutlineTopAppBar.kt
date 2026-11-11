@@ -229,7 +229,7 @@ fun SearchOutlineTopAppBar(
                                 Modifier.padding(end = Size.small)
                                     .clip(RoundedCornerShape(Size.medium))
                                     .background(
-                                        MaterialTheme.colorScheme.errorContainer.copy(alpha = 0.8f)
+                                        MaterialTheme.colorScheme.errorContainer.copy(alpha = 0.8f),
                                     )
                                     .clickable { onClearRecentSearches() }
                                     .padding(horizontal = Size.smedium, vertical = Size.tiny),
@@ -258,12 +258,12 @@ fun SearchOutlineTopAppBar(
                                 Modifier.padding(end = Size.small)
                                     .clip(RoundedCornerShape(Size.medium))
                                     .background(
-                                        MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.7f)
+                                        MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.7f),
                                     )
                                     .combinedClickable(
                                         onLongClick = {
                                             haptic.performHapticFeedback(
-                                                HapticFeedbackType.LongPress
+                                                HapticFeedbackType.LongPress,
                                             )
                                             onRemoveRecentSearch(query)
                                         },

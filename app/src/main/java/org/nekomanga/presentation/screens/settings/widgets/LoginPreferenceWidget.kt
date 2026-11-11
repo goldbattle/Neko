@@ -57,7 +57,7 @@ fun TrackingPreferenceWidget(
                 modifier =
                     Modifier.size(Size.huge)
                         .clip(RoundedCornerShape(Size.small))
-                        .background(color = Color(tracker.logoColor))
+                        .background(color = Color(tracker.logoColor)),
             ) {
                 Image(
                     painter = painterResource(id = tracker.logoRes),
@@ -76,7 +76,7 @@ fun TrackingPreferenceWidget(
                     if (loggedIn) MaterialTheme.colorScheme.primary
                     else
                         MaterialTheme.colorScheme.onSurface.copy(
-                            NekoColors.disabledAlphaHighContrast
+                            NekoColors.disabledAlphaHighContrast,
                         ),
                 contentDescription = null,
             )
@@ -105,7 +105,7 @@ fun SitePreferenceWidget(
                     if (loggedIn) MaterialTheme.colorScheme.primary
                     else
                         MaterialTheme.colorScheme.onSurface.copy(
-                            NekoColors.disabledAlphaHighContrast
+                            NekoColors.disabledAlphaHighContrast,
                         ),
                 contentDescription = null,
             )

@@ -120,7 +120,7 @@ class ComikeyHandlerTest {
                             {"href": "pages/0001.webp", "type": "image/webp", "height": 2048, "width": 1400}
                         ]
                     }
-                    """
+                    """,
             )
 
         assertEquals(
@@ -152,7 +152,7 @@ class ComikeyHandlerTest {
     fun `other requests are not intercepted`() {
         assertFalse(ComikeyHandler.isRelayManifest("comikey.com", "/v1/ep1/manifest"))
         assertFalse(
-            ComikeyHandler.isRelayManifest("relay-us.epub.rocks", "/v1/ep1/pages/0001.webp")
+            ComikeyHandler.isRelayManifest("relay-us.epub.rocks", "/v1/ep1/pages/0001.webp"),
         )
         assertFalse(ComikeyHandler.isRelayManifest("relay-us.epub.rocks.example", "/manifest"))
         assertFalse(ComikeyHandler.isRelayManifest(null, "/manifest"))

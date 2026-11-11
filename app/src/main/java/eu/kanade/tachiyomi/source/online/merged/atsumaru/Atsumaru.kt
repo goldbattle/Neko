@@ -121,7 +121,7 @@ class Atsumaru : ReducedHttpSource() {
     }
 
     override suspend fun fetchChapters(
-        mangaUrl: String
+        mangaUrl: String,
     ): Result<List<SChapterStatusPair>, ResultError> {
         val response =
             client.newCall(GET("$baseUrl/api/manga/allChapters?mangaId=$mangaUrl", headers)).await()

@@ -62,7 +62,7 @@ fun VerticalCategoriesPage(
     val lazyListState =
         rememberLazyListState(
             initialFirstVisibleItemIndex =
-                libraryScreenState.scrollPositions[VERTICAL_SCROLL_INDEX] ?: 0
+                libraryScreenState.scrollPositions[VERTICAL_SCROLL_INDEX] ?: 0,
         )
 
     DisposableEffect(libraryScreenActions) {
@@ -334,9 +334,9 @@ fun LibraryCategoryHeader(
                     }
                 } else {
                     MaterialTheme.colorScheme.onSurface.copy(
-                        alpha = NekoColors.disabledAlphaLowContrast
+                        alpha = NekoColors.disabledAlphaLowContrast,
                     )
-                }
+                },
         )
 
     Row(
@@ -409,7 +409,7 @@ fun LibraryCategoryHeader(
 @Preview
 @Composable
 private fun LibraryCategoryHeaderPreview(
-    @PreviewParameter(ThemeConfigProvider::class) themeConfig: ThemeConfig
+    @PreviewParameter(ThemeConfigProvider::class) themeConfig: ThemeConfig,
 ) {
     val categoryItem =
         CategoryItem(

@@ -28,7 +28,7 @@ import org.nekomanga.logging.TimberKt
  *   stateless [ComposeWebtoonViewer].
  */
 @Deprecated(
-    "Use ReaderPreloadEngine and stateless ComposeWebtoonViewer with WebtoonViewerConfigUiModel instead"
+    "Use ReaderPreloadEngine and stateless ComposeWebtoonViewer with WebtoonViewerConfigUiModel instead",
 )
 class WebtoonViewer(val activity: ReaderActivity, val noWebtoonTag: Boolean = false) : BaseViewer {
 

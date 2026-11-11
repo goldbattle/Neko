@@ -119,7 +119,7 @@ class ModifyCategoryUseCaseTest {
                     match { insertedCategory ->
                         insertedCategory.name == "Regular" &&
                             insertedCategory.mangaSort == LibrarySort.Title.categoryValueDescending
-                    }
+                    },
                 )
             }
         }
@@ -194,7 +194,7 @@ class ModifyCategoryUseCaseTest {
                     match { insertedCategory ->
                         insertedCategory.name == "Regular" &&
                             insertedCategory.mangaSort == LibrarySort.DateAdded.categoryValue
-                    }
+                    },
                 )
             }
         }
@@ -215,7 +215,7 @@ class ModifyCategoryUseCaseTest {
                 categoryRepository.insertCategory(
                     match { insertedCategory ->
                         insertedCategory.name == categoryName && insertedCategory.order == 1
-                    }
+                    },
                 )
             }
         }
@@ -246,7 +246,7 @@ class ModifyCategoryUseCaseTest {
                 categoryRepository.insertCategory(
                     match { insertedCategory ->
                         insertedCategory.name == categoryName && insertedCategory.order == 6
-                    }
+                    },
                 )
             }
         }
@@ -398,7 +398,7 @@ class ModifyCategoryUseCaseTest {
             coVerify(exactly = 1) { categoryRepository.getCategoryById(categoryId) }
             coVerify(exactly = 1) {
                 categoryRepository.insertCategory(
-                    match { it.id == categoryId && it.name == newName }
+                    match { it.id == categoryId && it.name == newName },
                 )
             }
         }
@@ -435,7 +435,7 @@ class ModifyCategoryUseCaseTest {
                         list[0].order == 1 &&
                         list[1].id == 10 &&
                         list[1].order == 2
-                }
+                },
             )
         }
     }

@@ -477,7 +477,7 @@ class SimilarHandler {
         if (strictMatch && responseBody.data.size != mangaIds.size) {
             TimberKt.d { "manga returned doesn't match number of manga expected" }
             throw Exception(
-                "Unable to complete response ${responseBody.data.size} of ${mangaIds.size} returned"
+                "Unable to complete response ${responseBody.data.size} of ${mangaIds.size} returned",
             )
         }
         return responseBody

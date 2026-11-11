@@ -65,7 +65,7 @@ class FollowsSyncProcessor {
                 .fetchAllFollows()
                 .onErr {
                     errorNotification(
-                        (it as? ResultError.Generic)?.errorString ?: "Error fetching follows"
+                        (it as? ResultError.Generic)?.errorString ?: "Error fetching follows",
                     )
                 }
                 .onOk { unfilteredManga ->

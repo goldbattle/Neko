@@ -54,7 +54,7 @@ private fun ResultRow(displayResult: DisplayResult, onClick: () -> Unit) {
                     style = MaterialTheme.typography.bodyMedium,
                     color =
                         MaterialTheme.colorScheme.onSurface.copy(
-                            alpha = NekoColors.mediumAlphaLowContrast
+                            alpha = NekoColors.mediumAlphaLowContrast,
                         ),
                     maxLines = 4,
                     overflow = TextOverflow.Ellipsis,

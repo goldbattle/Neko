@@ -100,7 +100,7 @@ class ComikeyHandler {
                     override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
                         super.onPageStarted(view, url, favicon)
                         view?.evaluateJavascript(
-                            webviewScript.replace("__interface__", interfaceName)
+                            webviewScript.replace("__interface__", interfaceName),
                         ) {}
                     }
 

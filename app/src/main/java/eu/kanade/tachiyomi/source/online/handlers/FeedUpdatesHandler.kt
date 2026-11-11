@@ -63,7 +63,7 @@ class FeedUpdatesHandler {
     }
 
     private suspend fun feedUpdatesParse(
-        chapterListDto: ChapterListDto
+        chapterListDto: ChapterListDto,
     ): Result<MangaListPage, ResultError> {
         return runCatching {
             val result =
@@ -123,7 +123,7 @@ class FeedUpdatesHandler {
                         MangaListPage(
                             sourceManga = mangaList.toList(),
                             hasNextPage = hasMoreResults,
-                        )
+                        ),
                     )
                 }
         }

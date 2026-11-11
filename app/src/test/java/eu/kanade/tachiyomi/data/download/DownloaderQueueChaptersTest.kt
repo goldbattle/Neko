@@ -73,7 +73,7 @@ class DownloaderQueueChaptersTest {
         Injekt.addSingleton(
             mockk<MangaDetailsPreferences> {
                 every { sortChapterOrder().get() } returns Manga.CHAPTER_SORTING_SOURCE
-            }
+            },
         )
 
         val editor = mockk<SharedPreferences.Editor>(relaxed = true)
@@ -399,7 +399,7 @@ class DownloaderQueueChaptersTest {
                                 listOf(chapter(2, otherManga)),
                                 autoStart = true,
                             )
-                        }
+                        },
                     )
                 }
                 jobCalls += "stop"
@@ -431,7 +431,7 @@ class DownloaderQueueChaptersTest {
                 queueing.set(
                     runUntilDoneOrBlocked {
                         downloader.queueChapters(manga, listOf(chapter(2)), autoStart = false)
-                    }
+                    },
                 )
             }
         }

@@ -129,7 +129,7 @@ fun ButtonBlock(
                             } else {
                                 null
                             },
-                    )
+                    ),
                 )
 
                 // Tracking Button (conditionally added)
@@ -158,7 +158,7 @@ fun ButtonBlock(
                                 else UiText.StringResource(R.string.tracking),
                             isChecked = isTracked,
                             onClick = trackingClick,
-                        )
+                        ),
                     )
                 }
 
@@ -168,14 +168,14 @@ fun ButtonBlock(
                         icon = ArtTrackIcon,
                         text = UiText.StringResource(R.string.artwork),
                         onClick = artworkClick,
-                    )
+                    ),
                 )
                 add(
                     ActionButtonData(
                         icon = AccountTreeIcon,
                         text = UiText.StringResource(R.string.similar_work),
                         onClick = similarClick,
-                    )
+                    ),
                 )
                 add(
                     ActionButtonData(
@@ -192,25 +192,26 @@ fun ButtonBlock(
                             },
                         text =
                             UiText.StringResource(
-                                if (mergedCount != 0) R.string.is_merged else R.string.is_not_merged
+                                if (mergedCount != 0) R.string.is_merged
+                                else R.string.is_not_merged,
                             ),
                         isChecked = mergedCount != 0,
                         onClick = mergeClick,
-                    )
+                    ),
                 )
                 add(
                     ActionButtonData(
                         icon = Icons.Filled.OpenInBrowser,
                         text = UiText.StringResource(R.string.links),
                         onClick = linksClick,
-                    )
+                    ),
                 )
                 add(
                     ActionButtonData(
                         icon = Icons.Filled.Share,
                         text = UiText.StringResource(R.string.share),
                         onClick = shareClick,
-                    )
+                    ),
                 )
             }
         }
@@ -315,7 +316,7 @@ private fun ActionButton(
                                     onClick = {
                                         it.onClick()
                                         favoriteExpanded = false
-                                    }
+                                    },
                                 )
                             } else {
                                 it

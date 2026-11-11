@@ -54,7 +54,7 @@ class ChapterExtensionsTest {
                     uploader = "",
                     isUnavailable = false,
                     smartOrder = 0,
-                )
+                ),
         )
     }
 }

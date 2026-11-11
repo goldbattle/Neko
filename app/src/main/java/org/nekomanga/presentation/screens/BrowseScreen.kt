@@ -224,7 +224,7 @@ private fun BrowseWrapper(
                             BrowseBottomSheetScreen.BrowseDisplayOptionsSheet(
                                 switchDisplayClick = switchDisplayClick,
                                 libraryEntryVisibilityClick = libraryEntryVisibilityClick,
-                            )
+                            ),
                         )
                     }
                 },
@@ -254,8 +254,8 @@ private fun BrowseWrapper(
                             setCategories = { selectedCategories ->
                                 scope.launch { sheetState.hide() }
                                 toggleFavorite(displayManga.mangaId, selectedCategories)
-                            }
-                        )
+                            },
+                        ),
                     )
                 }
             } else {
@@ -274,7 +274,7 @@ private fun BrowseWrapper(
                             Action(
                                 text = UiText.StringResource(R.string.retry),
                                 onClick = retryClick,
-                            )
+                            ),
                         ),
                     contentPadding = recyclerContentPadding,
                 )

@@ -43,7 +43,7 @@ private fun MangaCoverPreviewContent(artwork: Artwork) {
 @Preview
 @Composable
 private fun MangaCoverPreview(
-    @PreviewParameter(ArtworkProvider::class) themedArtwork: Themed<Artwork>
+    @PreviewParameter(ArtworkProvider::class) themedArtwork: Themed<Artwork>,
 ) {
     ThemedPreviews(themedArtwork.themeConfig) { MangaCoverPreviewContent(themedArtwork.value) }
 }

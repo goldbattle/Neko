@@ -29,7 +29,7 @@ dependencies {
 tasks.withType<KotlinCompile> {
     compilerOptions {
         freeCompilerArgs.addAll(
-            listOf("-opt-in=kotlinx.serialization.ExperimentalSerializationApi")
+            listOf("-opt-in=kotlinx.serialization.ExperimentalSerializationApi"),
         )
     }
 }

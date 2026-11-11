@@ -95,7 +95,7 @@ internal class GeneralSettingsScreen(
                                 1 to stringResource(R.string.over_wifi_only),
                                 2 to stringResource(R.string.dont_auto_update),
                             ),
-                    )
+                    ),
                 ),
         )
     }

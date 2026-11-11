@@ -26,7 +26,7 @@ object MangaCoverMetadata {
                             }
                         }
                     }
-                    .toMap()
+                    .toMap(),
             )
     }
 

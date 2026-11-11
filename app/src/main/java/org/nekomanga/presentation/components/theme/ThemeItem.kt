@@ -110,7 +110,7 @@ fun AppThemePreviewItem(
                         .background(
                             color = colorScheme.surfaceContainerHigh,
                             shape = MaterialTheme.shapes.small,
-                        )
+                        ),
             )
 
             Box(modifier = Modifier.weight(0.3f), contentAlignment = Alignment.CenterEnd) {
@@ -133,23 +133,25 @@ fun AppThemePreviewItem(
                         shape = MaterialTheme.shapes.small,
                     )
                     .fillMaxWidth(0.5f)
-                    .aspectRatio(MangaCover.Book.ratio)
+                    .aspectRatio(MangaCover.Book.ratio),
         ) {
             Row(
                 modifier =
                     Modifier.padding(Size.small)
                         .size(width = Size.large, height = Size.medium)
-                        .clip(RoundedCornerShape(Size.small))
+                        .clip(RoundedCornerShape(Size.small)),
             ) {
                 Box(
                     modifier =
-                        Modifier.fillMaxHeight().width(Size.smedium).background(colorScheme.primary)
+                        Modifier.fillMaxHeight()
+                            .width(Size.smedium)
+                            .background(colorScheme.primary),
                 )
                 Box(
                     modifier =
                         Modifier.fillMaxHeight()
                             .width(Size.smedium)
-                            .background(colorScheme.secondary)
+                            .background(colorScheme.secondary),
                 )
             }
         }
@@ -175,15 +177,15 @@ fun AppThemePreviewItem(
                                 .background(
                                     color =
                                         colorScheme.onSurface.copy(
-                                            alpha = NekoColors.mediumAlphaHighContrast
+                                            alpha = NekoColors.mediumAlphaHighContrast,
                                         ),
                                     shape = CircleShape,
-                                )
+                                ),
                     )
                     Box(
                         modifier =
                             Modifier.size(Size.medium)
-                                .background(color = colorScheme.primary, shape = CircleShape)
+                                .background(color = colorScheme.primary, shape = CircleShape),
                     )
                     Box(
                         modifier =
@@ -191,10 +193,10 @@ fun AppThemePreviewItem(
                                 .background(
                                     color =
                                         colorScheme.onSurface.copy(
-                                            alpha = NekoColors.mediumAlphaHighContrast
+                                            alpha = NekoColors.mediumAlphaHighContrast,
                                         ),
                                     shape = CircleShape,
-                                )
+                                ),
                     )
                 }
             }

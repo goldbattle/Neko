@@ -151,13 +151,15 @@ class PagerConfig(
             .launchIn(scope)
         readerPreferences
             .pageLayout()
-            .register({
-                autoDoublePages = it == PageLayout.AUTOMATIC.value
-                if (!autoDoublePages) {
-                    doublePages = it == PageLayout.DOUBLE_PAGES.value
-                    splitPages = it == PageLayout.SPLIT_PAGES.value
-                }
-            })
+            .register(
+                {
+                    autoDoublePages = it == PageLayout.AUTOMATIC.value
+                    if (!autoDoublePages) {
+                        doublePages = it == PageLayout.DOUBLE_PAGES.value
+                        splitPages = it == PageLayout.SPLIT_PAGES.value
+                    }
+                },
+            )
 
         readerPreferences.automaticSplitsPage().register({ autoSplitPages = it })
         navigationOverlayForNewUser = preferences.showNavigationOverlayNewUser().get()

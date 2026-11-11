@@ -100,7 +100,7 @@ class AboutViewModelTest {
             // Assert
             coVerify(exactly = 1) {
                 mockAppSnackbarManager.showSnackbar(
-                    withArg { assertEquals(R.string.no_network_connection, it.messageRes) }
+                    withArg { assertEquals(R.string.no_network_connection, it.messageRes) },
                 )
             }
         }
@@ -145,7 +145,7 @@ class AboutViewModelTest {
         assertFalse(state.checkingForUpdates)
         coVerify(exactly = 1) {
             mockAppSnackbarManager.showSnackbar(
-                withArg { assertEquals("Network timeout", it.message) }
+                withArg { assertEquals("Network timeout", it.message) },
             )
         }
     }
@@ -169,7 +169,7 @@ class AboutViewModelTest {
             assertFalse(state.checkingForUpdates)
             coVerify(exactly = 1) {
                 mockAppSnackbarManager.showSnackbar(
-                    withArg { assertEquals(R.string.no_new_updates_available, it.messageRes) }
+                    withArg { assertEquals(R.string.no_new_updates_available, it.messageRes) },
                 )
             }
         }
@@ -219,7 +219,7 @@ class AboutViewModelTest {
             assertTrue(devModeValue)
             coVerify(exactly = 1) {
                 mockAppSnackbarManager.showSnackbar(
-                    withArg { assertEquals(R.string.developer_mode_enabled, it.messageRes) }
+                    withArg { assertEquals(R.string.developer_mode_enabled, it.messageRes) },
                 )
             }
         }
@@ -240,7 +240,7 @@ class AboutViewModelTest {
                     withArg {
                         assertEquals(R.string._copied_to_clipboard, it.messageRes)
                         assertEquals(R.string.build_information, it.fieldRes)
-                    }
+                    },
                 )
             }
         }

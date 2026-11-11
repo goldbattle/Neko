@@ -55,7 +55,7 @@ class DataStorageSettingsViewModel : ViewModel() {
 
     init {
         BackupCreatorJob.isManualJobRunningFlow(applicationContext).observeAndUpdate(
-            viewModelScope
+            viewModelScope,
         ) { isRunning ->
             _isBackupRunning.value = isRunning
         }
@@ -66,19 +66,19 @@ class DataStorageSettingsViewModel : ViewModel() {
         }
 
         DiskUtil.observeDiskSpace(applicationContext.cacheDir, applicationContext).observeAndUpdate(
-            viewModelScope
+            viewModelScope,
         ) { newSize ->
             _cacheData.update { it.copy(parentCacheSize = newSize) }
         }
 
         DiskUtil.observeDiskSpace(chapterCache.cacheDir, applicationContext).observeAndUpdate(
-            viewModelScope
+            viewModelScope,
         ) { newSize ->
             _cacheData.update { it.copy(chapterDiskCacheSize = newSize) }
         }
 
         DiskUtil.observeDiskSpace(coverCache.cacheDir, applicationContext).observeAndUpdate(
-            viewModelScope
+            viewModelScope,
         ) { newSize ->
             _cacheData.update { it.copy(coverCacheSize = newSize) }
         }
@@ -99,7 +99,7 @@ class DataStorageSettingsViewModel : ViewModel() {
                 _cacheData.update { it.copy(imageCacheSize = newSize) }
             }
         DiskUtil.observeDiskSpace(network.cacheDir, applicationContext).observeAndUpdate(
-            viewModelScope
+            viewModelScope,
         ) { newSize ->
             _cacheData.update { it.copy(networkCacheSize = newSize) }
         }

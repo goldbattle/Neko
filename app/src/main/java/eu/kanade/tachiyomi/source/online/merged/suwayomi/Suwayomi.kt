@@ -105,7 +105,7 @@ class Suwayomi : MergedServerSource() {
                     val err =
                         result.body.string().replace(
                             ".*<div class=\"error\">([^<]*)</div>.*"
-                                .toRegex(RegexOption.DOT_MATCHES_ALL)
+                                .toRegex(RegexOption.DOT_MATCHES_ALL),
                         ) {
                             it.groups[1]!!.value
                         }
@@ -122,13 +122,13 @@ class Suwayomi : MergedServerSource() {
                                 POST(
                                     "${url ?: hostUrl()}/api/graphql",
                                     body = refreshTokenFormBuilder(),
-                                )
+                                ),
                             )
                             .execute()
                             .body
                             .use {
                                 json.decodeFromString<SuwayomiGraphQLDto<SuwayomiRefreshTokenDto>>(
-                                    it.string()
+                                    it.string(),
                                 )
                             }
 
@@ -148,7 +148,7 @@ class Suwayomi : MergedServerSource() {
                                 "${url ?: hostUrl()}/api/graphql",
                                 baseHeaders,
                                 loginFormBuilder(user, pass),
-                            )
+                            ),
                         )
                         .execute()
                         .body
@@ -180,7 +180,7 @@ class Suwayomi : MergedServerSource() {
                     JsonPrimitive(
                         $$"mutation REFRESH_LOGIN_TOKEN($input RefreshTokenInput!) {" +
                             $$"refreshToken(input: $input) {" +
-                            "accessToken}}"
+                            "accessToken}}",
                     ),
                 )
                 put("variables", variables)
@@ -206,7 +206,7 @@ class Suwayomi : MergedServerSource() {
                     JsonPrimitive(
                         $$"mutation GET_LOGIN_TOKEN ($input: LoginInput!) {" +
                             $$"login(input: $input) {" +
-                            "accessToken refreshToken}}"
+                            "accessToken refreshToken}}",
                     ),
                 )
                 put("variables", variables)
@@ -352,7 +352,7 @@ class Suwayomi : MergedServerSource() {
                         $$"query SEARCH_MANGA($input:String){" +
                             "mangas(condition:{inLibrary:true}," +
                             $$"filter:{title:{includesInsensitive:$input}}){" +
-                            "nodes{id title thumbnailUrl source{name lang}}}}"
+                            "nodes{id title thumbnailUrl source{name lang}}}}",
                     ),
                 )
                 put("variables", variables)
@@ -362,7 +362,7 @@ class Suwayomi : MergedServerSource() {
     }
 
     override suspend fun fetchChapters(
-        mangaUrl: String
+        mangaUrl: String,
     ): Result<List<SChapterStatusPair>, ResultError> {
         val separator = if (mangaUrl.contains(Constants.SEPARATOR)) Constants.SEPARATOR else " "
         val parts = mangaUrl.split(separator, limit = 3)
@@ -391,16 +391,16 @@ class Suwayomi : MergedServerSource() {
                                         apiUrl,
                                         headers,
                                         fetchChaptersFormBuilder(mangaId.toLong()),
-                                    )
+                                    ),
                                 )
                                 .await()
                                 .body
                                 .use {
                                     json
                                         .decodeFromString<
-                                            SuwayomiGraphQLDto<SuwayomiFetchChaptersDto>
+                                            SuwayomiGraphQLDto<SuwayomiFetchChaptersDto>,
                                         >(
-                                            it.string()
+                                            it.string(),
                                         )
                                         .data
                                         ?.also {
@@ -419,16 +419,16 @@ class Suwayomi : MergedServerSource() {
                         chapters =
                             client
                                 .newCall(
-                                    POST(apiUrl, headers, getChaptersFormBuilder(mangaId.toLong()))
+                                    POST(apiUrl, headers, getChaptersFormBuilder(mangaId.toLong())),
                                 )
                                 .await()
                                 .body
                                 .use {
                                     json
                                         .decodeFromString<
-                                            SuwayomiGraphQLDto<SuwayomiGetChaptersDto>
+                                            SuwayomiGraphQLDto<SuwayomiGetChaptersDto>,
                                         >(
-                                            it.string()
+                                            it.string(),
                                         )
                                         .data
                                         ?.also { mangaTitle = it.manga.title }
@@ -736,7 +736,7 @@ class Suwayomi : MergedServerSource() {
                     JsonPrimitive(
                         $$"mutation FETCH_MANGA_CHAPTERS($input: FetchMangaAndChaptersInput!){" +
                             $$"fetchMangaAndChapters(input: $input) { manga{title} chapters{" +
-                            "id name chapterNumber sourceOrder uploadDate isRead scanlator}}}"
+                            "id name chapterNumber sourceOrder uploadDate isRead scanlator}}}",
                     ),
                 )
                 put("variables", variables)
@@ -757,7 +757,7 @@ class Suwayomi : MergedServerSource() {
                         $$"query GET_MANGA_CHAPTERS($mangaId: Int!) {" +
                             $$"manga(id: $mangaId){title} " +
                             $$"chapters(filter: {mangaId: {equalTo: $mangaId}}) { nodes {" +
-                            "id name chapterNumber sourceOrder uploadDate isRead scanlator}}}"
+                            "id name chapterNumber sourceOrder uploadDate isRead scanlator}}}",
                     ),
                 )
                 put("variables", variables)
@@ -797,7 +797,7 @@ class Suwayomi : MergedServerSource() {
                     "query",
                     JsonPrimitive(
                         $$"mutation GET_CHAPTER_PAGES_FETCH($input:FetchChapterPagesInput!){" +
-                            $$"fetchChapterPages(input:$input){pages}}"
+                            $$"fetchChapterPages(input:$input){pages}}",
                     ),
                 )
                 put("variables", variables)
@@ -837,7 +837,7 @@ class Suwayomi : MergedServerSource() {
                     "query",
                     JsonPrimitive(
                         $$"mutation UPDATE_CHAPTERS($input:UpdateChaptersInput!){" +
-                            $$"updateChapters(input:$input){__typename}}"
+                            $$"updateChapters(input:$input){__typename}}",
                     ),
                 )
                 put("variables", variables)

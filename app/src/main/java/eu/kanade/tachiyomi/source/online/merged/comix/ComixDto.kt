@@ -175,7 +175,7 @@ class Chapter(
     companion object {
         val createdAtRegex =
             Regex(
-                """^(\d+)\s*(s|m|h|d|w|mo|mos|y|yr|yrs|min|mins|sec|secs|hr|hrs|day|days|week|weeks|month|months|year|years)$"""
+                """^(\d+)\s*(s|m|h|d|w|mo|mos|y|yr|yrs|min|mins|sec|secs|hr|hrs|day|days|week|weeks|month|months|year|years)$""",
             )
     }
 }

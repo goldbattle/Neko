@@ -104,8 +104,8 @@ private fun Row(title: UiText, subTitle: UiText? = null, icon: ImageVector, onCl
                             MaterialTheme.typography.bodySmall.copy(
                                 color =
                                     MaterialTheme.colorScheme.onSurface.copy(
-                                        alpha = NekoColors.mediumAlphaLowContrast
-                                    )
+                                        alpha = NekoColors.mediumAlphaLowContrast,
+                                    ),
                             ),
                     )
                 }

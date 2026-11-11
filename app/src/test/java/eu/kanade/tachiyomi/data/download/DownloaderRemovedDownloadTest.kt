@@ -58,12 +58,12 @@ class DownloaderRemovedDownloadTest {
         Injekt.addSingleton(mockk<PreferencesHelper>())
         Injekt.addSingleton(mockk<MangaRepository> { coEvery { getMangaById(1L) } returns manga })
         Injekt.addSingleton(
-            mockk<ChapterRepository> { coEvery { getChapterById(1L) } returns chapter(1) }
+            mockk<ChapterRepository> { coEvery { getChapterById(1L) } returns chapter(1) },
         )
         Injekt.addSingleton(
             mockk<MangaDetailsPreferences> {
                 every { sortChapterOrder().get() } returns Manga.CHAPTER_SORTING_SOURCE
-            }
+            },
         )
 
         val activeDownloads =

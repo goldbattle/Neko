@@ -61,12 +61,12 @@ class FeedViewModel() : ViewModel() {
                 groupUpdateChapters = preferences.groupChaptersUpdates().get(),
                 downloadOnlyOnUnmetered = preferences.downloadOnlyOverUnmetered().get(),
                 swipeRefreshEnabled = preferences.swipeRefreshFeedScreen().get(),
-            )
+            ),
         )
 
     private val _historyScreenPagingState =
         MutableStateFlow(
-            HistoryScreenPagingState(historyGrouping = preferences.historyChapterGrouping().get())
+            HistoryScreenPagingState(historyGrouping = preferences.historyChapterGrouping().get()),
         )
 
     private val _updatesScreenPagingState = MutableStateFlow(UpdatesScreenPagingState())
@@ -411,7 +411,7 @@ class FeedViewModel() : ViewModel() {
                     historyFeedMangaList =
                         it.historyFeedMangaList
                             .filter { fm -> fm.mangaId != feedManga.mangaId }
-                            .toList()
+                            .toList(),
                 )
             }
             loadSummaryPage()
@@ -435,7 +435,7 @@ class FeedViewModel() : ViewModel() {
                     continueReadingList =
                         state.continueReadingList
                             .filter { fm -> fm.mangaId != feedManga.mangaId }
-                            .toList()
+                            .toList(),
                 )
             }
 
@@ -457,7 +457,7 @@ class FeedViewModel() : ViewModel() {
                             chapters =
                                 newFeedManga.chapters
                                     .filter { it.chapter.url != simpleChapter.url }
-                                    .toList()
+                                    .toList(),
                         )
                 }
                 _historyScreenPagingState.update {
@@ -1025,7 +1025,7 @@ class FeedViewModel() : ViewModel() {
                 mutableList[indexOfDownload] =
                     mutableList[indexOfDownload].copy(
                         chapterItem =
-                            download.chapterItem.toChapterItem(download.status, download.progress)
+                            download.chapterItem.toChapterItem(download.status, download.progress),
                     )
             }
 

@@ -47,7 +47,7 @@ class SaveImageNotifier(private val context: Context) {
                         } else {
                             onError(null)
                         }
-                    }
+                    },
                 )
                 .build()
         context.imageLoader.enqueue(request)

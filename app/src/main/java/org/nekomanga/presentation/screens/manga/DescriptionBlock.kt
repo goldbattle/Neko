@@ -111,7 +111,7 @@ fun DescriptionBlock(
                     onClick = expandCollapseClick,
                     indication = null, // No ripple effect
                     interactionSource = remember { MutableInteractionSource() },
-                )
+                ),
     ) {
         // Display Alt Titles and Genres first on tablet for a better layout
         if (isExpanded && isTablet) {
@@ -215,9 +215,9 @@ private fun CollapsedDescription(
                                     Color.Transparent,
                                     MaterialTheme.colorScheme.surface.copy(alpha = .8f),
                                     MaterialTheme.colorScheme.surface,
-                                )
-                        )
-                    )
+                                ),
+                        ),
+                    ),
         )
         moreButton()
     }
@@ -344,7 +344,7 @@ private fun AltTitleChip(title: String, isSelected: Boolean, tagColor: Color, on
                 containerColor = tagColor,
                 labelColor =
                     MaterialTheme.colorScheme.onSurfaceVariant.copy(
-                        alpha = NekoColors.mediumAlphaHighContrast
+                        alpha = NekoColors.mediumAlphaHighContrast,
                     ),
             ),
         border = null,
@@ -355,7 +355,7 @@ private fun AltTitleChip(title: String, isSelected: Boolean, tagColor: Color, on
                     contentDescription = null,
                     tint =
                         MaterialTheme.colorScheme.onSurfaceVariant.copy(
-                            alpha = NekoColors.mediumAlphaHighContrast
+                            alpha = NekoColors.mediumAlphaHighContrast,
                         ),
                 )
             }
@@ -414,7 +414,7 @@ private fun Genres(
                             selectedGenre = null
                         },
                         SimpleDropDownItem.Action(
-                            text = UiText.StringResource(R.string.search_library)
+                            text = UiText.StringResource(R.string.search_library),
                         ) {
                             genreLibrarySearch(genre)
                             selectedGenre = null

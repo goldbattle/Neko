@@ -40,7 +40,7 @@ class ReaderOverlayStateTest {
                     bottomFraction = 1f,
                     label = UiText.StringResource(R.string.next),
                     color = Color(0xCCFF124A),
-                )
+                ),
             )
 
         val initial = ReaderViewModel.State()
@@ -111,8 +111,8 @@ class ReaderOverlayStateTest {
                             bottomFraction = 1f,
                             label = UiText.String("Test"),
                             color = Color.Red,
-                        )
-                    )
+                        ),
+                    ),
             )
 
         assertNotEquals(baseState, stateWithNav)

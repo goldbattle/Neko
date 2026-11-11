@@ -382,7 +382,7 @@ fun PagerPageItem(
                                 val transformations = mutableListOf<Transformation>()
                                 if (config.cropBorders) {
                                     transformations.add(
-                                        CropBordersTransformation(cropTopBottom = true)
+                                        CropBordersTransformation(cropTopBottom = true),
                                     )
                                 }
                                 if (shouldRotateWide) {
@@ -390,7 +390,7 @@ fun PagerPageItem(
                                         RotateWidePageTransformation(
                                             rotateWide = true,
                                             reverse = config.doublePageRotateReverse,
-                                        )
+                                        ),
                                     )
                                 }
                                 if (transformations.isNotEmpty()) {

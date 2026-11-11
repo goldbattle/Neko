@@ -166,7 +166,7 @@ internal class DownloadSettingsScreen(
                                 .toMap(),
                     ),
                     Preference.PreferenceItem.InfoPreference(
-                        title = stringResource(R.string.download_ahead_info)
+                        title = stringResource(R.string.download_ahead_info),
                     ),
                 ),
         )
@@ -189,7 +189,7 @@ internal class DownloadSettingsScreen(
                                     2 to stringResource(R.string.always_delete),
                                 )
                                 .toMap(),
-                    )
+                    ),
                 ),
         )
     }

@@ -114,7 +114,7 @@ class BrowseRepositoryImpl(
                                 .toDisplayManga(mangaRepository, mangaDex.id)
                                 .distinctBy { it.url },
                     )
-                }
+                },
             )
         }
     }

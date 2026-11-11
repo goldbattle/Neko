@@ -58,7 +58,7 @@ class SourceChapterSorterTest {
                     uploader = "1",
                     isUnavailable = false,
                     smartOrder = 1,
-                )
+                ),
         )
     }
 
@@ -100,10 +100,10 @@ class SourceChapterSorterTest {
         // Name contains oneshot but IS merged -> parses from text instead of returning 0f
         // Let's use "Toonily" as it contains a merge source name (part of MergeType)
         getChapterNum(
-            createChapter("Oneshot title", chapterTxt = "Ch. 1", scanlator = "Toonily")
+            createChapter("Oneshot title", chapterTxt = "Ch. 1", scanlator = "Toonily"),
         ) shouldBe 1f
         getChapterNum(
-            createChapter("oneshot", chapterTxt = "Ch. 2.5", scanlator = "Toonily")
+            createChapter("oneshot", chapterTxt = "Ch. 2.5", scanlator = "Toonily"),
         ) shouldBe 2.5f
     }
 

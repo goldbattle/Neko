@@ -221,7 +221,7 @@ private fun TrackingServiceItem(
             BorderStroke(
                 1.dp,
                 MaterialTheme.colorScheme.onSurface.copy(
-                    alpha = NekoColors.disabledAlphaLowContrast
+                    alpha = NekoColors.disabledAlphaLowContrast,
                 ),
             ),
         modifier = Modifier.padding(horizontal = Size.small),
@@ -395,7 +395,7 @@ private fun TrackRowTwo(
                             stringResource(id = R.string.score),
                             color =
                                 MaterialTheme.colorScheme.onSurface.copy(
-                                    alpha = NekoColors.disabledAlphaHighContrast
+                                    alpha = NekoColors.disabledAlphaHighContrast,
                                 ),
                             style = MaterialTheme.typography.bodyMedium,
                         )
@@ -405,7 +405,7 @@ private fun TrackRowTwo(
                             modifier = Modifier.size(12.dp),
                             tint =
                                 MaterialTheme.colorScheme.onSurface.copy(
-                                    alpha = NekoColors.disabledAlphaHighContrast
+                                    alpha = NekoColors.disabledAlphaHighContrast,
                                 ),
                         )
                     }
@@ -438,7 +438,7 @@ fun TrackRowThree(
                     false ->
                         stringResource(id = R.string.started_reading_date) to
                             MaterialTheme.colorScheme.onSurface.copy(
-                                alpha = NekoColors.disabledAlphaHighContrast
+                                alpha = NekoColors.disabledAlphaHighContrast,
                             )
                 }
             Text(text = startText, color = startColor, style = MaterialTheme.typography.bodyMedium)
@@ -455,7 +455,7 @@ fun TrackRowThree(
                     false ->
                         stringResource(id = R.string.finished_reading_date) to
                             MaterialTheme.colorScheme.onSurface.copy(
-                                alpha = NekoColors.disabledAlphaHighContrast
+                                alpha = NekoColors.disabledAlphaHighContrast,
                             )
                 }
             Text(text = endText, color = endColor, style = MaterialTheme.typography.bodyMedium)
@@ -473,7 +473,7 @@ private fun Logo(service: TrackServiceItem, track: TrackItem?, onClick: (String,
                 .background(color = Color(service.logoColor))
                 .conditional(track != null) {
                     clickable { onClick(track!!.trackingUrl, track.title) }
-                }
+                },
     ) {
         Image(
             painter = painterResource(id = service.logoRes),

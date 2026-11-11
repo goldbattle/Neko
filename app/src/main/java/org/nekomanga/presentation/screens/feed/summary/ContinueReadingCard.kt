@@ -139,7 +139,7 @@ fun ContinueReadingCard(
                                                     onClick = {
                                                         deleteHistoryClick(chapterItem.chapter)
                                                     },
-                                                )
+                                                ),
                                             )
                                         } else {
                                             emptyList()
@@ -148,9 +148,9 @@ fun ContinueReadingCard(
                                                 SimpleDropDownItem.Action(
                                                     UiText.StringResource(R.string.entire_series),
                                                     onClick = deleteAllHistoryClick,
-                                                )
+                                                ),
                                             ),
-                                )
+                                ),
                             )
                             .toList(),
                 )

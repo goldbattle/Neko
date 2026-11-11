@@ -104,7 +104,7 @@ fun LibraryScreen(
                             putExtra(Intent.EXTRA_TEXT, urls)
                         }
                     context.startActivity(
-                        Intent.createChooser(intent, context.getString(R.string.share))
+                        Intent.createChooser(intent, context.getString(R.string.share)),
                     )
                 },
                 markMangaChapters = libraryViewModel::markChapters,
@@ -355,8 +355,8 @@ private fun LibraryWrapper(
                                     scope.launch {
                                         openSheet(
                                             LibraryBottomSheetScreen.SortSheet(
-                                                categoryItem = categoryItem
-                                            )
+                                                categoryItem = categoryItem,
+                                            ),
                                         )
                                     }
                                 },
@@ -372,8 +372,8 @@ private fun LibraryWrapper(
                                     scope.launch {
                                         openSheet(
                                             LibraryBottomSheetScreen.SortSheet(
-                                                categoryItem = categoryItem
-                                            )
+                                                categoryItem = categoryItem,
+                                            ),
                                         )
                                     }
                                 },
@@ -416,7 +416,7 @@ private fun EmptyLibrary(
                 Action(
                     text = UiText.StringResource(resourceId = R.string.clear_filters),
                     onClick = onClearActiveFilters,
-                )
+                ),
             )
         }
 
@@ -444,8 +444,8 @@ private fun EmptyLibrary(
                 EmptyScreen(
                     message =
                         UiText.StringResource(
-                            resourceId = R.string.library_is_empty_add_from_browse
-                        )
+                            resourceId = R.string.library_is_empty_add_from_browse,
+                        ),
                 )
             }
             LibraryEmptyType.None -> Unit

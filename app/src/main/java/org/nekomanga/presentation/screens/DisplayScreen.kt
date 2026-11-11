@@ -195,8 +195,8 @@ private fun DisplayWrapper(
                         setCategories = { selectedCategories ->
                             scope.launch { sheetState.hide() }
                             toggleFavorite(displayManga.mangaId, selectedCategories)
-                        }
-                    )
+                        },
+                    ),
                 )
             }
         } else {
@@ -217,7 +217,7 @@ private fun DisplayWrapper(
                                 showIsList = true,
                                 switchDisplayClick = switchDisplayClick,
                                 libraryEntryVisibilityClick = libraryEntryVisibilityClick,
-                            )
+                            ),
                         )
                     }
                 },
@@ -246,7 +246,7 @@ private fun DisplayWrapper(
                                     Action(
                                         text = UiText.StringResource(R.string.retry),
                                         onClick = retryClick,
-                                    )
+                                    ),
                                 )
                             else listOf(),
                     )

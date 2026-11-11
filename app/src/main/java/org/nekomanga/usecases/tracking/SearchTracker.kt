@@ -35,7 +35,7 @@ class SearchTracker(private val trackManager: TrackManager = Injekt.get()) {
                         results.map { it.toTrackSearchItem() }.toList(),
                         hasMatchingId = id.isNotEmpty(),
                     )
-            }
+            },
         )
     }
         .catch {
@@ -44,7 +44,7 @@ class SearchTracker(private val trackManager: TrackManager = Injekt.get()) {
                 TrackingConstants.TrackSearchResult.Error(
                     it.message ?: "Error searching tracker",
                     service.nameRes,
-                )
+                ),
             )
         }
 
@@ -73,7 +73,7 @@ class SearchTracker(private val trackManager: TrackManager = Injekt.get()) {
                     true -> TrackingConstants.TrackSearchResult.NoResult
                     false ->
                         TrackingConstants.TrackSearchResult.Success(
-                            results.map { it.toTrackSearchItem() }.toList()
+                            results.map { it.toTrackSearchItem() }.toList(),
                         )
                 }
             }

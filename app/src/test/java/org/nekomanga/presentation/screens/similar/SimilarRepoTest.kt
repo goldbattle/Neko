@@ -100,7 +100,7 @@ class SimilarRepoTest {
                         currentThumbnail = "https://thumb/1.jpg",
                         title = "Related 1",
                         displayText = "prequel",
-                    )
+                    ),
                 )
             val recommendedManga =
                 listOf(
@@ -144,7 +144,7 @@ class SimilarRepoTest {
 
             coEvery {
                 mangaRepository.getMangaByUrls(
-                    listOf("/manga/related-1", "/manga/rec-1", "/manga/rec-2")
+                    listOf("/manga/related-1", "/manga/rec-1", "/manga/rec-2"),
                 )
             } returns listOf(dbManga1, dbManga2, dbManga3)
 
@@ -182,7 +182,7 @@ class SimilarRepoTest {
                         currentThumbnail = "https://thumb/new1.jpg",
                         title = "New Manga 1",
                         displayText = "99.00% match",
-                    )
+                    ),
                 )
 
             coEvery { similarHandler.fetchRelated(dexId, false) } returns emptyList()
@@ -225,7 +225,7 @@ class SimilarRepoTest {
                         currentThumbnail = "https://thumb/mal.jpg",
                         title = "MAL Manga",
                         displayText = "500 user votes",
-                    )
+                    ),
                 )
 
             coEvery { similarHandler.fetchRelated(dexId, false) } throws

@@ -183,7 +183,7 @@ fun DownloadButton(
                         SimpleDropDownItem.Action(
                             text = UiText.StringResource(R.string.remove),
                             onClick = { isDraining = true },
-                        )
+                        ),
                     )
                 }
                 Download.State.ERROR -> {
@@ -195,7 +195,7 @@ fun DownloadButton(
                                     onClick(MangaConstants.DownloadAction.Cancel)
                                 }
                             },
-                        )
+                        ),
                     )
                 }
                 Download.State.QUEUE,
@@ -474,7 +474,7 @@ private fun Downloading(buttonColor: Color, modifier: Modifier, downloadProgress
             targetValue =
                 if (animatedProgress < 0.4f) {
                     MaterialTheme.colorScheme.onSurface.copy(
-                        alpha = NekoColors.disabledAlphaLowContrast
+                        alpha = NekoColors.disabledAlphaLowContrast,
                     )
                 } else {
                     MaterialTheme.colorScheme.surface
@@ -564,7 +564,7 @@ private fun Background(
 @Preview
 @Composable
 private fun DownloadButtonPreview(
-    @PreviewParameter(ThemeConfigProvider::class) themeConfig: ThemeConfig
+    @PreviewParameter(ThemeConfigProvider::class) themeConfig: ThemeConfig,
 ) {
     ThemedPreviews(themeConfig) {
         Row(horizontalArrangement = Arrangement.spacedBy(Size.small)) {

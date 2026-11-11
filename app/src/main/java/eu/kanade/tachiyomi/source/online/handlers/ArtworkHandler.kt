@@ -49,7 +49,7 @@ class ArtworkHandler {
                                 else "",
                             description = it.attributes.description ?: "",
                         )
-                    }
+                    },
                 )
             }
         }

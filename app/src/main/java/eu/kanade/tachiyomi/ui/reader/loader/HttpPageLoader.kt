@@ -196,7 +196,7 @@ class HttpPageLoader(
                 if (!imageResponse.isSuccessful) {
                     imageResponse.close()
                     throw Exception(
-                        httpErrorMessage(imageResponse.code, imageResponse.request.url.host)
+                        httpErrorMessage(imageResponse.code, imageResponse.request.url.host),
                     )
                 }
                 chapterCache.putImageToCache(imageUrl, imageResponse)

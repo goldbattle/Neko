@@ -97,7 +97,7 @@ fun ToolTipButton(
                     enabledTint
                 } else {
                     MaterialTheme.colorScheme.onSurface.copy(
-                        alpha = NekoColors.disabledAlphaLowContrast
+                        alpha = NekoColors.disabledAlphaLowContrast,
                     )
                 }
             CompositionLocalProvider(LocalContentColor provides contentColor) {

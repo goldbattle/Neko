@@ -46,7 +46,7 @@ class ReaderChaptersSheetUiStateTest {
                             isBookmarked = false,
                             textColor = Color.White,
                             bookmarkColor = Color.Yellow,
-                        )
+                        ),
                     ),
                 quickActions =
                     listOf(
@@ -54,7 +54,7 @@ class ReaderChaptersSheetUiStateTest {
                             id = ReaderQuickActionId.Comments,
                             iconRes = R.drawable.ic_view_comments_24p,
                             tooltipRes = R.string.comments,
-                        )
+                        ),
                     ),
                 currentChapterIndex = 0,
                 isLoading = false,

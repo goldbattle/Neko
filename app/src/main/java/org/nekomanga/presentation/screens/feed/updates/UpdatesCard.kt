@@ -51,7 +51,7 @@ fun UpdatesCard(
             icon =
                 rememberVectorPainter(
                     if (chapterItem.chapter.read) Icons.Default.VisibilityOff
-                    else Icons.Default.Visibility
+                    else Icons.Default.Visibility,
                 ),
             background = MaterialTheme.colorScheme.secondary,
             onSwipe = { chapterSwipe(chapterItem) },

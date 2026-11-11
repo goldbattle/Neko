@@ -59,7 +59,7 @@ class DownloadProvider(
                 context.getString(
                     R.string.invalid_download_location,
                     downloadsDir?.displayablePath ?: "",
-                )
+                ),
             )
         }
     }
@@ -287,7 +287,7 @@ class DownloadProvider(
                 "${chapter.scanlator}_${chapter.name}"
             } else {
                 chapter.name
-            }
+            },
         )
     }
 

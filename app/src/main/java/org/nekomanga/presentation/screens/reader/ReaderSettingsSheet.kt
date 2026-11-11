@@ -84,7 +84,7 @@ fun ReaderSettingsSheet(
     ) {
         Column(
             modifier =
-                modifier.fillMaxWidth().padding(horizontal = Size.medium, vertical = Size.small)
+                modifier.fillMaxWidth().padding(horizontal = Size.medium, vertical = Size.small),
         ) {
             Row(
                 modifier = Modifier.fillMaxWidth().padding(bottom = Size.medium),
@@ -194,7 +194,7 @@ private fun GeneralSettingsTab(
             selectedIndex = uiState.sliderPosition.prefValue,
             onSelected = { index ->
                 onAction(
-                    ReaderSettingsAction.SetSliderPosition(ReaderSliderPosition.fromSpinner(index))
+                    ReaderSettingsAction.SetSliderPosition(ReaderSliderPosition.fromSpinner(index)),
                 )
             },
         )
@@ -273,8 +273,8 @@ private fun LayoutSettingsTab(
                 onSelected = { index ->
                     onAction(
                         ReaderSettingsAction.SetWebtoonInvertTapping(
-                            ViewerNavigation.TappingInvertMode.values()[index]
-                        )
+                            ViewerNavigation.TappingInvertMode.values()[index],
+                        ),
                     )
                 },
             )
@@ -366,8 +366,8 @@ private fun LayoutSettingsTab(
                 onSelected = { index ->
                     onAction(
                         ReaderSettingsAction.SetPagerInvertTapping(
-                            ViewerNavigation.TappingInvertMode.values()[index]
-                        )
+                            ViewerNavigation.TappingInvertMode.values()[index],
+                        ),
                     )
                 },
             )
@@ -512,8 +512,8 @@ private fun FilterSettingsTab(
                                 value.roundToInt(),
                                 COLOR_FILTER_ALPHA_MASK,
                                 24,
-                            )
-                        )
+                            ),
+                        ),
                     )
                 },
             )
@@ -530,8 +530,8 @@ private fun FilterSettingsTab(
                                 value.roundToInt(),
                                 COLOR_FILTER_RED_MASK,
                                 16,
-                            )
-                        )
+                            ),
+                        ),
                     )
                 },
             )
@@ -548,8 +548,8 @@ private fun FilterSettingsTab(
                                 value.roundToInt(),
                                 COLOR_FILTER_GREEN_MASK,
                                 8,
-                            )
-                        )
+                            ),
+                        ),
                     )
                 },
             )
@@ -566,8 +566,8 @@ private fun FilterSettingsTab(
                                 value.roundToInt(),
                                 COLOR_FILTER_BLUE_MASK,
                                 0,
-                            )
-                        )
+                            ),
+                        ),
                     )
                 },
             )
@@ -707,7 +707,7 @@ fun ReaderSliderSetting(
 @Preview
 @Composable
 private fun ReaderSettingsSheetPagedPreview(
-    @PreviewParameter(ThemeConfigProvider::class) themeConfig: ThemeConfig
+    @PreviewParameter(ThemeConfigProvider::class) themeConfig: ThemeConfig,
 ) {
     ThemedPreviews(themeConfig) {
         ReaderSettingsSheet(
@@ -727,7 +727,7 @@ private fun ReaderSettingsSheetPagedPreview(
 @Preview
 @Composable
 private fun ReaderSettingsSheetWebtoonPreview(
-    @PreviewParameter(ThemeConfigProvider::class) themeConfig: ThemeConfig
+    @PreviewParameter(ThemeConfigProvider::class) themeConfig: ThemeConfig,
 ) {
     ThemedPreviews(themeConfig) {
         ReaderSettingsSheet(
@@ -747,7 +747,7 @@ private fun ReaderSettingsSheetWebtoonPreview(
 @Preview
 @Composable
 private fun ReaderSettingsSheetFilterPreview(
-    @PreviewParameter(ThemeConfigProvider::class) themeConfig: ThemeConfig
+    @PreviewParameter(ThemeConfigProvider::class) themeConfig: ThemeConfig,
 ) {
     ThemedPreviews(themeConfig) {
         ReaderSettingsSheet(

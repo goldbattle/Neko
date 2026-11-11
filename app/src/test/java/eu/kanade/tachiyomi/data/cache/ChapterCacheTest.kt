@@ -43,7 +43,7 @@ class ChapterCacheTest {
                 every { changes() } returns emptyFlow()
             }
         Injekt.addSingleton(
-            mockk<ReaderPreferences> { every { preloadPageAmount() } returns preloadPageAmount }
+            mockk<ReaderPreferences> { every { preloadPageAmount() } returns preloadPageAmount },
         )
         val cacheRoot = folder.newFolder("cache")
         chapterCache = ChapterCache(mockk<Context> { every { cacheDir } returns cacheRoot })

@@ -81,7 +81,7 @@ fun AddEditCategoryDialog(
                     enabled = canConfirm,
                     colors =
                         ButtonDefaults.textButtonColors(
-                            contentColor = themeColorState.primaryColor
+                            contentColor = themeColorState.primaryColor,
                         ),
                 ) {
                     Text(text = stringResource(id = R.string.save))
@@ -92,7 +92,7 @@ fun AddEditCategoryDialog(
                     onClick = onDismiss,
                     colors =
                         ButtonDefaults.textButtonColors(
-                            contentColor = themeColorState.primaryColor
+                            contentColor = themeColorState.primaryColor,
                         ),
                 ) {
                     Text(text = stringResource(id = R.string.cancel))
@@ -105,7 +105,7 @@ fun AddEditCategoryDialog(
 @Preview
 @Composable
 private fun AddEditCategoryDialogDefaultPreview(
-    @PreviewParameter(ThemeConfigProvider::class) themeConfig: ThemeConfig
+    @PreviewParameter(ThemeConfigProvider::class) themeConfig: ThemeConfig,
 ) {
     ThemedPreviews(themeConfig) {
         AddEditCategoryDialog(
@@ -122,7 +122,7 @@ private fun AddEditCategoryDialogDefaultPreview(
 @Preview
 @Composable
 private fun AddEditCategoryDialogEditingPreview(
-    @PreviewParameter(ThemeConfigProvider::class) themeConfig: ThemeConfig
+    @PreviewParameter(ThemeConfigProvider::class) themeConfig: ThemeConfig,
 ) {
     ThemedPreviews(themeConfig) {
         AddEditCategoryDialog(
@@ -139,7 +139,7 @@ private fun AddEditCategoryDialogEditingPreview(
 @Preview
 @Composable
 private fun AddEditCategoryDialogErrorPreview(
-    @PreviewParameter(ThemeConfigProvider::class) themeConfig: ThemeConfig
+    @PreviewParameter(ThemeConfigProvider::class) themeConfig: ThemeConfig,
 ) {
     ThemedPreviews(themeConfig) {
         AddEditCategoryDialog(

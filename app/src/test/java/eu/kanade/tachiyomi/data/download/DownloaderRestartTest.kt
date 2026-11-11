@@ -66,12 +66,12 @@ class DownloaderRestartTest {
         Injekt.addSingleton(
             mockk<MangaRepository> {
                 coEvery { getMangaById(any()) } coAnswers { awaitCancellation() }
-            }
+            },
         )
         Injekt.addSingleton(
             mockk<MangaDetailsPreferences> {
                 every { sortChapterOrder().get() } returns Manga.CHAPTER_SORTING_SOURCE
-            }
+            },
         )
 
         val editor = mockk<SharedPreferences.Editor>(relaxed = true)

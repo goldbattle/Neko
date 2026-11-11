@@ -71,7 +71,7 @@ fun MultiSelectListPreferenceWidget(
                     onClick = {
                         onValuesChange(selected.toMutableSet())
                         isDialogShown = false
-                    }
+                    },
                 ) {
                     Text(text = stringResource(R.string.ok))
                 }

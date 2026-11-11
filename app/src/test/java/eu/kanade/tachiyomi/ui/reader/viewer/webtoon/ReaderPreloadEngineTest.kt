@@ -192,8 +192,8 @@ class ReaderPreloadEngineTest {
         for (i in 0 until 4) {
             items.add(
                 ReaderUiItem.SplitPage(
-                    ReaderPageSplit(page = page1, topOffset = i * 1000, splitHeight = 1000)
-                )
+                    ReaderPageSplit(page = page1, topOffset = i * 1000, splitHeight = 1000),
+                ),
             )
         }
         // Transition Next

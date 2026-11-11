@@ -51,7 +51,7 @@ fun LibraryButtonBar(
         Gap(Size.tiny)
 
         Row(
-            horizontalArrangement = Arrangement.spacedBy(ButtonGroupDefaults.ConnectedSpaceBetween)
+            horizontalArrangement = Arrangement.spacedBy(ButtonGroupDefaults.ConnectedSpaceBetween),
         ) {
             AnimatedVisibility(showCollapseAll) {
                 FilledTonalButton(
@@ -69,7 +69,7 @@ fun LibraryButtonBar(
                             stringResource(
                                 id =
                                     if (libraryScreenState.allCollapsed) R.string.expand
-                                    else R.string.collapse
+                                    else R.string.collapse,
                             ),
                     )
                 }

@@ -338,7 +338,10 @@ fun ComposeWebtoonViewer(
                             }
                         val placeable =
                             measurable.measure(
-                                constraints.copy(minHeight = targetHeight, maxHeight = targetHeight)
+                                constraints.copy(
+                                    minHeight = targetHeight,
+                                    maxHeight = targetHeight,
+                                ),
                             )
                         layout(placeable.width, placeable.height) { placeable.place(0, 0) }
                     }

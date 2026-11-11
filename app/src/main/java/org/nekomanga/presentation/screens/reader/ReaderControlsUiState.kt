@@ -183,7 +183,7 @@ fun buildReaderBottomBarButtons(
             id = ReaderBottomActionId.CropBorders,
             icon =
                 ReaderButtonIcon.Vector(
-                    if (cropBorders) Icons.Default.CropFree else Icons.Default.Crop
+                    if (cropBorders) Icons.Default.CropFree else Icons.Default.Crop,
                 ),
             tooltipRes = R.string.crop_borders,
             toggleStyle = ButtonToggleStyle.PrimaryWhenToggled,
