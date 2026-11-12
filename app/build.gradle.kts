@@ -83,6 +83,12 @@ android {
     flavorDimensions.add("default")
 
     productFlavors { create("standard") { buildConfigField("Boolean", "INCLUDE_UPDATER", "true") } }
+
+    sourceSets {
+        maybeCreate("standardNonMinifiedRelease")
+            .baselineProfiles
+            .srcDir("src/standardRelease/generated/baselineProfiles")
+    }
 }
 
 base { archivesName.set("Neko") }
