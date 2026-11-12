@@ -446,7 +446,7 @@ private fun MangaScreenWrapper(
         )
     }
 
-    val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
+    val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
 
     val isTablet =
         windowSizeClass.widthSizeClass == WindowWidthSizeClass.Expanded &&
