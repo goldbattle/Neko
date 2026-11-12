@@ -600,7 +600,7 @@ private fun LazyListScope.chapterList(
     onRead: (ChapterItem) -> Unit,
     onOpenSheet: (DetailsBottomSheetScreen) -> Unit,
 ) {
-    item(key = "chapter_header") {
+    item(key = "chapter_header", contentType = "chapter_header") {
         ChapterHeader(
             themeColor = themeColorState,
             numberOfChapters = chapters.size,
@@ -609,8 +609,11 @@ private fun LazyListScope.chapterList(
         )
     }
 
-    itemsIndexed(items = chapters, key = { _, chapter -> chapter.chapter.id }) { index, chapterItem
-        ->
+    itemsIndexed(
+        items = chapters,
+        key = { _, chapter -> chapter.chapter.id },
+        contentType = { _, _ -> "chapter" },
+    ) { index, chapterItem ->
         MangaChapterListItem(
             index = index,
             chapterItem = chapterItem,

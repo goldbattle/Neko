@@ -232,33 +232,33 @@ private fun ChapterRowContent(
             else onSurfaceColor.copy(alpha = NekoColors.mediumAlphaLowContrast)
         }
 
-    val dropdownItems =
-        remember(
-            chapterItem.chapter.isLocalSource(),
-            chapterItem.chapter.isMergedChapter(),
-            chapterItem.chapter.scanlator,
-            chapterItem.chapter.uploader,
-        ) {
-            buildChapterDropdownItems(
-                isLocal = chapterItem.chapter.isLocalSource(),
-                isMerged = chapterItem.chapter.isMergedChapter(),
-                scanlator = chapterItem.chapter.scanlator,
-                uploader = chapterItem.chapter.uploader,
-                onWebView = { onWebView(chapterItem) },
-                onComment = { onComment(chapterItem.chapter.mangaDexChapterId) },
-                markPrevious = { read -> markPrevious(chapterItem, read) },
-                blockScanlator = blockScanlator,
-            )
-        }
+    if (isDropdownExpanded) {
+        val dropdownItems =
+            remember(
+                chapterItem.chapter.isLocalSource(),
+                chapterItem.chapter.isMergedChapter(),
+                chapterItem.chapter.scanlator,
+                chapterItem.chapter.uploader,
+            ) {
+                buildChapterDropdownItems(
+                    isLocal = chapterItem.chapter.isLocalSource(),
+                    isMerged = chapterItem.chapter.isMergedChapter(),
+                    scanlator = chapterItem.chapter.scanlator,
+                    uploader = chapterItem.chapter.uploader,
+                    onWebView = { onWebView(chapterItem) },
+                    onComment = { onComment(chapterItem.chapter.mangaDexChapterId) },
+                    markPrevious = { read -> markPrevious(chapterItem, read) },
+                    blockScanlator = blockScanlator,
+                )
+            }
 
-    SimpleDropdownMenu(
-        expanded = isDropdownExpanded,
-        themeColorState = themeColorState,
-        onDismiss = { isDropdownExpanded = false },
-        dropDownItems = dropdownItems,
-    )
-
-    themeColorState.rippleConfiguration
+        SimpleDropdownMenu(
+            expanded = true,
+            themeColorState = themeColorState,
+            onDismiss = { isDropdownExpanded = false },
+            dropDownItems = dropdownItems,
+        )
+    }
 
     Row(
         modifier =
