@@ -85,38 +85,60 @@ fun ChapterRow(
     markPrevious: (ChapterItem, Boolean) -> Unit,
 ) {
     CompositionLocalProvider(LocalRippleConfiguration provides themeColor.rippleConfiguration) {
+        val colorScheme = MaterialTheme.colorScheme
         val swipeActionBackgroundColor =
-            MaterialTheme.colorScheme.surfaceColorAtElevationCustomColor(
-                themeColor.primaryColor,
-                Size.small,
-            )
+            remember(colorScheme, themeColor.primaryColor) {
+                colorScheme.surfaceColorAtElevationCustomColor(
+                    themeColor.primaryColor,
+                    Size.small,
+                )
+            }
 
         val rightSwipeAction =
-            chapterSwipeAction(
-                action = swipeRightAction,
-                chapterItem = chapterItem,
-                themeColor = themeColor,
-                background = swipeActionBackgroundColor,
-                onBookmark = onBookmark,
-                onRead = onRead,
-                onDownload = onDownload,
-            )
+            remember(
+                swipeRightAction,
+                chapterItem,
+                themeColor,
+                swipeActionBackgroundColor,
+                onBookmark,
+                onRead,
+                onDownload,
+            ) {
+                chapterSwipeAction(
+                    action = swipeRightAction,
+                    chapterItem = chapterItem,
+                    themeColor = themeColor,
+                    background = swipeActionBackgroundColor,
+                    onBookmark = onBookmark,
+                    onRead = onRead,
+                    onDownload = onDownload,
+                )
+            }
         val leftSwipeAction =
-            chapterSwipeAction(
-                action = swipeLeftAction,
-                chapterItem = chapterItem,
-                themeColor = themeColor,
-                background = swipeActionBackgroundColor,
-                onBookmark = onBookmark,
-                onRead = onRead,
-                onDownload = onDownload,
-            )
+            remember(
+                swipeLeftAction,
+                chapterItem,
+                themeColor,
+                swipeActionBackgroundColor,
+                onBookmark,
+                onRead,
+                onDownload,
+            ) {
+                chapterSwipeAction(
+                    action = swipeLeftAction,
+                    chapterItem = chapterItem,
+                    themeColor = themeColor,
+                    background = swipeActionBackgroundColor,
+                    onBookmark = onBookmark,
+                    onRead = onRead,
+                    onDownload = onDownload,
+                )
+            }
+        val startSwipeActions = remember(rightSwipeAction) { listOfNotNull(rightSwipeAction) }
+        val endSwipeActions = remember(leftSwipeAction) { listOfNotNull(leftSwipeAction) }
 
         // The app theme forces LTR, so swiping right reveals the start actions.
-        ChapterSwipe(
-            startSwipeActions = listOfNotNull(rightSwipeAction),
-            endSwipeActions = listOfNotNull(leftSwipeAction),
-        ) {
+        ChapterSwipe(startSwipeActions = startSwipeActions, endSwipeActions = endSwipeActions) {
             ChapterRowContent(
                 themeColorState = themeColor,
                 shouldHideChapterTitles = shouldHideChapterTitles,
@@ -133,7 +155,6 @@ fun ChapterRow(
 }
 
 /** Swipe action for one side of the row, or null when that side should do nothing. */
-@Composable
 private fun chapterSwipeAction(
     action: MangaConstants.ChapterSwipeAction,
     chapterItem: ChapterItem,
