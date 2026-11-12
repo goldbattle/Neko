@@ -48,7 +48,7 @@ fun coilImageLoader(context: Context) =
             }
             diskCache(diskCacheInit)
             memoryCache { MemoryCache.Builder().maxSizePercent(context, 0.40).build() }
-            crossfade(true)
+            crossfade(false)
             allowRgb565(context.getSystemService<ActivityManager>()!!.isLowRamDevice)
             allowHardware(isCurrSDKPieOrGreater)
             if (Injekt.get<NetworkPreferences>().verboseLogging().get()) {
