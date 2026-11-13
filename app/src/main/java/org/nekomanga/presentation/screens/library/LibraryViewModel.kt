@@ -398,7 +398,7 @@ class LibraryViewModel() : ViewModel() {
                     .debounce { (query, initial) ->
                         // If the query matches the deep link 'initialSearch', skip the delay (0ms).
                         // Otherwise (manual typing), use the standard debounce (e.g., 500ms).
-                        if (!query.isNullOrBlank() && query == initial) 0L
+                        if (query.isNullOrBlank() || query == initial) 0L
                         else SEARCH_DEBOUNCE_MILLIS
                     }
                     .map { it.first?.trim() } // Extract just the query string

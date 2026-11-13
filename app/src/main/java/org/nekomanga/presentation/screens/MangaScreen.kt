@@ -69,7 +69,6 @@ import eu.kanade.tachiyomi.util.system.sharedCacheDir
 import eu.kanade.tachiyomi.util.system.toast
 import eu.kanade.tachiyomi.util.system.withUIContext
 import java.text.DateFormat
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.nekomanga.R
 import org.nekomanga.constants.MdConstants
@@ -483,7 +482,6 @@ private fun MangaScreenWrapper(
 
     LaunchedEffect(screenState.manga.initialized, screenState.general.firstLoad) {
         if (screenState.manga.initialized && !screenState.general.firstLoad) {
-            delay(250L)
             isInitialized = true
         } else {
             isInitialized = false
