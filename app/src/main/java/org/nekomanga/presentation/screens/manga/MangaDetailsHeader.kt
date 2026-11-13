@@ -88,6 +88,7 @@ fun MangaDetailsHeader(
                     dynamicCovers = mangaDetailScreenState.manga.dynamicCovers,
                     artwork = mangaDetailScreenState.manga.currentArtwork,
                     showBackdropOverlay = mangaDetailScreenState.general.themeBasedOffCovers,
+                    needsPalette = mangaDetailScreenState.general.vibrantColor == null,
                     generatePalette = generatePalette,
                     isSearching = mangaDetailScreenState.general.isSearching,
                     backdropSize = mangaDetailScreenState.general.backdropSize,

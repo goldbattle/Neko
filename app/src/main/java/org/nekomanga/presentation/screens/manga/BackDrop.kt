@@ -25,17 +25,20 @@ fun BackDrop(
     backdropOverlayAlpha: Float,
     dynamicCovers: Boolean,
     modifier: Modifier = Modifier,
+    needsPalette: Boolean = true,
     generatePalette: (drawable: Drawable) -> Unit = {},
 ) {
     val context = LocalContext.current
     val resources = LocalResources.current
 
     val imageRequest =
-        remember(artwork, dynamicCovers) {
+        remember(artwork, dynamicCovers, needsPalette) {
             ImageRequest.Builder(context)
                 .data(artwork)
                 .dynamicCover(dynamicCovers)
-                .allowHardware(false) // Necessary for palette generation
+                .apply {
+                    if (needsPalette) allowHardware(false) // Necessary for palette generation
+                }
                 .build()
         }
 
@@ -55,7 +58,9 @@ fun BackDrop(
             contentDescription = null,
             contentScale = ContentScale.Crop,
             modifier = modifier.alpha(.2f),
-            onSuccess = { generatePalette(it.result.image.asDrawable(resources)) },
+                onSuccess = {
+                if (needsPalette) generatePalette(it.result.image.asDrawable(resources))
+            },
         )
     }
 }

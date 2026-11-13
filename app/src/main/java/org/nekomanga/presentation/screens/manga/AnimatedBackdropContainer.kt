@@ -35,6 +35,7 @@ fun AnimatedBackdropContainer(
     artwork: Artwork,
     showBackdropOverlay: Boolean,
     dynamicCovers: Boolean,
+    needsPalette: Boolean = true,
     generatePalette: (drawable: Drawable) -> Unit = {},
 ) {
 
@@ -135,6 +136,7 @@ fun AnimatedBackdropContainer(
             artwork = artwork,
             backdropOverlayAlpha = animatedOverlayAlpha,
             modifier = Modifier.matchParentSize(),
+            needsPalette = needsPalette,
             generatePalette = generatePalette,
         )
 
