@@ -381,6 +381,17 @@ private fun ChapterTitle(
     textColor: Color,
     themeColor: Color,
 ) {
+    val chapterLabel = stringResource(id = R.string.chapter_, "%s")
+    val displayTitle =
+        remember(shouldHideChapterTitles, title, chapterNumber, chapterLabel) {
+            if (shouldHideChapterTitles) chapterLabel.replace("%s", decimalFormat.format(chapterNumber))
+            else title
+        }
+    val baseStyle = MaterialTheme.typography.bodyLarge
+    val titleStyle =
+        remember(baseStyle, textColor) {
+            baseStyle.copy(color = textColor, fontWeight = FontWeight.Medium)
+        }
     Row(verticalAlignment = Alignment.CenterVertically) {
         if (isBookmarked) {
             Icon(
@@ -392,15 +403,8 @@ private fun ChapterTitle(
             Gap(Size.tiny)
         }
         Text(
-            text =
-                if (shouldHideChapterTitles)
-                    stringResource(id = R.string.chapter_, decimalFormat.format(chapterNumber))
-                else title,
-            style =
-                MaterialTheme.typography.bodyLarge.copy(
-                    color = textColor,
-                    fontWeight = FontWeight.Medium,
-                ),
+            text = displayTitle,
+            style = titleStyle,
             maxLines = 2,
             overflow = TextOverflow.Ellipsis,
         )
@@ -409,17 +413,18 @@ private fun ChapterTitle(
 
 @Composable
 private fun ChapterSubtitle(subtitleText: String, language: String, textColor: Color) {
+    val baseStyle = MaterialTheme.typography.bodyMedium
+    val style =
+        remember(baseStyle, textColor) {
+            baseStyle.copy(color = textColor, fontWeight = FontWeight.Medium)
+        }
     Row(verticalAlignment = Alignment.CenterVertically) {
         if (language.isNotBlank()) {
             LanguageIcon(language = language, textColor = textColor)
         }
         Text(
             text = subtitleText,
-            style =
-                MaterialTheme.typography.bodyMedium.copy(
-                    color = textColor,
-                    fontWeight = FontWeight.Medium,
-                ),
+            style = style,
             maxLines = 2,
             overflow = TextOverflow.Ellipsis,
         )
@@ -431,6 +436,11 @@ private fun LanguageIcon(language: String, textColor: Color) {
     if (language.equals(MdLang.ENGLISH.lang, true)) return
 
     val mdLang = remember(language) { MdLang.fromIsoCode(language) }
+    val baseStyle = MaterialTheme.typography.bodyMedium
+    val style =
+        remember(baseStyle, textColor) {
+            baseStyle.copy(color = textColor, fontWeight = FontWeight.Medium)
+        }
 
     if (mdLang?.iconResId != null) {
         Image(
@@ -442,11 +452,7 @@ private fun LanguageIcon(language: String, textColor: Color) {
     } else {
         Text(
             text = "$language?",
-            style =
-                MaterialTheme.typography.bodyMedium.copy(
-                    color = textColor,
-                    fontWeight = FontWeight.Medium,
-                ),
+            style = style,
         )
         Spacer(modifier = Modifier.size(Size.tiny))
     }
@@ -461,7 +467,8 @@ private fun ChapterDownloadIndicator(
     onDownload: (MangaConstants.DownloadAction) -> Unit,
     themeColorState: ThemeColorState,
 ) {
-    val isLocked = isUnavailable || MdConstants.UnsupportedOfficialGroupList.contains(scanlator)
+    val isUnsupportedGroup = remember(scanlator) { MdConstants.UnsupportedOfficialGroupList.contains(scanlator) }
+    val isLocked = isUnavailable || isUnsupportedGroup
     val isDownloaded = downloadState == Download.State.DOWNLOADED
 
     when {
