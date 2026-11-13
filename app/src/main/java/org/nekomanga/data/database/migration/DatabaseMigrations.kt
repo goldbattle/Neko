@@ -30,6 +30,18 @@ object DatabaseMigrations {
             }
         }
 
+    val MIGRATION_46_47 =
+        object : Migration(46, 47) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL(
+                    "CREATE INDEX IF NOT EXISTS `index_chapters_bookmark_manga_id` ON `chapters` (`bookmark`, `manga_id`)",
+                )
+                db.execSQL(
+                    "CREATE INDEX IF NOT EXISTS `index_chapters_unavailable_manga_id` ON `chapters` (`unavailable`, `manga_id`)",
+                )
+            }
+        }
+
     private fun tableExists(db: SupportSQLiteDatabase, tableName: String): Boolean {
         db.query("SELECT name FROM sqlite_master WHERE type='table' AND name=?", arrayOf(tableName))
             .use { cursor ->

@@ -112,7 +112,10 @@ class AppModule(val app: Application) : InjektModule {
         addSingletonFactory {
             Room.databaseBuilder(app, AppDatabase::class.java, AppDatabase.DATABASE_NAME)
                 .setJournalMode(RoomDatabase.JournalMode.WRITE_AHEAD_LOGGING)
-                .addMigrations(DatabaseMigrations.MIGRATION_45_46)
+                .addMigrations(
+                    DatabaseMigrations.MIGRATION_45_46,
+                    DatabaseMigrations.MIGRATION_46_47,
+                )
                 .fallbackToDestructiveMigration(false)
                 .build()
         }

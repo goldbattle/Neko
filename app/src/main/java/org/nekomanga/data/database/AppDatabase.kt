@@ -50,7 +50,7 @@ import org.nekomanga.data.database.utils.MergeTypeConverter
             UploaderEntity::class,
             MergeMangaEntity::class,
         ],
-    version = 46, // Set higher than StorIO version 45
+    version = 47, // Set higher than StorIO version 45
     exportSchema = true,
 )
 @TypeConverters(MergeTypeConverter::class, FollowStatusConverter::class)
