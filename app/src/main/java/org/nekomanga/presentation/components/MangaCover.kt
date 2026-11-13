@@ -48,13 +48,17 @@ enum class MangaCover(val ratio: Float) {
                 false -> NekoColors.highAlphaHighContrast
             }
 
+        val context = LocalContext.current
+        val request =
+            remember(artwork, dynamicCover) {
+                ImageRequest.Builder(context).data(artwork).dynamicCover(dynamicCover).build()
+            }
+        val placeholderColor = colorResource(color)
+        val placeholder = remember(placeholderColor) { ColorPainter(placeholderColor) }
+
         AsyncImage(
-            model =
-                ImageRequest.Builder(LocalContext.current)
-                    .data(artwork)
-                    .dynamicCover(dynamicCover)
-                    .build(),
-            placeholder = ColorPainter(colorResource(color)),
+            model = request,
+            placeholder = placeholder,
             contentDescription = contentDescription,
             alpha = alpha,
             contentScale = ContentScale.Crop,
