@@ -116,10 +116,10 @@ fun VerticalFastScroller(
                         )
                     }
 
-                    val scrollStateTracker = remember { MutableData(listState.isScrollInProgress) }
-                    val stableScrollInProgress =
-                        scrollStateTracker.value || listState.isScrollInProgress
-                    scrollStateTracker.value = listState.isScrollInProgress
+                    val scrolling = listState.isScrollInProgress
+                    val scrollStateTracker = remember { MutableData(scrolling) }
+                    val stableScrollInProgress = scrollStateTracker.value || scrolling
+                    scrollStateTracker.value = scrolling
                     val anyScrollInProgress = stableScrollInProgress || isThumbDragged
 
                     val maxRemainingSections = remember { MutableData(0f) }
