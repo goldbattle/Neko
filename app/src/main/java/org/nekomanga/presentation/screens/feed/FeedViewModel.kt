@@ -131,9 +131,13 @@ class FeedViewModel() : ViewModel() {
                 _historyScreenPagingState.update { state -> state.copy(pageLoading = it) }
             },
             onRequest = {
+                // Only later pages skip already-shown series. On the first page the list may still
+                // hold the previous load, which would filter out every series and show an empty
+                // History ("No results found" until the tab is switched again).
                 val seenIds =
                     if (
-                        _historyScreenPagingState.value.historyGrouping == FeedHistoryGroup.Series
+                        _historyScreenPagingState.value.historyGrouping ==
+                            FeedHistoryGroup.Series && _historyScreenPagingState.value.offset > 0
                     ) {
                         _historyScreenPagingState.value.historyFeedMangaList
                             .map { it.mangaId }
