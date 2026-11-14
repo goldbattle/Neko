@@ -32,6 +32,7 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -94,10 +95,15 @@ fun ChapterRow(
                 )
             }
 
+        val latestItem = rememberUpdatedState(chapterItem)
         val rightSwipeAction =
             remember(
                 swipeRightAction,
-                chapterItem,
+                chapterItem.chapter.read,
+                chapterItem.chapter.bookmark,
+                chapterItem.downloadState,
+                chapterItem.chapter.isUnavailable,
+                chapterItem.chapter.scanlator,
                 themeColor,
                 swipeActionBackgroundColor,
                 onBookmark,
@@ -109,15 +115,19 @@ fun ChapterRow(
                     chapterItem = chapterItem,
                     themeColor = themeColor,
                     background = swipeActionBackgroundColor,
-                    onBookmark = onBookmark,
-                    onRead = onRead,
-                    onDownload = onDownload,
+                    onBookmark = { onBookmark(latestItem.value) },
+                    onRead = { onRead(latestItem.value) },
+                    onDownload = { _, a -> onDownload(listOf(latestItem.value), a) },
                 )
             }
         val leftSwipeAction =
             remember(
                 swipeLeftAction,
-                chapterItem,
+                chapterItem.chapter.read,
+                chapterItem.chapter.bookmark,
+                chapterItem.downloadState,
+                chapterItem.chapter.isUnavailable,
+                chapterItem.chapter.scanlator,
                 themeColor,
                 swipeActionBackgroundColor,
                 onBookmark,
@@ -129,9 +139,9 @@ fun ChapterRow(
                     chapterItem = chapterItem,
                     themeColor = themeColor,
                     background = swipeActionBackgroundColor,
-                    onBookmark = onBookmark,
-                    onRead = onRead,
-                    onDownload = onDownload,
+                    onBookmark = { onBookmark(latestItem.value) },
+                    onRead = { onRead(latestItem.value) },
+                    onDownload = { _, a -> onDownload(listOf(latestItem.value), a) },
                 )
             }
         val startSwipeActions = remember(rightSwipeAction) { listOfNotNull(rightSwipeAction) }
@@ -381,7 +391,8 @@ private fun ChapterTitle(
     textColor: Color,
     themeColor: Color,
 ) {
-    val chapterLabel = stringResource(id = R.string.chapter_, "%s")
+    val chapterLabel =
+        if (shouldHideChapterTitles) stringResource(id = R.string.chapter_, "%s") else ""
     val displayTitle =
         remember(shouldHideChapterTitles, title, chapterNumber, chapterLabel) {
             if (shouldHideChapterTitles)
