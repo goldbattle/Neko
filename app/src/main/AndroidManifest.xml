@@ -43,7 +43,7 @@
         android:icon="@mipmap/ic_launcher"
         android:supportsRtl="true"
         android:roundIcon="@mipmap/ic_launcher_round"
-        android:label="Neko"
+        android:label="Neko Fast"
         android:largeHeap="true"
         android:theme="@style/Theme.Neko"
         android:networkSecurityConfig="@xml/network_security_config">

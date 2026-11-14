@@ -27,8 +27,8 @@ android {
         minSdk = AndroidConfig.minSdkVersion
         targetSdk = AndroidConfig.targetSdkVersion
         applicationId = "org.nekomanga.neko"
-        versionCode = 3806
-        versionName = "3.8.6"
+        versionCode = 3807
+        versionName = "3.8.7-fast"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled = true
         buildConfigField("String", "COMMIT_COUNT", "\"${getCommitCount()}\"")
@@ -63,6 +63,9 @@ android {
             proguardFiles("proguard-android-optimize.txt", "proguard-rules.pro")
         }
         getByName("release") {
+            // Neko Fast: separate package so it installs side by side; debug key so it can be sideloaded
+            applicationIdSuffix = ".fast"
+            signingConfig = signingConfigs.getByName("debug")
             isShrinkResources = true
             isMinifyEnabled = true
             manifestPlaceholders["mangadexAuthRedirectUri"] = "mangadex-auth"
@@ -92,6 +95,18 @@ android {
 }
 
 base { archivesName.set("Neko") }
+
+// Neko Fast: Aria (phone updater) checks <ar_Neko>/app/build/outputs/apk/release/app-release.apk
+val ariaApk = rootDir.resolve("../app/build/outputs/apk/release/app-release.apk")
+
+tasks.matching { it.name == "assembleRelease" }.configureEach {
+    doLast {
+        val apk = layout.buildDirectory.dir("outputs/apk/standard/release").get().asFile
+            .listFiles { f -> f.name.endsWith("universal-release.apk") }!!.single()
+        apk.copyTo(ariaApk, overwrite = true)
+        println("Neko Fast APK -> $ariaApk")
+    }
+}
 
 composeCompiler {
     val enableMetrics =
