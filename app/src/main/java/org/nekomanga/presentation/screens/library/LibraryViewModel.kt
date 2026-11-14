@@ -42,6 +42,7 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.mapNotNull
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
@@ -269,7 +270,12 @@ class LibraryViewModel() : ViewModel() {
      * from frequent updates of counts.
      */
     val libraryMangaListFlow: Flow<List<LibraryMangaItem>> =
-        combine(initialLibraryItemsFlow, trackMapFlow, trackCountMapFlow, downloadCountMapFlow) {
+        combine(
+            initialLibraryItemsFlow,
+            trackMapFlow.onStart { emit(emptyMap<Long, List<String>>()) },
+            trackCountMapFlow.onStart { emit(emptyMap<Long, Int>()) },
+            downloadCountMapFlow,
+        ) {
                 items,
                 trackMap,
                 trackCountMap,
