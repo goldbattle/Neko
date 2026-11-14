@@ -143,11 +143,10 @@ private fun Grouped(
                 .flatten()
         }
 
+    val renderedGroups =
+        remember(groupedBySeries) { groupedBySeries.groupBy { getDateString(it.date, now) } }
+
     LazyColumn(modifier = modifier, state = scrollState, contentPadding = contentPadding) {
-
-        // 1. Group the already processed list by date string for rendering
-        val renderedGroups = groupedBySeries.groupBy { getDateString(it.date, now) }
-
         // 2. Iterate through the date groups
         renderedGroups.forEach { (dateString, seriesListForDate) ->
 
@@ -156,11 +155,10 @@ private fun Grouped(
                 // Find the global index of the first item in this date group
                 // to correctly trigger the header display once per date.
                 val firstItem = seriesListForDate.first()
-                val globalIndex = groupedBySeries.indexOf(firstItem)
 
                 // The 'timeSpan' state needs to track the date string globally to prevent duplicate
                 // headers
-                if (globalIndex == 0) timeSpan = "" // Reset tracker at the start
+                if (firstItem == groupedBySeries.first()) timeSpan = "" // Reset tracker at the start
 
                 if (timeSpan != dateString) {
                     timeSpan = dateString
@@ -171,7 +169,7 @@ private fun Grouped(
                             false -> R.string.updated_
                         }
 
-                    item(key = dateString) {
+                    item(key = dateString, contentType = "header") {
                         Text(
                             text = stringResource(id = prefix, dateString),
                             color = headerColor,
@@ -200,10 +198,10 @@ private fun Grouped(
                         else -> ListCardType.Center
                     }
 
-                // 6. Pagination Logic (needs the global index)
-                val globalIndex = groupedBySeries.indexOf(feedManga)
-
-                item(key = "${groupIndex}-${feedManga.mangaId}-${latestChapter.chapter.id}") {
+                item(
+                    key = "${groupIndex}-${feedManga.mangaId}-${latestChapter.chapter.id}",
+                    contentType = "row",
+                ) {
                     // 7. Wrap UpdatesCard with ExpressiveListCard
                     ExpressiveListCard(
                         modifier = Modifier.padding(horizontal = Size.small),
@@ -276,10 +274,13 @@ private fun Ungrouped(
     val now = Date().time
     var timeSpan by remember { mutableStateOf("") }
 
-    LazyColumn(modifier = modifier, state = scrollState, contentPadding = contentPadding) {
-        val groupedManga = feedUpdatesMangaList.groupBy { getDateString(it.date, now) }
+    val grouped =
+        remember(feedUpdatesMangaList) {
+            feedUpdatesMangaList.groupBy { getDateString(it.date, now) }
+        }
 
-        groupedManga.forEach { (dateString, mangaListForDate) ->
+    LazyColumn(modifier = modifier, state = scrollState, contentPadding = contentPadding) {
+        grouped.forEach { (dateString, mangaListForDate) ->
             if (dateString.isNotEmpty() && timeSpan != dateString) {
                 timeSpan = dateString
 
@@ -289,7 +290,7 @@ private fun Ungrouped(
                         false -> R.string.updated_
                     }
 
-                item(key = dateString) {
+                item(key = dateString, contentType = "header") {
                     Text(
                         text = stringResource(id = prefix, dateString),
                         color = headerColor,
@@ -318,12 +319,10 @@ private fun Ungrouped(
                         else -> ListCardType.Center
                     }
 
-                val globalIndex =
-                    feedUpdatesMangaList.indexOf(feedManga) // Used for pagination only
-
                 item(
                     key =
                         "$dateString-$chapterIndex-${feedManga.mangaId}-${chapterItem.chapter.id}",
+                    contentType = "row",
                 ) {
                     ExpressiveListCard(
                         modifier = Modifier.padding(horizontal = Size.small),
