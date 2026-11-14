@@ -655,7 +655,7 @@ private fun VerticalLayout(
             modifier = Modifier.fillMaxSize(),
             contentPadding = contentPadding,
         ) {
-            item(key = "header") {
+            item(key = "header", contentType = "header") {
                 MangaDetailsHeader(
                     mangaDetailScreenState = screenState,
                     isInitialized = isInitialized,
@@ -733,7 +733,7 @@ private fun SideBySideLayout(
             modifier = Modifier.fillMaxWidth(.5f).fillMaxHeight(),
             contentPadding = detailsContentPadding,
         ) {
-            item(key = "header") {
+            item(key = "header", contentType = "header") {
                 MangaDetailsHeader(
                     mangaDetailScreenState = screenState,
                     isInitialized = isInitialized,
