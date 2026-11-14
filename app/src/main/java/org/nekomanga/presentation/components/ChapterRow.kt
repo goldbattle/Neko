@@ -384,7 +384,8 @@ private fun ChapterTitle(
     val chapterLabel = stringResource(id = R.string.chapter_, "%s")
     val displayTitle =
         remember(shouldHideChapterTitles, title, chapterNumber, chapterLabel) {
-            if (shouldHideChapterTitles) chapterLabel.replace("%s", decimalFormat.format(chapterNumber))
+            if (shouldHideChapterTitles)
+                chapterLabel.replace("%s", decimalFormat.format(chapterNumber))
             else title
         }
     val baseStyle = MaterialTheme.typography.bodyLarge
@@ -467,7 +468,8 @@ private fun ChapterDownloadIndicator(
     onDownload: (MangaConstants.DownloadAction) -> Unit,
     themeColorState: ThemeColorState,
 ) {
-    val isUnsupportedGroup = remember(scanlator) { MdConstants.UnsupportedOfficialGroupList.contains(scanlator) }
+    val isUnsupportedGroup =
+        remember(scanlator) { MdConstants.UnsupportedOfficialGroupList.contains(scanlator) }
     val isLocked = isUnavailable || isUnsupportedGroup
     val isDownloaded = downloadState == Download.State.DOWNLOADED
 

@@ -58,7 +58,7 @@ fun BackDrop(
             contentDescription = null,
             contentScale = ContentScale.Crop,
             modifier = modifier.alpha(.2f),
-                onSuccess = {
+            onSuccess = {
                 if (needsPalette) generatePalette(it.result.image.asDrawable(resources))
             },
         )

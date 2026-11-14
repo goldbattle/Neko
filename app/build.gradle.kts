@@ -27,8 +27,8 @@ android {
         minSdk = AndroidConfig.minSdkVersion
         targetSdk = AndroidConfig.targetSdkVersion
         applicationId = "org.nekomanga.neko"
-        versionCode = 3809
-        versionName = "3.8.9-fast"
+        versionCode = 3810
+        versionName = "3.8.10-fast"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled = true
         buildConfigField("String", "COMMIT_COUNT", "\"${getCommitCount()}\"")
@@ -63,7 +63,8 @@ android {
             proguardFiles("proguard-android-optimize.txt", "proguard-rules.pro")
         }
         getByName("release") {
-            // Neko Fast: separate package so it installs side by side; debug key so it can be sideloaded
+            // Neko Fast: separate package so it installs side by side; debug key so it can be
+            // sideloaded
             applicationIdSuffix = ".fast"
             signingConfig = signingConfigs.getByName("debug")
             isShrinkResources = true
@@ -97,14 +98,19 @@ android {
 base { archivesName.set("Neko") }
 
 // Neko Fast: Aria (phone updater) checks <ar_Neko>/app/build/outputs/apk/release/app-release.apk
-tasks.matching { it.name == "assembleRelease" }.configureEach {
-    val outDir = layout.buildDirectory.dir("outputs/apk/standard/release").get().asFile
-    val dest = rootDir.resolve("../app/build/outputs/apk/release/app-release.apk")
-    doLast {
-        outDir.listFiles()!!.single { it.name.endsWith("universal-release.apk") }.copyTo(dest, overwrite = true)
-        println("Neko Fast APK -> $dest")
+tasks
+    .matching { it.name == "assembleRelease" }
+    .configureEach {
+        val outDir = layout.buildDirectory.dir("outputs/apk/standard/release").get().asFile
+        val dest = rootDir.resolve("../app/build/outputs/apk/release/app-release.apk")
+        doLast {
+            outDir
+                .listFiles()!!
+                .single { it.name.endsWith("universal-release.apk") }
+                .copyTo(dest, overwrite = true)
+            println("Neko Fast APK -> $dest")
+        }
     }
-}
 
 composeCompiler {
     val enableMetrics =
