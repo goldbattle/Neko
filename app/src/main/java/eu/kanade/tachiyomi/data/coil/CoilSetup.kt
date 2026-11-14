@@ -47,7 +47,7 @@ fun coilImageLoader(context: Context) =
                 add(ReaderPageSplitFetcher.Factory())
             }
             diskCache(diskCacheInit)
-            memoryCache { MemoryCache.Builder().maxSizePercent(context, 0.40).build() }
+            memoryCache { MemoryCache.Builder().maxSizePercent(context, 0.60).build() }
             crossfade(false)
             allowRgb565(context.getSystemService<ActivityManager>()!!.isLowRamDevice)
             allowHardware(isCurrSDKPieOrGreater)
