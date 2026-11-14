@@ -97,14 +97,12 @@ android {
 base { archivesName.set("Neko") }
 
 // Neko Fast: Aria (phone updater) checks <ar_Neko>/app/build/outputs/apk/release/app-release.apk
-val ariaApk = rootDir.resolve("../app/build/outputs/apk/release/app-release.apk")
-
 tasks.matching { it.name == "assembleRelease" }.configureEach {
+    val outDir = layout.buildDirectory.dir("outputs/apk/standard/release").get().asFile
+    val dest = rootDir.resolve("../app/build/outputs/apk/release/app-release.apk")
     doLast {
-        val apk = layout.buildDirectory.dir("outputs/apk/standard/release").get().asFile
-            .listFiles { f -> f.name.endsWith("universal-release.apk") }!!.single()
-        apk.copyTo(ariaApk, overwrite = true)
-        println("Neko Fast APK -> $ariaApk")
+        outDir.listFiles()!!.single { it.name.endsWith("universal-release.apk") }.copyTo(dest, overwrite = true)
+        println("Neko Fast APK -> $dest")
     }
 }
 
