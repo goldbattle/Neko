@@ -44,7 +44,8 @@ class UpdateMangaStatusAndMissingChapterCount(
         }
 
         // Update missing chapter count if it has changed
-        if (missingChapters != manga.missing_chapters) {
+        // missing_chapters is null when none (MangaItem maps blank -> null), count is "" then
+        if (missingChapters != manga.missing_chapters.orEmpty()) {
             manga.missing_chapters = missingChapters
             updated = true
         }
