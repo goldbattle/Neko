@@ -123,7 +123,9 @@ class FeedRepositoryImpl(
                         .filter { it.id != null }
                         .associateBy { it.id!! }
                 val chaptersMap =
-                    chapterRepository.getChaptersForMangaIds(mangaIds).groupBy { it.manga_id }
+                    chapterRepository.getUnreadChaptersForMangaIds(mangaIds).groupBy {
+                        it.manga_id
+                    }
 
                 return groupedEntries.mapNotNull { entry ->
                     val mangaId = entry.key
@@ -237,7 +239,7 @@ class FeedRepositoryImpl(
 
                 val chaptersMap =
                     if (mangaIdsToFetch.isNotEmpty()) {
-                        chapterRepository.getChaptersForMangaIds(mangaIdsToFetch).groupBy {
+                        chapterRepository.getUnreadChaptersForMangaIds(mangaIdsToFetch).groupBy {
                             it.manga_id
                         }
                     } else {

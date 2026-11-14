@@ -729,7 +729,7 @@ class FeedRepositoryImplTest {
                 }
 
             coEvery { mangaRepository.getMangaByIds(listOf(1L)) } returns listOf(manga)
-            coEvery { chapterRepository.getChaptersForMangaIds(listOf(1L)) } returns
+            coEvery { chapterRepository.getUnreadChaptersForMangaIds(listOf(1L)) } returns
                 listOf(chapter1, chapter2, nextChapter)
             every { downloadManager.isChapterDownloaded(any(), any()) } returns false
             every { downloadManager.getQueuedDownloadOrNull(any()) } returns null
@@ -834,7 +834,7 @@ class FeedRepositoryImplTest {
             every { downloadManager.getQueuedDownloadOrNull(any()) } returns null
 
             coEvery { mangaRepository.getMangaByIds(listOf(1L)) } returns listOf(manga1)
-            coEvery { chapterRepository.getChaptersForMangaIds(listOf(1L)) } returns
+            coEvery { chapterRepository.getUnreadChaptersForMangaIds(listOf(1L)) } returns
                 listOf(ch1, ch2)
 
             val simpleChapterItem = ch1.toSimpleChapter()!!.toChapterItem()

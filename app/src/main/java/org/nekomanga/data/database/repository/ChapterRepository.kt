@@ -12,6 +12,8 @@ interface ChapterRepository {
 
     suspend fun getChaptersForMangaIds(mangaIds: List<Long>): List<Chapter>
 
+    suspend fun getUnreadChaptersForMangaIds(mangaIds: List<Long>): List<Chapter>
+
     suspend fun getChapterById(id: Long): Chapter?
 
     suspend fun getChapterByUrl(url: String): Chapter?

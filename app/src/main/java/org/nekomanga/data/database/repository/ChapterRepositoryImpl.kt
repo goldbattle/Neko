@@ -34,6 +34,10 @@ class ChapterRepositoryImpl(
         return chapterDao.getChaptersForMangaIds(mangaIds).map { it.toChapter() }
     }
 
+    override suspend fun getUnreadChaptersForMangaIds(mangaIds: List<Long>): List<Chapter> {
+        return chapterDao.getUnreadChaptersForMangaIds(mangaIds).map { it.toChapter() }
+    }
+
     override suspend fun getChapterById(id: Long): Chapter? {
         return chapterDao.getChapterById(id)?.toChapter()
     }

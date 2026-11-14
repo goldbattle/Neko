@@ -22,6 +22,9 @@ interface ChapterDao {
     @Query("SELECT * FROM chapters WHERE manga_id IN (:mangaIds)")
     suspend fun getChaptersForMangaIds(mangaIds: List<Long>): List<ChapterEntity>
 
+    @Query("SELECT * FROM chapters WHERE manga_id IN (:mangaIds) AND read = 0")
+    suspend fun getUnreadChaptersForMangaIds(mangaIds: List<Long>): List<ChapterEntity>
+
     @Query("SELECT * FROM chapters WHERE id = :id")
     suspend fun getChapterById(id: Long): ChapterEntity?
 
