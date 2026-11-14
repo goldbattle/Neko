@@ -166,7 +166,6 @@ fun VerticalCategoriesPage(
                             key = { index, _ -> "grid-row-${item.categoryItem.id}-$index" },
                         ) { _, rowItems ->
                             RowGrid(
-                                modifier = Modifier.animateItem(),
                                 rowItems = rowItems,
                                 selectedIds = selectedIds,
                                 columns = columns,
