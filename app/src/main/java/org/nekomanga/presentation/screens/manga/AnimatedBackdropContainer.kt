@@ -3,6 +3,7 @@ package org.nekomanga.presentation.screens.manga
 import android.graphics.drawable.Drawable
 import androidx.compose.animation.core.animateDp
 import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.snap
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.core.updateTransition
 import androidx.compose.foundation.background
@@ -64,14 +65,8 @@ fun AnimatedBackdropContainer(
         transition.animateDp(
             label = "BoxHeightAnimation",
             transitionSpec = {
-                // This is your delay logic from the file
-                if (this.targetState < this.initialState) {
-                    // Shrinking: 2s duration, 2s delay
-                    tween(durationMillis = 600)
-                } else {
-                    // Expanding: Use a smooth tween instead of 1ms
-                    tween(durationMillis = 600)
-                }
+                // Leaving the full-screen "loading" state snaps: the details should appear at once.
+                if (this.initialState == screenHeight.dp) snap() else tween(durationMillis = 600)
             },
         ) { heightValue ->
             heightValue
@@ -81,11 +76,7 @@ fun AnimatedBackdropContainer(
         transition.animateFloat(
             label = "GradientAlphaAnimation",
             transitionSpec = {
-                if (this.targetState < this.initialState) {
-                    tween(durationMillis = 600)
-                } else {
-                    tween(durationMillis = 600)
-                }
+                if (this.initialState == screenHeight.dp) snap() else tween(durationMillis = 600)
             },
         ) { targetDp ->
             if (targetDp == screenHeight.dp) 0f else 1f
@@ -108,8 +99,7 @@ fun AnimatedBackdropContainer(
             transitionSpec = {
                 // Case 1: Shrinking from full-screen
                 if (this.initialState == screenHeight.dp && this.targetState < this.initialState) {
-                    // Delay fade-in until *after* the 600ms height animation
-                    tween(durationMillis = 300)
+                    snap()
                 } else {
                     // Fade out immediately (or cross-fade)
                     tween(durationMillis = 200)

@@ -478,15 +478,8 @@ private fun MangaScreenWrapper(
             }
         }
 
-    var isInitialized by remember { mutableStateOf(false) }
-
-    LaunchedEffect(screenState.manga.initialized, screenState.general.firstLoad) {
-        if (screenState.manga.initialized && !screenState.general.firstLoad) {
-            isInitialized = true
-        } else {
-            isInitialized = false
-        }
-    }
+    // Computed directly (not via LaunchedEffect, which lagged a frame behind the data).
+    val isInitialized = screenState.manga.initialized && !screenState.general.firstLoad
 
     val refreshState =
         remember(screenState.general.isRefreshing, themeColorState) {
