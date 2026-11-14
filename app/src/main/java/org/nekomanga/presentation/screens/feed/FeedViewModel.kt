@@ -22,6 +22,7 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
@@ -69,7 +70,10 @@ class FeedViewModel() : ViewModel() {
             HistoryScreenPagingState(historyGrouping = preferences.historyChapterGrouping().get()),
         )
 
-    private val _updatesScreenPagingState = MutableStateFlow(UpdatesScreenPagingState())
+    private val _updatesScreenPagingState =
+        MutableStateFlow(
+            UpdatesScreenPagingState(updatesSortedByFetch = preferences.sortFetchedTime().get()),
+        )
 
     private val _summaryScreenPagingState = MutableStateFlow(SummaryScreenPagingState())
 
@@ -215,7 +219,6 @@ class FeedViewModel() : ViewModel() {
 
         if (_feedScreenState.value.firstLoad) {
             _feedScreenState.update { state -> state.copy(firstLoad = false) }
-            viewModelScope.launchIO { loadNextPage() }
         }
 
         preferences.useVividColorHeaders().changes().observeAndUpdate(viewModelScope) { enabled ->
@@ -243,7 +246,7 @@ class FeedViewModel() : ViewModel() {
             _feedScreenState.update { state -> state.copy(groupUpdateChapters = it) }
         }
 
-        preferences.historyChapterGrouping().changes().observeAndUpdate(viewModelScope) {
+        preferences.historyChapterGrouping().changes().drop(1).observeAndUpdate(viewModelScope) {
             _historyScreenPagingState.update { state ->
                 state.copy(
                     historyGrouping = it,
@@ -277,7 +280,6 @@ class FeedViewModel() : ViewModel() {
                         )
                     }
                     updatesPaginator.reset()
-                    loadNextPage()
                 }
             }
 
@@ -289,7 +291,7 @@ class FeedViewModel() : ViewModel() {
             _feedScreenState.update { state -> state.copy(swipeRefreshEnabled = it) }
         }
 
-        preferences.sortFetchedTime().changes().observeAndUpdate(viewModelScope) {
+        preferences.sortFetchedTime().changes().drop(1).observeAndUpdate(viewModelScope) {
             _updatesScreenPagingState.update { state ->
                 state.copy(
                     updatesSortedByFetch = it,
