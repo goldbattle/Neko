@@ -184,8 +184,13 @@ class LibraryViewModel() : ViewModel() {
             .distinctUntilChanged()
             .shareIn(viewModelScope, SharingStarted.WhileSubscribed(5000), 1)
 
+    private val allTracksFlow =
+        trackRepository
+            .observeAllTracks()
+            .shareIn(viewModelScope, SharingStarted.WhileSubscribed(5000), 1)
+
     val trackMapFlow: Flow<Map<Long, List<String>>> =
-        combine(trackRepository.observeAllTracks(), loggedServicesFlow) { tracks, loggedServices ->
+        combine(allTracksFlow, loggedServicesFlow) { tracks, loggedServices ->
                 val serviceMap = loggedServices.associateBy { it.id }
 
                 tracks
@@ -202,7 +207,7 @@ class LibraryViewModel() : ViewModel() {
             .shareIn(viewModelScope, SharingStarted.WhileSubscribed(5000), 1)
 
     val trackCountMapFlow: Flow<Map<Long, Int>> =
-        combine(trackRepository.observeAllTracks(), loggedServicesFlow) { tracks, loggedServices ->
+        combine(allTracksFlow, loggedServicesFlow) { tracks, loggedServices ->
                 val serviceMap = loggedServices.associateBy { it.id }
 
                 tracks
