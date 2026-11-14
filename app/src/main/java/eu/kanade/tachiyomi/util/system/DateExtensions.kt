@@ -15,8 +15,21 @@ fun Date.toTimestampString(dateFormatter: DateFormat): String {
     return "$date $time"
 }
 
+private val relativeDateCache = java.util.concurrent.ConcurrentHashMap<Long, String>()
+@Volatile private var relativeDateCacheMinute = 0L
+
 val Long.timeSpanFromNow: String
-    get() = DateUtils.getRelativeTimeSpanString(this).toString()
+    get() {
+        val minute = System.currentTimeMillis() / 60_000L
+        if (minute != relativeDateCacheMinute) {
+            relativeDateCache.clear()
+            relativeDateCacheMinute = minute
+        }
+        if (relativeDateCache.size > 2000) relativeDateCache.clear()
+        return relativeDateCache.getOrPut(this) {
+            DateUtils.getRelativeTimeSpanString(this).toString()
+        }
+    }
 
 fun SimpleDateFormat.tryParse(date: String?): Long {
     return try {
