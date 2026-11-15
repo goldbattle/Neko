@@ -27,8 +27,8 @@ android {
         minSdk = AndroidConfig.minSdkVersion
         targetSdk = AndroidConfig.targetSdkVersion
         applicationId = "org.nekomanga.neko"
-        versionCode = 3811
-        versionName = "3.8.11-fast"
+        versionCode = 3812
+        versionName = "3.8.12-fast"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled = true
         buildConfigField("String", "COMMIT_COUNT", "\"${getCommitCount()}\"")
