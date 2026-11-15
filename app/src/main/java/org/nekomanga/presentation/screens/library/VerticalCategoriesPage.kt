@@ -212,6 +212,7 @@ private fun RowGrid(
     isComfortableGrid: Boolean,
     libraryScreenActions: LibraryScreenActions,
 ) {
+    val selectedSet = remember(selectedIds) { selectedIds.toHashSet() }
     VerticalGrid(
         columns = SimpleGridCells.Fixed(columns),
         modifier = modifier.fillMaxWidth().padding(horizontal = Size.small),
@@ -227,14 +228,14 @@ private fun RowGrid(
                 shouldOutlineCover = displayOptions.outlineCovers,
                 dynamicCover = displayOptions.dynamicCovers,
                 isComfortable = isComfortableGrid,
-                isSelected = selectedIds.contains(libraryItem.displayManga.mangaId),
+                isSelected = libraryItem.displayManga.mangaId in selectedSet,
                 showStartReadingButton =
                     displayOptions.showStartReadingButton && libraryItem.unreadCount > 0,
                 onStartReadingClick = {
                     libraryScreenActions.mangaStartReadingClick(libraryItem.displayManga.mangaId)
                 },
                 onClick = { _ ->
-                    if (selectedIds.isNotEmpty()) {
+                    if (selectedSet.isNotEmpty()) {
                         libraryScreenActions.mangaLongClick(libraryItem)
                     } else {
                         libraryScreenActions.mangaClick(libraryItem.displayManga.mangaId)
