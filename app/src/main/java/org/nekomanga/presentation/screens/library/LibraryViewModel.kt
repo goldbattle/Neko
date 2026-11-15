@@ -39,6 +39,7 @@ import kotlinx.coroutines.flow.conflate
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.mapNotNull
@@ -205,6 +206,7 @@ class LibraryViewModel() : ViewModel() {
                     .groupBy({ it.first }, { it.second })
             }
             .distinctUntilChanged()
+            .flowOn(Dispatchers.Default)
             .shareIn(viewModelScope, SharingStarted.WhileSubscribed(5000), 1)
 
     val trackCountMapFlow: Flow<Map<Long, Int>> =
@@ -220,6 +222,7 @@ class LibraryViewModel() : ViewModel() {
                     .mapValues { it.value.size }
             }
             .distinctUntilChanged()
+            .flowOn(Dispatchers.Default)
             .shareIn(viewModelScope, SharingStarted.WhileSubscribed(5000), 1)
 
     private val rawLibraryMangaListFlow =
@@ -262,6 +265,7 @@ class LibraryViewModel() : ViewModel() {
         rawLibraryMangaListFlow
             .map { dbMangaList -> dbMangaList.map { it.toLibraryMangaItem() } }
             .distinctUntilChanged()
+            .flowOn(Dispatchers.Default)
             .shareIn(viewModelScope, SharingStarted.WhileSubscribed(5000), 1)
 
     /**
