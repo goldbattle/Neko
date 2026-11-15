@@ -135,9 +135,16 @@ enum class MergeType(
             }
         }
 
+        private val mergeSourceNames: Array<String> by lazy {
+            entries.map { it.scanlatorName }.toTypedArray()
+        }
+
         fun containsMergeSourceName(name: String?): Boolean {
             name ?: return false
-            return entries.any { name.contains(MergeType.getMergeTypeName(it)) }
+            for (n in mergeSourceNames) {
+                if (name.contains(n)) return true
+            }
+            return false
         }
     }
 }

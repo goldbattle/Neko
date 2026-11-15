@@ -133,6 +133,8 @@ private fun parseChapterCount(
                     )
                 val currentGroupCount = countStr.toIntOrNull() ?: 0
                 val scanlators = ChapterUtil.getScanlators(scanlator)
+                val isMerged = MergeType.containsMergeSourceName(scanlator)
+                val isLocal = scanlator == Constants.LOCAL_SOURCE
 
                 var isFilteredOut = false
 
@@ -142,8 +144,8 @@ private fun parseChapterCount(
                         ChapterUtil.filteredBySource(
                             source,
                             scanlators,
-                            MergeType.containsMergeSourceName(scanlator),
-                            scanlator == Constants.LOCAL_SOURCE,
+                            isMerged,
+                            isLocal,
                             filtered,
                         )
                     ) {
