@@ -1104,6 +1104,15 @@ class FeedViewModel() : ViewModel() {
     }
 
     fun populateItems() {
+        val isFirstLoad = _feedScreenState.value.firstLoad
+        val skipUpdatesRefresh =
+            isFirstLoad &&
+                lastUpdatesFeedMangaList.isNullOrEmpty() &&
+                _updatesScreenPagingState.value.updatesFeedMangaList.isEmpty()
+        val skipHistoryRefresh =
+            isFirstLoad &&
+                lastHistoryFeedMangaList.isNullOrEmpty() &&
+                _historyScreenPagingState.value.historyFeedMangaList.isEmpty()
         viewModelScope.launchIO {
             _updatesScreenPagingState.update {
                 it.copy(updatesFeedMangaList = lastUpdatesFeedMangaList ?: it.updatesFeedMangaList)
@@ -1127,8 +1136,8 @@ class FeedViewModel() : ViewModel() {
             lastSummaryNewlyAddedFeedMangaList = null
         }
         viewModelScope.launchIO { loadSummaryPage() }
-        viewModelScope.launchIO { refreshUpdatesFeed() }
-        viewModelScope.launchIO { refreshHistoryFeed() }
+        if (!skipUpdatesRefresh) viewModelScope.launchIO { refreshUpdatesFeed() }
+        if (!skipHistoryRefresh) viewModelScope.launchIO { refreshHistoryFeed() }
     }
 
     companion object {
