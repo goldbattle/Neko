@@ -478,9 +478,6 @@ private fun MangaScreenWrapper(
             }
         }
 
-    // Computed directly (not via LaunchedEffect, which lagged a frame behind the data).
-    val isInitialized = screenState.manga.initialized && !screenState.general.firstLoad
-
     val refreshState =
         remember(screenState.general.isRefreshing, themeColorState) {
             RefreshState(
@@ -531,7 +528,6 @@ private fun MangaScreenWrapper(
         if (isTablet) {
             SideBySideLayout(
                 incomingContentPadding = contentPadding,
-                isInitialized = isInitialized,
                 screenState = screenState,
                 windowSizeClass = windowSizeClass,
                 themeColorState = themeColorState,
@@ -550,7 +546,6 @@ private fun MangaScreenWrapper(
         } else {
             VerticalLayout(
                 incomingContentPadding = contentPadding,
-                isInitialized = isInitialized,
                 screenState = screenState,
                 windowSizeClass = windowSizeClass,
                 themeColorState = themeColorState,
@@ -624,7 +619,6 @@ private fun LazyListScope.chapterList(
 @Composable
 private fun VerticalLayout(
     incomingContentPadding: PaddingValues,
-    isInitialized: Boolean,
     screenState: MangaConstants.MangaDetailScreenState,
     windowSizeClass: WindowSizeClass,
     themeColorState: ThemeColorState,
@@ -658,7 +652,6 @@ private fun VerticalLayout(
             item(key = "header", contentType = "header") {
                 MangaDetailsHeader(
                     mangaDetailScreenState = screenState,
-                    isInitialized = isInitialized,
                     windowSizeClass = windowSizeClass,
                     isLoggedIntoTrackers = screenState.track.loggedInTrackService.isNotEmpty(),
                     themeColorState = themeColorState,
@@ -682,19 +675,17 @@ private fun VerticalLayout(
                     onQuickReadClick = { chapterActions.openNext() },
                 )
             }
-            if (isInitialized) {
-                chapterList(
-                    chapters =
-                        if (screenState.general.isSearching) screenState.general.searchChapters
-                        else screenState.chapters.activeChapters,
-                    screenState = screenState,
-                    themeColorState = themeColorState,
-                    chapterActions = chapterActions,
-                    onBookmark = onBookmark,
-                    onRead = onRead,
-                    onOpenSheet = onOpenSheet,
-                )
-            }
+            chapterList(
+                chapters =
+                    if (screenState.general.isSearching) screenState.general.searchChapters
+                    else screenState.chapters.activeChapters,
+                screenState = screenState,
+                themeColorState = themeColorState,
+                chapterActions = chapterActions,
+                onBookmark = onBookmark,
+                onRead = onRead,
+                onOpenSheet = onOpenSheet,
+            )
         }
     }
 }
@@ -702,7 +693,6 @@ private fun VerticalLayout(
 @Composable
 private fun SideBySideLayout(
     incomingContentPadding: PaddingValues,
-    isInitialized: Boolean,
     screenState: MangaConstants.MangaDetailScreenState,
     windowSizeClass: WindowSizeClass,
     themeColorState: ThemeColorState,
@@ -736,7 +726,6 @@ private fun SideBySideLayout(
             item(key = "header", contentType = "header") {
                 MangaDetailsHeader(
                     mangaDetailScreenState = screenState,
-                    isInitialized = isInitialized,
                     windowSizeClass = windowSizeClass,
                     isLoggedIntoTrackers = screenState.track.loggedInTrackService.isNotEmpty(),
                     themeColorState = themeColorState,
@@ -775,19 +764,17 @@ private fun SideBySideLayout(
             bottomContentPadding = incomingContentPadding.calculateBottomPadding(),
         ) {
             LazyColumn(state = listState, contentPadding = chapterContentPadding) {
-                if (isInitialized) {
-                    chapterList(
-                        chapters =
-                            if (screenState.general.isSearching) screenState.general.searchChapters
-                            else screenState.chapters.activeChapters,
-                        screenState = screenState,
-                        themeColorState = themeColorState,
-                        chapterActions = chapterActions,
-                        onBookmark = onBookmark,
-                        onRead = onRead,
-                        onOpenSheet = onOpenSheet,
-                    )
-                }
+                chapterList(
+                    chapters =
+                        if (screenState.general.isSearching) screenState.general.searchChapters
+                        else screenState.chapters.activeChapters,
+                    screenState = screenState,
+                    themeColorState = themeColorState,
+                    chapterActions = chapterActions,
+                    onBookmark = onBookmark,
+                    onRead = onRead,
+                    onOpenSheet = onOpenSheet,
+                )
             }
         }
     }

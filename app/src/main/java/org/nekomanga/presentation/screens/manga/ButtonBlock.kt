@@ -59,7 +59,6 @@ import org.nekomanga.presentation.theme.Size
 @Composable
 fun ButtonBlock(
     hideButtonText: Boolean,
-    isInitialized: Boolean,
     mergedCount: Int,
     inLibrary: Boolean,
     loggedIntoTrackers: Boolean,
@@ -74,8 +73,6 @@ fun ButtonBlock(
     shareClick: () -> Unit,
     moveCategories: () -> Unit,
 ) {
-    if (!isInitialized) return
-
     val checkedButtonColors =
         ButtonDefaults.outlinedButtonColors(
             containerColor = themeColorState.containerColor.copy(alpha = NekoColors.halfAlpha),

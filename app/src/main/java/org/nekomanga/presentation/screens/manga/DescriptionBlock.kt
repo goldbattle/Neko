@@ -20,7 +20,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRow
@@ -71,7 +70,6 @@ fun DescriptionBlock(
     windowSizeClass: WindowSizeClass,
     title: String,
     description: String,
-    isInitialized: Boolean,
     altTitles: List<String>,
     genres: List<String>,
     themeColorState: ThemeColorState,
@@ -80,8 +78,6 @@ fun DescriptionBlock(
     expandCollapseClick: () -> Unit,
     descriptionActions: MangaConstants.DescriptionActions,
 ) {
-    if (!isInitialized) return
-
     val isTablet = windowSizeClass.widthSizeClass == WindowWidthSizeClass.Expanded
 
     val smallDescription =
@@ -200,7 +196,7 @@ private fun CollapsedDescription(
     Box(modifier = Modifier.clipToBounds()) {
         MarkdownRender(
             markdownState = markdownState,
-            modifier = Modifier.fillMaxWidth().heightIn(Size.none, descriptionHeight),
+            modifier = Modifier.fillMaxWidth().height(descriptionHeight),
         )
         // Gradient overlay to fade out the text
         Box(

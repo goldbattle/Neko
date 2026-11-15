@@ -29,7 +29,6 @@ import org.nekomanga.presentation.components.theme.ThemeColorState
 
 @Composable
 fun AnimatedBackdropContainer(
-    isInitialized: Boolean,
     isSearching: Boolean,
     backdropSize: MangaConstants.BackdropSize,
     themeColorState: ThemeColorState,
@@ -43,10 +42,9 @@ fun AnimatedBackdropContainer(
     val screenHeight = LocalConfiguration.current.screenHeightDp
 
     val targetHeight: Dp by
-        remember(isInitialized, isSearching, backdropSize, screenHeight) {
+        remember(isSearching, backdropSize, screenHeight) {
             derivedStateOf {
                 when {
-                    !isInitialized -> screenHeight.dp
                     isSearching -> (screenHeight / 4).dp
                     else ->
                         when (backdropSize) {
@@ -84,14 +82,8 @@ fun AnimatedBackdropContainer(
 
     val baseModifier = Modifier.fillMaxWidth()
 
-    val heightModifier =
-        if (!isInitialized) {
-            // If not initialized (delayed), snap to full height instantly
-            baseModifier.height(screenHeight.dp)
-        } else {
-            // Otherwise, use the animated height
-            baseModifier.height(animatedHeight)
-        }
+    // Opens directly at its final size (no full-screen loading state), so nothing below it moves.
+    val heightModifier = baseModifier.height(animatedHeight)
 
     val animatedOverlayAlpha by
         transition.animateFloat(

@@ -2,8 +2,6 @@ package org.nekomanga.presentation.screens.manga
 
 import android.graphics.drawable.Drawable
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.tween
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -31,7 +29,6 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.unit.dp
 import eu.kanade.tachiyomi.ui.manga.MangaConstants
 import eu.kanade.tachiyomi.ui.manga.MangaConstants.DescriptionActions
@@ -45,7 +42,6 @@ import org.nekomanga.presentation.theme.Size
 @Composable
 fun MangaDetailsHeader(
     mangaDetailScreenState: MangaConstants.MangaDetailScreenState,
-    isInitialized: Boolean,
     windowSizeClass: WindowSizeClass,
     isLoggedIntoTrackers: Boolean,
     themeColorState: ThemeColorState,
@@ -67,23 +63,14 @@ fun MangaDetailsHeader(
         LocalTextSelectionColors provides themeColorState.textSelectionColors,
     ) {
         var isDescriptionManuallyExpanded by
-            rememberSaveable(mangaDetailScreenState.manga.inLibrary) {
-                mutableStateOf(!mangaDetailScreenState.manga.inLibrary)
-            }
+            rememberSaveable(mangaDetailScreenState.manga.inLibrary) { mutableStateOf(false) }
 
         val isTablet = windowSizeClass.widthSizeClass == WindowWidthSizeClass.Expanded
         val isDescriptionExpanded = isTablet || isDescriptionManuallyExpanded
 
-        val alpha: Float by
-            animateFloatAsState(
-                targetValue = if (isInitialized) 1f else 0f,
-                animationSpec = tween(durationMillis = 600),
-            )
-
         Column {
             Box {
                 AnimatedBackdropContainer(
-                    isInitialized = isInitialized,
                     themeColorState = themeColorState,
                     dynamicCovers = mangaDetailScreenState.manga.dynamicCovers,
                     artwork = mangaDetailScreenState.manga.currentArtwork,
@@ -94,7 +81,7 @@ fun MangaDetailsHeader(
                     backdropSize = mangaDetailScreenState.general.backdropSize,
                 )
                 Column(
-                    modifier = Modifier.align(Alignment.BottomStart).graphicsLayer(alpha = alpha),
+                    modifier = Modifier.align(Alignment.BottomStart),
                 ) {
                     InformationBlock(
                         themeColorState = themeColorState,
@@ -131,7 +118,6 @@ fun MangaDetailsHeader(
                             Gap(Size.medium)
                             ButtonBlock(
                                 hideButtonText = mangaDetailScreenState.general.hideButtonText,
-                                isInitialized = mangaDetailScreenState.manga.initialized,
                                 mergedCount =
                                     if (
                                         mangaDetailScreenState.manga.isMerged
@@ -157,9 +143,7 @@ fun MangaDetailsHeader(
                 }
             }
             AnimatedVisibility(
-                visible =
-                    mangaDetailScreenState.manga.initialized &&
-                        !mangaDetailScreenState.general.isSearching,
+                visible = !mangaDetailScreenState.general.isSearching,
                 enter = fadeIn() + expandVertically(),
                 exit = fadeOut() + shrinkVertically(),
             ) {
@@ -177,7 +161,6 @@ fun MangaDetailsHeader(
                         windowSizeClass = windowSizeClass,
                         title = mangaDetailScreenState.manga.currentTitle,
                         description = mangaDetailScreenState.manga.currentDescription,
-                        isInitialized = mangaDetailScreenState.manga.initialized,
                         altTitles = mangaDetailScreenState.manga.alternativeTitles,
                         genres = mangaDetailScreenState.manga.genres,
                         themeColorState = themeColorState,

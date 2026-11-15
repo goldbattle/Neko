@@ -73,6 +73,7 @@ import kotlinx.coroutines.flow.conflate
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.mapNotNull
@@ -438,6 +439,24 @@ class MangaViewModel(val mangaId: Long) : ViewModel() {
                 mangaRepository.updateChapterFlags(manga)
                 mangaRepository.updateScanlatorFilter(manga)
                 mangaRepository.updateLanguageFilter(manga)
+            }
+        }
+
+        // Seed title + cover from the manga row alone so the header is filled on the first frames,
+        // before the full combine below (chapters, tracks, categories...) emits.
+        viewModelScope.launchIO {
+            val m = mangaFlow.first()
+            _mangaDetailScreenState.update {
+                if (!it.general.firstLoad || it.manga.currentTitle.isNotEmpty()) it
+                else
+                    it.copy(
+                        manga =
+                            it.manga.copy(
+                                currentTitle = m.userTitle.ifEmpty { m.title },
+                                currentArtwork = createCurrentArtwork(m),
+                                inLibrary = m.favorite,
+                            ),
+                    )
             }
         }
 
