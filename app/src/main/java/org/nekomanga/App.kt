@@ -10,6 +10,7 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.os.Build
+import android.os.Handler
 import android.os.Looper
 import android.webkit.CookieManager
 import android.webkit.WebView
@@ -88,28 +89,34 @@ open class App : Application(), DefaultLifecycleObserver, SingletonImageLoader.F
             activityTracker,
         )
 
-        kotlin
-            .runCatching { CookieManager.getInstance() }
-            .onFailure {
-                Toast.makeText(
-                        applicationContext,
-                        "Error! App requires WebView to be installed",
-                        Toast.LENGTH_LONG,
-                    )
-                    .show()
-            }
-
-        // TLS 1.3 support for Android < 10
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
-            Security.insertProviderAt(Conscrypt.newProvider(), 1)
-        }
-
         // Avoid potential crashes
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
             val process = getProcessName()
             if (packageName != process) {
                 kotlin.runCatching { WebView.setDataDirectorySuffix(process) }
             }
+        }
+
+        // Warm up WebView (loads its native lib, ~seconds) off the main thread; only used to warn if missing.
+        Thread {
+                kotlin
+                    .runCatching { CookieManager.getInstance() }
+                    .onFailure {
+                        Handler(Looper.getMainLooper()).post {
+                            Toast.makeText(
+                                    applicationContext,
+                                    "Error! App requires WebView to be installed",
+                                    Toast.LENGTH_LONG,
+                                )
+                                .show()
+                        }
+                    }
+            }
+            .start()
+
+        // TLS 1.3 support for Android < 10
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
+            Security.insertProviderAt(Conscrypt.newProvider(), 1)
         }
 
         Injekt.importModule(PreferenceModule(this))
