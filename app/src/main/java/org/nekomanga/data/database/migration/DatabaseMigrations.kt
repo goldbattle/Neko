@@ -39,6 +39,9 @@ object DatabaseMigrations {
                 db.execSQL(
                     "CREATE INDEX IF NOT EXISTS `index_chapters_unavailable_manga_id` ON `chapters` (`unavailable`, `manga_id`)",
                 )
+                db.execSQL(
+                    "CREATE INDEX IF NOT EXISTS `index_chapters_manga_id_read_scanlator_uploader` ON `chapters` (`manga_id`, `read`, `scanlator`, `uploader`)",
+                )
             }
         }
 
