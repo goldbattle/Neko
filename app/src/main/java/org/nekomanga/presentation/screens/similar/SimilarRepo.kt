@@ -142,7 +142,7 @@ class SimilarRepo(
     }
 
     private suspend fun resolveGroups(
-        rawGroups: List<Pair<Int, List<SourceManga>>>
+        rawGroups: List<Pair<Int, List<SourceManga>>>,
     ): List<SimilarMangaGroup> {
         return withContext(Dispatchers.IO) {
             // Bulk pre-resolve all SourceManga across all recommendation categories in a single

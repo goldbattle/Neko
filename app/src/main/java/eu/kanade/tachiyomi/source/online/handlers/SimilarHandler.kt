@@ -67,9 +67,7 @@ class SimilarHandler {
                 mangaList.data.map { it.toRelatedMangaDto(thumbQuality, mangaIdMap[it.id] ?: "") }
 
             // Update the Manga Similar database
-            updateSimilar(dexId) { dbDto ->
-                dbDto.relatedManga = relatedMangaList
-            }
+            updateSimilar(dexId) { dbDto -> dbDto.relatedManga = relatedMangaList }
         }
 
         val dbDto = getDbDto(similarRepository.getSimilar(dexId))
@@ -101,9 +99,7 @@ class SimilarHandler {
                     .map { it.toRelatedMangaDto(thumbQuality, "") }
 
             // Update the Manga Similar database
-            updateSimilar(dexId) { dbDto ->
-                dbDto.recommendedManga = recommendedMangaList
-            }
+            updateSimilar(dexId) { dbDto -> dbDto.recommendedManga = recommendedMangaList }
         }
 
         val dbDto = getDbDto(similarRepository.getSimilar(dexId))
