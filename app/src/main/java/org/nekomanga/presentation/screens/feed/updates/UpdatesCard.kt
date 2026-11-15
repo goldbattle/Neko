@@ -11,6 +11,7 @@ import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
@@ -46,20 +47,26 @@ fun UpdatesCard(
     chapterSwipe: (ChapterItem) -> Unit,
     downloadClick: (MangaConstants.DownloadAction) -> Unit,
 ) {
-    val swipeAction =
-        SwipeAction(
-            icon =
-                rememberVectorPainter(
-                    if (chapterItem.chapter.read) Icons.Default.VisibilityOff
-                    else Icons.Default.Visibility,
-                ),
-            background = MaterialTheme.colorScheme.secondary,
-            onSwipe = { chapterSwipe(chapterItem) },
+    val icon =
+        rememberVectorPainter(
+            if (chapterItem.chapter.read) Icons.Default.VisibilityOff
+            else Icons.Default.Visibility,
         )
+    val secondary = MaterialTheme.colorScheme.secondary
+    val endSwipeActions =
+        remember(icon, secondary, chapterItem, chapterSwipe) {
+            listOf(
+                SwipeAction(
+                    icon = icon,
+                    background = secondary,
+                    onSwipe = { chapterSwipe(chapterItem) },
+                )
+            )
+        }
 
     ChapterSwipe(
         modifier = modifier.padding(vertical = Dp(1f)),
-        endSwipeActions = listOf(swipeAction),
+        endSwipeActions = endSwipeActions,
     ) {
         UpdatesRow(
             modifier = modifier,

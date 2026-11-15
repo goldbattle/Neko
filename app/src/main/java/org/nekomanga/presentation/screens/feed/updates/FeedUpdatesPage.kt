@@ -17,9 +17,11 @@ import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import eu.kanade.tachiyomi.ui.manga.MangaConstants
 import java.util.Date
 import jp.wasabeef.gap.Gap
 import org.nekomanga.R
+import org.nekomanga.domain.chapter.ChapterItem
 import org.nekomanga.presentation.components.UiText
 import org.nekomanga.presentation.components.listcard.ExpressiveListCard
 import org.nekomanga.presentation.components.listcard.ListCardType
@@ -215,14 +217,34 @@ private fun Grouped(
                             artwork = feedManga.artwork,
                             outlineCovers = outlineCovers,
                             dynamicCovers = dynamicCovers,
-                            mangaClick = { feedScreenActions.mangaClick(feedManga.mangaId) },
-                            chapterClick = { chapterId ->
-                                feedScreenActions.chapterClick(feedManga.mangaId, chapterId)
-                            },
-                            chapterSwipe = { _ -> feedScreenActions.chapterSwipe(latestChapter) },
-                            downloadClick = { action ->
-                                feedScreenActions.downloadClick(latestChapter, feedManga, action)
-                            },
+                            mangaClick =
+                                remember<() -> Unit>(feedManga, feedScreenActions) {
+                                    { feedScreenActions.mangaClick(feedManga.mangaId) }
+                                },
+                            chapterClick =
+                                remember<(Long) -> Unit>(feedManga, feedScreenActions) {
+                                    { chapterId ->
+                                        feedScreenActions.chapterClick(feedManga.mangaId, chapterId)
+                                    }
+                                },
+                            chapterSwipe =
+                                remember<(ChapterItem) -> Unit>(latestChapter, feedScreenActions) {
+                                    { _ -> feedScreenActions.chapterSwipe(latestChapter) }
+                                },
+                            downloadClick =
+                                remember<(MangaConstants.DownloadAction) -> Unit>(
+                                    latestChapter,
+                                    feedManga,
+                                    feedScreenActions,
+                                ) {
+                                    { action ->
+                                        feedScreenActions.downloadClick(
+                                            latestChapter,
+                                            feedManga,
+                                            action,
+                                        )
+                                    }
+                                },
                         )
                     }
 
@@ -334,16 +356,34 @@ private fun Ungrouped(
                             artwork = feedManga.artwork,
                             outlineCovers = outlineCovers,
                             dynamicCovers = dynamicCovers,
-                            mangaClick = { feedScreenActions.mangaClick(feedManga.mangaId) },
-                            chapterClick = { chapterId ->
-                                feedScreenActions.chapterClick(feedManga.mangaId, chapterId)
-                            },
-                            chapterSwipe = { chapterItem ->
-                                feedScreenActions.chapterSwipe(chapterItem)
-                            },
-                            downloadClick = { action ->
-                                feedScreenActions.downloadClick(chapterItem, feedManga, action)
-                            },
+                            mangaClick =
+                                remember<() -> Unit>(feedManga, feedScreenActions) {
+                                    { feedScreenActions.mangaClick(feedManga.mangaId) }
+                                },
+                            chapterClick =
+                                remember<(Long) -> Unit>(feedManga, feedScreenActions) {
+                                    { chapterId ->
+                                        feedScreenActions.chapterClick(feedManga.mangaId, chapterId)
+                                    }
+                                },
+                            chapterSwipe =
+                                remember<(ChapterItem) -> Unit>(feedScreenActions) {
+                                    { item -> feedScreenActions.chapterSwipe(item) }
+                                },
+                            downloadClick =
+                                remember<(MangaConstants.DownloadAction) -> Unit>(
+                                    chapterItem,
+                                    feedManga,
+                                    feedScreenActions,
+                                ) {
+                                    { action ->
+                                        feedScreenActions.downloadClick(
+                                            chapterItem,
+                                            feedManga,
+                                            action,
+                                        )
+                                    }
+                                },
                         )
                     }
                     if (chapterIndex != chaptersForDate.size - 1) {
