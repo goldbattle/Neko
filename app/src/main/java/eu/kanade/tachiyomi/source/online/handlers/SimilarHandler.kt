@@ -22,6 +22,8 @@ import eu.kanade.tachiyomi.util.log
 import eu.kanade.tachiyomi.util.manga.MangaMappings
 import eu.kanade.tachiyomi.util.system.withIOContext
 import eu.kanade.tachiyomi.util.throws
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import kotlinx.serialization.json.Json
 import org.nekomanga.constants.MdConstants
 import org.nekomanga.core.network.ProxyRetrofitQueryMap
@@ -65,10 +67,9 @@ class SimilarHandler {
                 mangaList.data.map { it.toRelatedMangaDto(thumbQuality, mangaIdMap[it.id] ?: "") }
 
             // Update the Manga Similar database
-            val mangaDb = similarRepository.getSimilar(dexId)
-            val dbDto = getDbDto(mangaDb)
-            dbDto.relatedManga = relatedMangaList
-            insertMangaSimilar(dexId, dbDto, mangaDb)
+            updateSimilar(dexId) { dbDto ->
+                dbDto.relatedManga = relatedMangaList
+            }
         }
 
         val dbDto = getDbDto(similarRepository.getSimilar(dexId))
@@ -100,16 +101,29 @@ class SimilarHandler {
                     .map { it.toRelatedMangaDto(thumbQuality, "") }
 
             // Update the Manga Similar database
-            val mangaDb = similarRepository.getSimilar(dexId)
-            val dbDto = getDbDto(mangaDb)
-            dbDto.recommendedManga = recommendedMangaList
-            insertMangaSimilar(dexId, dbDto, mangaDb)
+            updateSimilar(dexId) { dbDto ->
+                dbDto.recommendedManga = recommendedMangaList
+            }
         }
 
         val dbDto = getDbDto(similarRepository.getSimilar(dexId))
 
         return dbDto.recommendedManga?.map { it.toSourceManga() } ?: emptyList()
     }
+
+    private val dbLock = Mutex()
+
+    /**
+     * The six recommendation fetchers run concurrently and all store into ONE JSON row per manga;
+     * without the lock a read-modify-write from one fetcher overwrites the list another just saved.
+     */
+    private suspend fun updateSimilar(dexId: String, change: (SimilarMangaDatabaseDto) -> Unit) =
+        dbLock.withLock {
+            val mangaDb = similarRepository.getSimilar(dexId)
+            val dbDto = getDbDto(mangaDb)
+            change(dbDto)
+            insertMangaSimilar(dexId, dbDto, mangaDb)
+        }
 
     private suspend fun insertMangaSimilar(
         dexId: String,
@@ -222,11 +236,10 @@ class SimilarHandler {
             }
 
         // update db
-        val mangaDb = similarRepository.getSimilar(dexId)
-        val dbDto = getDbDto(mangaDb)
-        dbDto.similarApi = similarDto
-        dbDto.similarManga = mangaList
-        insertMangaSimilar(dexId, dbDto, mangaDb)
+        updateSimilar(dexId) { dbDto ->
+            dbDto.similarApi = similarDto
+            dbDto.similarManga = mangaList
+        }
     }
 
     /** fetch our similar mangaList from external service Anilist */
@@ -295,11 +308,10 @@ class SimilarHandler {
             mangaListDto.data.map { it.toRelatedMangaDto(thumbQuality, idPairs[it.id] ?: "") }
 
         // update db
-        val mangaDb = similarRepository.getSimilar(dexId)
-        val dbDto = getDbDto(mangaDb)
-        dbDto.aniListApi = similarDto
-        dbDto.aniListManga = mangaList
-        insertMangaSimilar(dexId, dbDto, mangaDb)
+        updateSimilar(dexId) { dbDto ->
+            dbDto.aniListApi = similarDto
+            dbDto.aniListManga = mangaList
+        }
     }
 
     /** fetch our similar mangaList from external service myanimelist */
@@ -363,11 +375,10 @@ class SimilarHandler {
             }
 
         // update db
-        val mangaDb = similarRepository.getSimilar(dexId)
-        val dbDto = getDbDto(mangaDb)
-        dbDto.myAnimelistApi = similarDto
-        dbDto.myAnimeListManga = mangaList
-        insertMangaSimilar(dexId, dbDto, mangaDb)
+        updateSimilar(dexId) { dbDto ->
+            dbDto.myAnimelistApi = similarDto
+            dbDto.myAnimeListManga = mangaList
+        }
     }
 
     /** fetch our similar mangaList from external service mangaupdates */
@@ -440,11 +451,10 @@ class SimilarHandler {
             }
 
         // update db
-        val mangaDb = similarRepository.getSimilar(dexId)
-        val dbDto = getDbDto(mangaDb)
-        dbDto.mangaUpdatesApi = similarDto
-        dbDto.mangaUpdatesListManga = mangaList
-        insertMangaSimilar(dexId, dbDto, mangaDb)
+        updateSimilar(dexId) { dbDto ->
+            dbDto.mangaUpdatesApi = similarDto
+            dbDto.mangaUpdatesListManga = mangaList
+        }
     }
 
     /** this will get the manga objects with cover_art for all the specified ids */

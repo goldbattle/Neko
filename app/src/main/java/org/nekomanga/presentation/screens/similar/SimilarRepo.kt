@@ -56,6 +56,7 @@ class SimilarRepo(
     suspend fun fetchSimilar(
         dexId: String,
         forceRefresh: Boolean = false,
+        onGroups: (List<SimilarMangaGroup>) -> Unit = {},
     ): List<SimilarMangaGroup> {
         return withContext(Dispatchers.IO) {
             val similarDbEntry = similarRepository.getSimilar(dexId)
@@ -128,19 +129,22 @@ class SimilarRepo(
                     .getOrNull()
             }
 
-            val rawGroups =
-                listOfNotNull(
-                        related.await(),
-                        recommended.await(),
-                        similar.await(),
-                        mu.await(),
-                        anilist.await(),
-                        mal.await(),
-                    )
-                    .filter { it.second.isNotEmpty() }
+            // Awaited in display order: a group is shown once it and every group above it are
+            // ready, so the page only ever grows below what is already visible (no shifting).
+            val groups = mutableListOf<SimilarMangaGroup>()
+            for (job in listOf(related, recommended, similar, mu, anilist, mal)) {
+                val raw = job.await()?.takeIf { it.second.isNotEmpty() } ?: continue
+                groups += resolveGroups(listOf(raw))
+                onGroups(groups.toList())
+            }
+            groups
+        }
+    }
 
-            if (rawGroups.isEmpty()) return@withContext emptyList()
-
+    private suspend fun resolveGroups(
+        rawGroups: List<Pair<Int, List<SourceManga>>>
+    ): List<SimilarMangaGroup> {
+        return withContext(Dispatchers.IO) {
             // Bulk pre-resolve all SourceManga across all recommendation categories in a single
             // batch
             val allSourceMangas = rawGroups.flatMap { it.second }

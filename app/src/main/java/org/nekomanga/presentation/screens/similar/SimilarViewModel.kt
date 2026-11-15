@@ -93,24 +93,26 @@ class SimilarViewModel(val mangaUUID: String) : ViewModel() {
     private fun getSimilarManga(forceRefresh: Boolean = false) {
         viewModelScope.launch {
             if (mangaUUID.isNotEmpty()) {
-                _similarScreenState.update {
-                    it.copy(
-                        isRefreshing = true,
-                        allDisplayManga = mapOf(),
-                        filteredDisplayManga = mapOf(),
-                    )
-                }
+                // Keep what is on screen during a refresh; it is replaced once, when complete.
+                _similarScreenState.update { it.copy(isRefreshing = true) }
 
-                val list = repo.fetchSimilar(mangaUUID, forceRefresh)
-                val allDisplayManga =
-                    list.associate { group -> group.type to group.manga.toList() }.toMap()
-                _similarScreenState.update {
-                    it.copy(
-                        isRefreshing = false,
-                        allDisplayManga = allDisplayManga,
-                        filteredDisplayManga = allDisplayManga.filterByVisibility(preferences),
-                    )
+                fun show(list: List<SimilarMangaGroup>, done: Boolean) {
+                    val allDisplayManga = list.associate { group -> group.type to group.manga }
+                    _similarScreenState.update {
+                        it.copy(
+                            isRefreshing = !done,
+                            allDisplayManga = allDisplayManga,
+                            filteredDisplayManga = allDisplayManga.filterByVisibility(preferences),
+                        )
+                    }
                 }
+                show(
+                    repo.fetchSimilar(mangaUUID, forceRefresh) {
+                        // first open: stream groups in (they only append); refresh: swap once
+                        if (!forceRefresh) show(it, done = false)
+                    },
+                    done = true,
+                )
             }
         }
     }
