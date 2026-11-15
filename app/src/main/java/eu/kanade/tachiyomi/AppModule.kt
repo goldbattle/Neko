@@ -117,6 +117,7 @@ class AppModule(val app: Application) : InjektModule {
                     DatabaseMigrations.MIGRATION_45_46,
                     DatabaseMigrations.MIGRATION_46_47,
                     DatabaseMigrations.MIGRATION_47_48,
+                    DatabaseMigrations.MIGRATION_48_49,
                 )
                 .fallbackToDestructiveMigration(false)
                 .build()

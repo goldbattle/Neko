@@ -61,6 +61,15 @@ object DatabaseMigrations {
             }
         }
 
+    val MIGRATION_48_49 =
+        object : Migration(48, 49) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL(
+                    "CREATE INDEX IF NOT EXISTS `index_history_last_read` ON `history` (`last_read`)",
+                )
+            }
+        }
+
     private fun tableExists(db: SupportSQLiteDatabase, tableName: String): Boolean {
         db.query("SELECT name FROM sqlite_master WHERE type='table' AND name=?", arrayOf(tableName))
             .use { cursor ->
