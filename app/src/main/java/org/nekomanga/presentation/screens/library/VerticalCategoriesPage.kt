@@ -24,19 +24,27 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
+import coil3.imageLoader
+import coil3.request.ImageRequest
+import coil3.size.Size as CoilSize
 import com.cheonjaeung.compose.grid.SimpleGridCells
 import com.cheonjaeung.compose.grid.VerticalGrid
+import eu.kanade.tachiyomi.data.coil.dynamicCover
 import jp.wasabeef.gap.Gap
+import kotlinx.coroutines.flow.distinctUntilChanged
 import org.nekomanga.domain.category.CategoryItem
 import org.nekomanga.domain.manga.LibraryMangaItem
 import org.nekomanga.presentation.components.MangaGridItem
@@ -113,6 +121,44 @@ fun VerticalCategoriesPage(
                 dynamicCovers = libraryScreenState.dynamicCovers,
             )
         }
+
+    // Mirrors LazyColumn item order (header + rows); header slots are empty lists. Grid mode only.
+    val lazyRows =
+        remember(libraryScreenState.items, chunkedLibraryItems, collapsible) {
+            buildList<List<LibraryMangaItem>> {
+                if (chunkedLibraryItems.isEmpty()) return@buildList
+                libraryScreenState.items.forEach { item ->
+                    add(emptyList())
+                    if (!item.categoryItem.isHidden || !collapsible) {
+                        chunkedLibraryItems[item.categoryItem.id]?.let { addAll(it) }
+                    }
+                }
+            }
+        }
+    val context = LocalContext.current
+    val imageLoader = remember(context) { context.imageLoader }
+    LaunchedEffect(lazyListState, lazyRows, displayOptions.dynamicCovers) {
+        var lastPrefetched = -1
+        snapshotFlow { lazyListState.layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: -1 }
+            .distinctUntilChanged()
+            .collect { last ->
+                if (last < 0) return@collect
+                val end = minOf(last + 4, lazyRows.lastIndex)
+                val start = maxOf(last + 1, lastPrefetched + 1)
+                for (i in start..end) {
+                    lazyRows[i].forEach { item ->
+                        imageLoader.enqueue(
+                            ImageRequest.Builder(context)
+                                .data(item.displayManga.currentArtwork)
+                                .dynamicCover(displayOptions.dynamicCovers)
+                                .size(CoilSize.ORIGINAL)
+                                .build()
+                        )
+                    }
+                }
+                if (end > lastPrefetched) lastPrefetched = end
+            }
+    }
 
     LazyColumn(
         modifier = Modifier.fillMaxWidth(),
