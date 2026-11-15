@@ -87,7 +87,7 @@ class SimilarRepoTest {
         }
 
     @Test
-    fun `given recommendations across multiple sources when fetchSimilar called then fetches raw lists in parallel and batch queries manga repository once`() =
+    fun `given recommendations across multiple sources when fetchSimilar called then fetches raw lists in parallel and batch queries manga repository once per group`() =
         runTest {
             // Arrange
             val mockSimilarDb = mockk<MangaSimilar>()
@@ -142,14 +142,18 @@ class SimilarRepoTest {
                     thumbnail_url = "https://thumb/3.jpg"
                 }
 
+            coEvery { mangaRepository.getMangaByUrls(listOf("/manga/related-1")) } returns
+                listOf(dbManga1)
             coEvery {
-                mangaRepository.getMangaByUrls(
-                    listOf("/manga/related-1", "/manga/rec-1", "/manga/rec-2"),
-                )
-            } returns listOf(dbManga1, dbManga2, dbManga3)
+                mangaRepository.getMangaByUrls(listOf("/manga/rec-1", "/manga/rec-2"))
+            } returns listOf(dbManga2, dbManga3)
 
             // Act
-            val result = similarRepo.fetchSimilar(dexId, forceRefresh = false)
+            val partial = mutableListOf<List<Int>>()
+            val result =
+                similarRepo.fetchSimilar(dexId, forceRefresh = false) { groups ->
+                    partial += groups.map { it.type }
+                }
 
             // Assert
             assertEquals(2, result.size)
@@ -163,8 +167,16 @@ class SimilarRepoTest {
             assertEquals(102L, result[1].manga[0].mangaId)
             assertEquals(103L, result[1].manga[1].mangaId)
 
-            // Verify exactly 1 batch query was made for all recommendations across categories
-            coVerify(exactly = 1) { mangaRepository.getMangaByUrls(any()) }
+            // Groups are published in display order as they resolve (only ever appended)
+            assertEquals(
+                listOf(
+                    listOf(R.string.related_type),
+                    listOf(R.string.related_type, R.string.recommended_type),
+                ),
+                partial,
+            )
+            // One batch query per non-empty group (not per manga)
+            coVerify(exactly = 2) { mangaRepository.getMangaByUrls(any()) }
             coVerify(exactly = 0) { mangaRepository.insertMangaList(any()) }
         }
 
