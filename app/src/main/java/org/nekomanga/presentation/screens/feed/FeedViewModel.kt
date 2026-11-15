@@ -784,7 +784,13 @@ class FeedViewModel() : ViewModel() {
         }
     }
 
+    private var skipNextMangaChangesRefresh = true
+
     fun updateMangaForChanges() {
+        if (skipNextMangaChangesRefresh) {
+            skipNextMangaChangesRefresh = false
+            return
+        }
         if (!_feedScreenState.value.firstLoad) {
             viewModelScope.launchIO {
                 delay(500L)
