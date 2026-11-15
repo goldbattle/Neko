@@ -167,6 +167,7 @@ class MangaViewModel(val mangaId: Long) : ViewModel() {
     private val loginHelper: MangaDexLoginHelper = Injekt.get()
     private val statusHandler: StatusHandler = Injekt.get()
     private val trackManager: TrackManager = Injekt.get()
+    private var lastMissingCountKey: Any? = null
     private val mangaUpdateCoordinator: MangaUpdateCoordinator = Injekt.get()
     private val storageManager: StorageManager = Injekt.get()
     private val chapterUseCases: ChapterUseCases = Injekt.get()
@@ -704,10 +705,19 @@ class MangaViewModel(val mangaId: Long) : ViewModel() {
                     }
 
                     if (allInfo.mangaItem.initialized) {
-                        viewModelScope.launchIO {
-                            mangaUseCases.updateMangaStatusAndMissingCount(
-                                allInfo.mangaItem.toManga(),
+                        val key =
+                            Triple(
+                                allInfo.allChapterInfo.allChapters.size,
+                                allInfo.mangaItem.status,
+                                allInfo.mangaItem.missingChapters,
                             )
+                        if (key != lastMissingCountKey) {
+                            lastMissingCountKey = key
+                            viewModelScope.launchIO {
+                                mangaUseCases.updateMangaStatusAndMissingCount(
+                                    allInfo.mangaItem.toManga(),
+                                )
+                            }
                         }
                     }
                 }
