@@ -16,6 +16,11 @@ class MangaMappings(context: Context) {
         openDatabase(context, "2026-07-23_neko_mapping.db")
     }
 
+    /** Copies/opens the asset DB ahead of time so the first lookup (manga open) doesn't pay for it. */
+    fun prewarm() {
+        dbMappings
+    }
+
     private fun openDatabase(context: Context, dbPath: String): SQLiteDatabase {
         val dbFile: File = context.getDatabasePath(dbPath)
         if (!dbFile.exists()) {

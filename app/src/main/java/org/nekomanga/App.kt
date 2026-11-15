@@ -39,11 +39,13 @@ import eu.kanade.tachiyomi.ui.main.DeepLinks
 import eu.kanade.tachiyomi.ui.main.MainActivity
 import eu.kanade.tachiyomi.ui.security.SecureActivityDelegate
 import eu.kanade.tachiyomi.util.manga.MangaCoverMetadata
+import eu.kanade.tachiyomi.util.manga.MangaMappings
 import eu.kanade.tachiyomi.util.system.AuthenticatorUtil
 import eu.kanade.tachiyomi.util.system.launchIO
 import eu.kanade.tachiyomi.util.system.notification
 import java.security.Security
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -58,6 +60,7 @@ import org.nekomanga.presentation.screens.feed.FeedViewModel
 import org.nekomanga.presentation.screens.library.LibraryViewModel
 import tachiyomi.core.util.system.WebViewUtil
 import uy.kohesive.injekt.Injekt
+import uy.kohesive.injekt.api.get
 import uy.kohesive.injekt.injectLazy
 
 private const val ACTION_DISABLE_INCOGNITO_MODE = "tachi.action.DISABLE_INCOGNITO_MODE"
@@ -219,6 +222,12 @@ open class App : Application(), DefaultLifecycleObserver, SingletonImageLoader.F
                     notification,
                 )
             }
+        }
+
+        // Prewarm the mapping DB off the cold-start path
+        ProcessLifecycleOwner.get().lifecycleScope.launchIO {
+            delay(3000)
+            runCatching { Injekt.get<MangaMappings>().prewarm() }
         }
     }
 
