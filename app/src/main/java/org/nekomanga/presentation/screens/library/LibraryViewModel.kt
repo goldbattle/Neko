@@ -272,8 +272,8 @@ class LibraryViewModel() : ViewModel() {
     val libraryMangaListFlow: Flow<List<LibraryMangaItem>> =
         combine(
             initialLibraryItemsFlow,
-            trackMapFlow.onStart { emit(emptyMap<Long, List<String>>()) },
-            trackCountMapFlow.onStart { emit(emptyMap<Long, Int>()) },
+            trackMapFlow,
+            trackCountMapFlow,
             downloadCountMapFlow,
         ) {
                 items,
