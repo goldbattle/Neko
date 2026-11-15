@@ -211,15 +211,20 @@ fun VerticalFastScroller(
                             }
                     }
 
-                    LaunchedEffect(thumbOffsetY) {
-                        if (listState.layoutInfo.totalItemsCount == 0 || !isThumbDragged)
-                            return@LaunchedEffect
-                        val thumbProportion = (thumbOffsetY - thumbTopPadding) / trackHeightPx
+                    LaunchedEffect(listState) {
+                      snapshotFlow { thumbOffsetY }.collectLatest { thumbOffsetY ->
+                        if (
+                            listState.layoutInfo.totalItemsCount == 0 ||
+                                !isThumbDraggedState.value
+                        )
+                            return@collectLatest
+                        val thumbProportion =
+                            (thumbOffsetY - thumbTopPaddingState.value) / trackHeightPxState.value
                         if (thumbProportion <= 0.001f) {
                             estimateConfidence.value = -1f
                             listState.scrollToItem(index = 0, scrollOffset = 0)
                             scrolled.tryEmit(Unit)
-                            return@LaunchedEffect
+                            return@collectLatest
                         }
                         val scrollRemainingSections =
                             (1f - thumbProportion) * maxRemainingSections.value
@@ -234,7 +239,7 @@ fun VerticalFastScroller(
                                 it.index == scrollSectionIndex
                             }
                                 ?: listState.layoutInfo.visibleItemsInfo.firstOrNull()
-                                ?: return@LaunchedEffect
+                                ?: return@collectLatest
                         val scrollRelativeOffset =
                             expectedScrollItem.size * (currentSection - scrollSectionIndex)
                         val scrollSectionOffset =
@@ -250,6 +255,7 @@ fun VerticalFastScroller(
                             scrollOffset = scrollItemOffset,
                         )
                         scrolled.tryEmit(Unit)
+                      }
                     }
 
                     val alpha = remember { Animatable(0f) }
@@ -409,9 +415,23 @@ fun VerticalGridFastScroller(
                     val columnCount =
                         remember(columns) { slotSizesSums(constraints).size.coerceAtLeast(1) }
 
-                    LaunchedEffect(thumbOffsetY) {
-                        if (state.layoutInfo.totalItemsCount == 0 || !isThumbDragged)
-                            return@LaunchedEffect
+                    // Defer Compose state read using snapshotFlow instead of triggering
+                    // LaunchedEffect on every scroll tick
+                    val heightPxState = rememberUpdatedState(heightPx)
+                    val trackHeightPxGridState = rememberUpdatedState(trackHeightPx)
+                    val thumbTopPaddingGridState = rememberUpdatedState(thumbTopPadding)
+                    val columnCountState = rememberUpdatedState(columnCount)
+                    val isThumbDraggedGridState = rememberUpdatedState(isThumbDragged)
+
+                    LaunchedEffect(state) {
+                      snapshotFlow { thumbOffsetY }.collectLatest { thumbOffsetY ->
+                        if (
+                            state.layoutInfo.totalItemsCount == 0 ||
+                                !isThumbDraggedGridState.value
+                        )
+                            return@collectLatest
+                        val columnCount = columnCountState.value
+                        val heightPx = heightPxState.value
                         val visibleItems = state.layoutInfo.visibleItemsInfo
                         val startChild = visibleItems.first()
                         val endChild = visibleItems.last()
@@ -420,7 +440,9 @@ fun VerticalGridFastScroller(
                         val laidOutRows = 1 + abs(endChild.index - startChild.index) / columnCount
                         val avgSizePerRow = laidOutArea.toFloat() / laidOutRows
 
-                        val scrollRatio = (thumbOffsetY - thumbTopPadding) / trackHeightPx
+                        val scrollRatio =
+                            (thumbOffsetY - thumbTopPaddingGridState.value) /
+                                trackHeightPxGridState.value
                         val scrollAmt =
                             scrollRatio *
                                 (computeGridScrollRange(state = state, columnCount = columnCount)
@@ -434,15 +456,8 @@ fun VerticalGridFastScroller(
                             scrollOffset = rowOffset.roundToInt(),
                         )
                         scrolled.tryEmit(Unit)
+                      }
                     }
-
-                    // Defer Compose state read using snapshotFlow instead of triggering
-                    // LaunchedEffect on every scroll tick
-                    val heightPxState = rememberUpdatedState(heightPx)
-                    val trackHeightPxGridState = rememberUpdatedState(trackHeightPx)
-                    val thumbTopPaddingGridState = rememberUpdatedState(thumbTopPadding)
-                    val columnCountState = rememberUpdatedState(columnCount)
-                    val isThumbDraggedGridState = rememberUpdatedState(isThumbDragged)
 
                     LaunchedEffect(state) {
                         snapshotFlow {
