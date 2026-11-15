@@ -45,6 +45,16 @@ object DatabaseMigrations {
             }
         }
 
+    // Databases already at 47 (shipped before the covering index was added) need it too.
+    val MIGRATION_47_48 =
+        object : Migration(47, 48) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL(
+                    "CREATE INDEX IF NOT EXISTS `index_chapters_manga_id_read_scanlator_uploader` ON `chapters` (`manga_id`, `read`, `scanlator`, `uploader`)",
+                )
+            }
+        }
+
     private fun tableExists(db: SupportSQLiteDatabase, tableName: String): Boolean {
         db.query("SELECT name FROM sqlite_master WHERE type='table' AND name=?", arrayOf(tableName))
             .use { cursor ->
