@@ -34,8 +34,8 @@ import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.SubcomposeLayout
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Constraints
@@ -258,15 +258,15 @@ fun VerticalFastScroller(
                       }
                     }
 
-                    val alpha = remember { Animatable(0f) }
-                    val isThumbVisible = alpha.value > 0f
-                    LaunchedEffect(scrolled, alpha) {
+                    val thumbAlpha = remember { Animatable(0f) }
+                    val isThumbVisible by remember { derivedStateOf { thumbAlpha.value > 0f } }
+                    LaunchedEffect(scrolled, thumbAlpha) {
                         scrolled.sample(100).collectLatest {
                             if (thumbAllowed() && maxRemainingSections.value >= 0.5f) {
-                                alpha.snapTo(1f)
-                                alpha.animateTo(0f, animationSpec = FadeOutAnimationSpec)
+                                thumbAlpha.snapTo(1f)
+                                thumbAlpha.animateTo(0f, animationSpec = FadeOutAnimationSpec)
                             } else {
-                                alpha.animateTo(0f, animationSpec = ImmediateFadeOutAnimationSpec)
+                                thumbAlpha.animateTo(0f, animationSpec = ImmediateFadeOutAnimationSpec)
                             }
                         }
                     }
@@ -308,7 +308,7 @@ fun VerticalFastScroller(
                                 .padding(horizontal = 8.dp)
                                 .padding(end = endContentPadding)
                                 .width(ThumbThickness)
-                                .alpha(alpha.value)
+                                .graphicsLayer { alpha = thumbAlpha.value }
                                 .background(
                                     color = thumbColor,
                                     shape = MaterialTheme.shapes.medium,
@@ -493,15 +493,15 @@ fun VerticalGridFastScroller(
                             }
                     }
 
-                    val alpha = remember { Animatable(0f) }
-                    val isThumbVisible = alpha.value > 0f
-                    LaunchedEffect(scrolled, alpha) {
+                    val thumbAlpha = remember { Animatable(0f) }
+                    val isThumbVisible by remember { derivedStateOf { thumbAlpha.value > 0f } }
+                    LaunchedEffect(scrolled, thumbAlpha) {
                         scrolled.sample(100).collectLatest {
                             if (thumbAllowed()) {
-                                alpha.snapTo(1f)
-                                alpha.animateTo(0f, animationSpec = FadeOutAnimationSpec)
+                                thumbAlpha.snapTo(1f)
+                                thumbAlpha.animateTo(0f, animationSpec = FadeOutAnimationSpec)
                             } else {
-                                alpha.animateTo(0f, animationSpec = ImmediateFadeOutAnimationSpec)
+                                thumbAlpha.animateTo(0f, animationSpec = ImmediateFadeOutAnimationSpec)
                             }
                         }
                     }
@@ -542,7 +542,7 @@ fun VerticalGridFastScroller(
                                 .height(ThumbLength)
                                 .padding(end = endContentPadding)
                                 .width(ThumbThickness)
-                                .alpha(alpha.value)
+                                .graphicsLayer { alpha = thumbAlpha.value }
                                 .background(
                                     color = thumbColor,
                                     shape = MaterialTheme.shapes.medium,
