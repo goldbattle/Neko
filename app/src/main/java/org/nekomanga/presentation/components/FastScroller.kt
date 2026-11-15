@@ -375,10 +375,13 @@ fun VerticalGridFastScroller(
         val scrollerConstraints = constraints.copy(minWidth = 0, minHeight = 0)
         val scrollerPlaceable =
             subcompose("scroller") {
-                    val layoutInfo = state.layoutInfo
+                    val totalItemsCount by
+                        remember(state) { derivedStateOf { state.layoutInfo.totalItemsCount } }
+                    val afterContentPadding by
+                        remember(state) { derivedStateOf { state.layoutInfo.afterContentPadding } }
                     val showScroller =
-                        remember(columns, layoutInfo.totalItemsCount) {
-                            layoutInfo.visibleItemsInfo.size < layoutInfo.totalItemsCount
+                        remember(columns, totalItemsCount) {
+                            state.layoutInfo.visibleItemsInfo.size < totalItemsCount
                         }
                     if (!showScroller) return@subcompose
                     val thumbTopPadding = with(LocalDensity.current) { topContentPadding.toPx() }
@@ -399,7 +402,7 @@ fun VerticalGridFastScroller(
                         contentHeight.toFloat() -
                             thumbTopPadding -
                             thumbBottomPadding -
-                            state.layoutInfo.afterContentPadding
+                            afterContentPadding
                     val thumbHeightPx = with(LocalDensity.current) { ThumbLength.toPx() }
                     val trackHeightPx = heightPx - thumbHeightPx
 
@@ -407,7 +410,7 @@ fun VerticalGridFastScroller(
                         remember(columns) { slotSizesSums(constraints).size.coerceAtLeast(1) }
 
                     LaunchedEffect(thumbOffsetY) {
-                        if (layoutInfo.totalItemsCount == 0 || !isThumbDragged)
+                        if (state.layoutInfo.totalItemsCount == 0 || !isThumbDragged)
                             return@LaunchedEffect
                         val visibleItems = state.layoutInfo.visibleItemsInfo
                         val startChild = visibleItems.first()
