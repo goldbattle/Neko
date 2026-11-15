@@ -52,6 +52,12 @@ object DatabaseMigrations {
                 db.execSQL(
                     "CREATE INDEX IF NOT EXISTS `index_chapters_manga_id_read_scanlator_uploader` ON `chapters` (`manga_id`, `read`, `scanlator`, `uploader`)",
                 )
+                db.execSQL(
+                    "CREATE INDEX IF NOT EXISTS `index_chapters_date_upload` ON `chapters` (`date_upload`)",
+                )
+                db.execSQL(
+                    "CREATE INDEX IF NOT EXISTS `index_chapters_date_fetch` ON `chapters` (`date_fetch`)",
+                )
             }
         }
 
