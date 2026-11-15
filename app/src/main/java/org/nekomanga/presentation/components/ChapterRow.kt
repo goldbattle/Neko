@@ -291,6 +291,12 @@ private fun ChapterRowContent(
         )
     }
 
+    val onRowClick = remember(chapterItem, onClick) { { onClick(chapterItem) } }
+    val onIndicatorDownload =
+        remember(chapterItem, onDownload) {
+            { action: MangaConstants.DownloadAction -> onDownload(listOf(chapterItem), action) }
+        }
+
     Row(
         modifier =
             Modifier.fillMaxWidth()
@@ -298,7 +304,7 @@ private fun ChapterRowContent(
                     background(themeColorState.rippleColor.copy(alpha = 0.2f))
                 }
                 .combinedClickable(
-                    onClick = { onClick(chapterItem) },
+                    onClick = onRowClick,
                     onLongClick = {
                         haptic.performHapticFeedback(HapticFeedbackType.LongPress)
                         isDropdownExpanded = true
@@ -376,7 +382,7 @@ private fun ChapterRowContent(
             scanlator = chapterItem.chapter.scanlator,
             downloadState = chapterItem.downloadState,
             downloadProgress = chapterItem.downloadProgress,
-            onDownload = { action -> onDownload(listOf(chapterItem), action) },
+            onDownload = onIndicatorDownload,
             themeColorState = themeColorState,
         )
     }
