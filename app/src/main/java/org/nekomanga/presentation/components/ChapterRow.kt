@@ -96,6 +96,9 @@ fun ChapterRow(
             }
 
         val latestItem = rememberUpdatedState(chapterItem)
+        val currentOnBookmark by rememberUpdatedState(onBookmark)
+        val currentOnRead by rememberUpdatedState(onRead)
+        val currentOnDownload by rememberUpdatedState(onDownload)
         val rightSwipeAction =
             remember(
                 swipeRightAction,
@@ -106,18 +109,15 @@ fun ChapterRow(
                 chapterItem.chapter.scanlator,
                 themeColor,
                 swipeActionBackgroundColor,
-                onBookmark,
-                onRead,
-                onDownload,
             ) {
                 chapterSwipeAction(
                     action = swipeRightAction,
                     chapterItem = chapterItem,
                     themeColor = themeColor,
                     background = swipeActionBackgroundColor,
-                    onBookmark = { onBookmark(latestItem.value) },
-                    onRead = { onRead(latestItem.value) },
-                    onDownload = { _, a -> onDownload(listOf(latestItem.value), a) },
+                    onBookmark = { currentOnBookmark(latestItem.value) },
+                    onRead = { currentOnRead(latestItem.value) },
+                    onDownload = { _, a -> currentOnDownload(listOf(latestItem.value), a) },
                 )
             }
         val leftSwipeAction =
@@ -130,18 +130,15 @@ fun ChapterRow(
                 chapterItem.chapter.scanlator,
                 themeColor,
                 swipeActionBackgroundColor,
-                onBookmark,
-                onRead,
-                onDownload,
             ) {
                 chapterSwipeAction(
                     action = swipeLeftAction,
                     chapterItem = chapterItem,
                     themeColor = themeColor,
                     background = swipeActionBackgroundColor,
-                    onBookmark = { onBookmark(latestItem.value) },
-                    onRead = { onRead(latestItem.value) },
-                    onDownload = { _, a -> onDownload(listOf(latestItem.value), a) },
+                    onBookmark = { currentOnBookmark(latestItem.value) },
+                    onRead = { currentOnRead(latestItem.value) },
+                    onDownload = { _, a -> currentOnDownload(listOf(latestItem.value), a) },
                 )
             }
         val startSwipeActions = remember(rightSwipeAction) { listOfNotNull(rightSwipeAction) }
@@ -291,11 +288,15 @@ private fun ChapterRowContent(
         )
     }
 
-    val onRowClick = remember(chapterItem, onClick) { { onClick(chapterItem) } }
-    val onIndicatorDownload =
-        remember(chapterItem, onDownload) {
-            { action: MangaConstants.DownloadAction -> onDownload(listOf(chapterItem), action) }
+    val latestChapterItem by rememberUpdatedState(chapterItem)
+    val latestOnClick by rememberUpdatedState(onClick)
+    val latestOnDownload by rememberUpdatedState(onDownload)
+    val onRowClick = remember { { latestOnClick(latestChapterItem) } }
+    val onIndicatorDownload = remember {
+        { action: MangaConstants.DownloadAction ->
+            latestOnDownload(listOf(latestChapterItem), action)
         }
+    }
 
     Row(
         modifier =
