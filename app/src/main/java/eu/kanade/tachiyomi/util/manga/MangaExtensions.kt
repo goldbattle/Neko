@@ -208,7 +208,7 @@ fun LibraryManga.toLibraryMangaItem(): LibraryMangaItem {
         displayManga = displayManga.copy(inLibrary = false),
         userCover = this.user_cover,
         dynamicCover = this.dynamic_cover,
-        url = MdConstants.baseUrl + this.url + "/" + this.getSlug(),
+        url = MdConstants.baseUrl + this.url,
         rating = ((mangaRating * 100).roundToInt() / 100.0),
         addedToLibraryDate = this.date_added,
         latestChapterDate = this.last_update,
@@ -233,13 +233,18 @@ fun Manga.toSimpleManga(): SimpleManga {
     return SimpleManga(id = this.id!!, title = this.displayTitle())
 }
 
-fun SManga.getSlug(): String {
+private val slugNonAlnumRegex = Regex("[^a-z0-9]+")
+private val slugTrailingDashRegex = Regex("-+$")
+
+fun SManga.getSlug(): String = titleToSlug(this.title)
+
+fun titleToSlug(title: String): String {
     val title =
-        this.title
+        title
             .trim()
             .lowercase()
-            .replace("[^a-z0-9]+".toRegex(), "-")
-            .replace("-+$".toRegex(), "")
+            .replace(slugNonAlnumRegex, "-")
+            .replace(slugTrailingDashRegex, "")
 
     val wordList = title.split('-')
     val slug = mutableListOf<String>()

@@ -22,6 +22,7 @@ import eu.kanade.tachiyomi.ui.manga.MangaConstants.DownloadAction
 import eu.kanade.tachiyomi.util.chapter.ChapterItemFilter
 import eu.kanade.tachiyomi.util.chapter.ChapterItemSort
 import eu.kanade.tachiyomi.util.chapter.isAvailable
+import eu.kanade.tachiyomi.util.manga.titleToSlug
 import eu.kanade.tachiyomi.util.manga.toLibraryMangaItem
 import eu.kanade.tachiyomi.util.system.combine
 import eu.kanade.tachiyomi.util.system.launchIO
@@ -1312,7 +1313,9 @@ class LibraryViewModel() : ViewModel() {
     fun getSelectedMangaUrls(): String {
         val urls =
             libraryScreenState.value.selectedItems
-                .map { selected -> selected.url }
+                .map { selected ->
+                    selected.url + "/" + titleToSlug(selected.displayManga.originalTitle)
+                }
                 .distinct()
                 .joinToString("\n")
         viewModelScope.launchIO { clearSelectedManga() }
