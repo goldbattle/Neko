@@ -335,7 +335,6 @@ private fun ChapterRowContent(
                     chapterItem.chapter.pagesLeft,
                     chapterItem.chapter.scanlator,
                     chapterItem.chapter.uploader,
-                    chapterItem.chapter.isMergedChapter(),
                 ) {
                     val statuses = mutableListOf<String>()
                     ChapterUtil.relativeDate(chapterItem.chapter.dateUpload)?.let {
