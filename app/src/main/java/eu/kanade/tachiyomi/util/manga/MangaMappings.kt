@@ -64,7 +64,14 @@ class MangaMappings(context: Context) {
         return getResult(queryString, whereArgs)
     }
 
+    private object NoResult
+
+    // Keyed by "<query>|<arg>"; the query string encodes the method/column. NoResult stands in for null.
+    private val cache = java.util.concurrent.ConcurrentHashMap<String, Any>()
+
     private fun getResult(queryString: String, whereArgs: Array<String>): String? {
+        val key = queryString + "|" + whereArgs.joinToString("|")
+        cache[key]?.let { return it as? String }
         if (!dbMappings.isOpen) {
             return null
         }
@@ -74,6 +81,7 @@ class MangaMappings(context: Context) {
             result = cursor.getString(0)?.ifBlank { null }
         }
         cursor.close()
+        cache[key] = result ?: NoResult
         return result
     }
 }
