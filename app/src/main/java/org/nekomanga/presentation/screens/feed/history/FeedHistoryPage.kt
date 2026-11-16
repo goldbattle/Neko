@@ -11,10 +11,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import java.util.Date
@@ -68,14 +65,14 @@ fun FeedHistoryPage(
         }
     }
 
-    val now = Date().time
-    var timeSpan by remember { mutableStateOf("") }
+    val now = remember(feedHistoryMangaList) { Date().time }
 
     LazyColumn(
         modifier = modifier.fillMaxSize(),
         state = scrollState,
         contentPadding = contentPadding,
     ) {
+        var timeSpan = ""
         feedHistoryMangaList.forEachIndexed { index, feedManga ->
             val dateString =
                 getDateString(feedManga.chapters.first().chapter.lastRead, now, historyGrouping)
