@@ -132,38 +132,42 @@ private fun parseChapterCount(
                         countSepIndex + LibraryDao.RAW_CHAPTER_COUNT_SEPARATOR.length,
                     )
                 val currentGroupCount = countStr.toIntOrNull() ?: 0
-                val scanlators = ChapterUtil.getScanlators(scanlator)
-                val isMerged = MergeType.containsMergeSourceName(scanlator)
-                val isLocal = scanlator == Constants.LOCAL_SOURCE
-
                 var isFilteredOut = false
+                val scanlators =
+                    if (filtered.isEmpty() && blockedGroups.isEmpty()) emptyList()
+                    else ChapterUtil.getScanlators(scanlator)
 
-                // First check the sources
-                for (source in SOURCES) {
-                    if (
-                        ChapterUtil.filteredBySource(
-                            source,
-                            scanlators,
-                            isMerged,
-                            isLocal,
-                            filtered,
-                        )
-                    ) {
-                        isFilteredOut = true
-                        break
+                if (filtered.isNotEmpty()) {
+                    val isMerged = MergeType.containsMergeSourceName(scanlator)
+                    val isLocal = scanlator == Constants.LOCAL_SOURCE
+
+                    // First check the sources
+                    for (source in SOURCES) {
+                        if (
+                            ChapterUtil.filteredBySource(
+                                source,
+                                scanlators,
+                                isMerged,
+                                isLocal,
+                                filtered,
+                            )
+                        ) {
+                            isFilteredOut = true
+                            break
+                        }
                     }
-                }
 
-                if (!isFilteredOut) {
-                    if (
-                        ChapterUtil.filterByScanlator(
-                            scanlators,
-                            uploader,
-                            scanlatorMatchAll,
-                            filtered,
-                        )
-                    ) {
-                        isFilteredOut = true
+                    if (!isFilteredOut) {
+                        if (
+                            ChapterUtil.filterByScanlator(
+                                scanlators,
+                                uploader,
+                                scanlatorMatchAll,
+                                filtered,
+                            )
+                        ) {
+                            isFilteredOut = true
+                        }
                     }
                 }
 
