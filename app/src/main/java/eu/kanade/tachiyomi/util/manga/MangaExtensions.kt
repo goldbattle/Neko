@@ -144,6 +144,10 @@ fun Manga.toDisplayManga(
     )
 }
 
+// Genre tags / author strings come from a small shared vocabulary; parse each once per process.
+private val genreTagCache = java.util.concurrent.ConcurrentHashMap<String, String>()
+private val authorNamesCache = java.util.concurrent.ConcurrentHashMap<String, List<String>>()
+
 fun LibraryManga.toLibraryMangaItem(): LibraryMangaItem {
 
     val displayManga = this.toDisplayManga()
@@ -165,10 +169,13 @@ fun LibraryManga.toLibraryMangaItem(): LibraryMangaItem {
     val genreList =
         this.genre
             ?.split(",")
-            ?.filter { !it.contains("content rating:", true) }
-            ?.mapNotNull {
-                val tag = it.trim().capitalizeWords()
-                tag.ifBlank { null }
+            ?.mapNotNull { raw ->
+                genreTagCache
+                    .getOrPut(raw) {
+                        if (raw.contains("content rating:", true)) ""
+                        else raw.trim().capitalizeWords()
+                    }
+                    .ifBlank { null }
             } ?: unknownList
 
     val authorList =
@@ -180,9 +187,11 @@ fun LibraryManga.toLibraryMangaItem(): LibraryMangaItem {
                         artist.takeUnless { it.isNullOrBlank() },
                     )
                     .map {
-                        it.split(",", "/", " x ", " - ", ignoreCase = true).mapNotNull { name ->
-                            val author = name.trim()
-                            author.ifBlank { null }
+                        authorNamesCache.getOrPut(it) {
+                            it.split(",", "/", " x ", " - ", ignoreCase = true).mapNotNull { name ->
+                                val author = name.trim()
+                                author.ifBlank { null }
+                            }
                         }
                     }
                     .flatten()
