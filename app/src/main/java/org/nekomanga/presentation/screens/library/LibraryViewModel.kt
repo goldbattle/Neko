@@ -190,6 +190,7 @@ class LibraryViewModel() : ViewModel() {
     private val allTracksFlow =
         trackRepository
             .observeAllTracks()
+            .flowOn(Dispatchers.Default)
             .shareIn(viewModelScope, SharingStarted.WhileSubscribed(5000), 1)
 
     val trackMapFlow: Flow<Map<Long, List<String>>> =
