@@ -16,6 +16,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import coil3.compose.AsyncImage
 import coil3.request.ImageRequest
+import coil3.size.Precision
 import com.zedlabs.pastelplaceholder.Pastel
 import eu.kanade.tachiyomi.data.coil.dynamicCover
 import org.nekomanga.domain.manga.Artwork
@@ -51,7 +52,11 @@ enum class MangaCover(val ratio: Float) {
         val context = LocalContext.current
         val request =
             remember(artwork, dynamicCover) {
-                ImageRequest.Builder(context).data(artwork).dynamicCover(dynamicCover).build()
+                ImageRequest.Builder(context)
+                    .data(artwork)
+                    .dynamicCover(dynamicCover)
+                    .precision(Precision.INEXACT)
+                    .build()
             }
         val placeholderColor = colorResource(color)
         val placeholder = remember(placeholderColor) { ColorPainter(placeholderColor) }
