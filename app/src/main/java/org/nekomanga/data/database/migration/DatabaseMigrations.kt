@@ -67,6 +67,16 @@ object DatabaseMigrations {
                 db.execSQL(
                     "CREATE INDEX IF NOT EXISTS `index_history_last_read` ON `history` (`last_read`)",
                 )
+                // Neko Fast 3.8.13/3.8.14 shipped a different v48 (covering index only): make sure every
+                // v48 database ends with all indexes.
+                for (sql in
+                    listOf(
+                        "CREATE INDEX IF NOT EXISTS `index_chapters_manga_id_read_scanlator_uploader` ON `chapters` (`manga_id`, `read`, `scanlator`, `uploader`)",
+                        "CREATE INDEX IF NOT EXISTS `index_chapters_date_upload` ON `chapters` (`date_upload`)",
+                        "CREATE INDEX IF NOT EXISTS `index_chapters_date_fetch` ON `chapters` (`date_fetch`)",
+                    )) {
+                    db.execSQL(sql)
+                }
             }
         }
 
