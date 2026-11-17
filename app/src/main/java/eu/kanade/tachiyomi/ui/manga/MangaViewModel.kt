@@ -1193,12 +1193,12 @@ class MangaViewModel(val mangaId: Long) : ViewModel() {
     }
 
     private fun createInitialCurrentArtwork(): Artwork {
-        val manga = runBlocking { mangaRepository.getMangaById(mangaId)!!.toMangaItem() }
+        val manga = runBlocking { mangaRepository.getMangaById(mangaId)!! }
         return Artwork(
-            cover = manga.userCover,
-            dynamicCover = manga.dynamicCover,
+            cover = manga.user_cover ?: "",
+            dynamicCover = manga.dynamic_cover ?: "",
             inLibrary = manga.favorite,
-            originalCover = manga.coverUrl,
+            originalCover = manga.thumbnail_url ?: "",
             mangaId = mangaId,
         )
     }
