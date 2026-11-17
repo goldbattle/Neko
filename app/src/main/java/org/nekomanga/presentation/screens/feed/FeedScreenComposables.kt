@@ -3,7 +3,7 @@ package org.nekomanga.presentation.screens.feed
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.ContainedLoadingIndicator
+import org.nekomanga.presentation.screens.DelayedLoadingIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -74,7 +74,7 @@ fun FeedScreenContent(
                     updatesPagingScreenState.offset == 0 &&
                     updatesPagingScreenState.updatesFeedMangaList.isEmpty())
         ) {
-            ContainedLoadingIndicator(modifier = Modifier.align(Alignment.Center))
+            DelayedLoadingIndicator(modifier = Modifier.align(Alignment.Center))
         }
 
         val (feedManga, hasMoreResults) =

@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.ContainedLoadingIndicator
 import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
@@ -426,7 +425,7 @@ private fun EmptyLibrary(
     ) {
         when (emptyType) {
             LibraryEmptyType.Loading -> {
-                ContainedLoadingIndicator()
+                DelayedLoadingIndicator()
             }
             LibraryEmptyType.NoSearchMatches -> {
                 EmptyScreen(
