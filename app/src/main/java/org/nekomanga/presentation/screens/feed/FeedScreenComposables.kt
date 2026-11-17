@@ -62,13 +62,17 @@ fun FeedScreenContent(
     loadNextPage: () -> Unit,
 ) {
     Box(modifier = modifier) {
+        // Only while there is nothing to show yet: a refresh of the first page (offset 0) must not draw the
+        // spinner underneath a list that is already on screen.
         if (
             (feedScreenState.feedScreenType == FeedScreenType.History &&
                 historyPagingScreenState.pageLoading &&
-                historyPagingScreenState.offset == 0) ||
+                historyPagingScreenState.offset == 0 &&
+                historyPagingScreenState.historyFeedMangaList.isEmpty()) ||
                 (feedScreenState.feedScreenType == FeedScreenType.Updates &&
                     updatesPagingScreenState.pageLoading &&
-                    updatesPagingScreenState.offset == 0)
+                    updatesPagingScreenState.offset == 0 &&
+                    updatesPagingScreenState.updatesFeedMangaList.isEmpty())
         ) {
             ContainedLoadingIndicator(modifier = Modifier.align(Alignment.Center))
         }
