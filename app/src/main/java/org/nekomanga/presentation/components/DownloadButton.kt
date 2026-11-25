@@ -83,21 +83,21 @@ fun DownloadButton(
 ) {
     Box(modifier = modifier, contentAlignment = Alignment.Center) {
         var showChapterDropdown by remember { mutableStateOf(false) }
+        var dropdownEverShown by remember { mutableStateOf(false) }
         var isDraining by remember { mutableStateOf(false) }
 
         var downloadComplete by remember { mutableStateOf(false) }
-        var previousDownloadState by remember { mutableStateOf(downloadState) }
-
-        LaunchedEffect(downloadState) {
+        val previousDownloadStateHolder = remember { arrayOf(downloadState) }
+        if (previousDownloadStateHolder[0] != downloadState) {
             if (
-                previousDownloadState == Download.State.DOWNLOADING &&
+                previousDownloadStateHolder[0] == Download.State.DOWNLOADING &&
                     downloadState == Download.State.DOWNLOADED
             ) {
                 downloadComplete = true
             } else if (downloadState == Download.State.NOT_DOWNLOADED) {
                 downloadComplete = false
             }
-            previousDownloadState = downloadState
+            previousDownloadStateHolder[0] = downloadState
         }
 
         val downloadButtonLabel = stringResource(R.string.download)
@@ -106,7 +106,14 @@ fun DownloadButton(
         val queueDescription = stringResource(R.string.download_queue)
         val percentFormatter = remember { NumberFormat.getPercentInstance() }
         val downloadingDescription =
-            stringResource(R.string.downloading_, percentFormatter.format(downloadProgress / 100f))
+            if (downloadState == Download.State.DOWNLOADING) {
+                stringResource(
+                    R.string.downloading_,
+                    percentFormatter.format(downloadProgress / 100f),
+                )
+            } else {
+                ""
+            }
         val downloadedDescription = stringResource(R.string.downloaded)
         val errorDescription = stringResource(R.string.download_error)
 
@@ -116,7 +123,10 @@ fun DownloadButton(
                         when (downloadState) {
                             Download.State.NOT_DOWNLOADED ->
                                 onClick(MangaConstants.DownloadAction.Download)
-                            else -> showChapterDropdown = true
+                            else -> {
+                                dropdownEverShown = true
+                                showChapterDropdown = true
+                            }
                         }
                     },
                     role = Role.Button,
@@ -175,59 +185,61 @@ fun DownloadButton(
                 )
         }
 
-        val scope = rememberCoroutineScope()
-        val dropDownItems =
-            when (downloadState) {
-                Download.State.DOWNLOADED -> {
-                    listOf(
-                        SimpleDropDownItem.Action(
-                            text = UiText.StringResource(R.string.remove),
-                            onClick = { isDraining = true },
-                        ),
-                    )
+        if (dropdownEverShown) {
+            val scope = rememberCoroutineScope()
+            val dropDownItems =
+                when (downloadState) {
+                    Download.State.DOWNLOADED -> {
+                        listOf(
+                            SimpleDropDownItem.Action(
+                                text = UiText.StringResource(R.string.remove),
+                                onClick = { isDraining = true },
+                            ),
+                        )
+                    }
+                    Download.State.ERROR -> {
+                        listOf(
+                            SimpleDropDownItem.Action(
+                                text = UiText.StringResource(R.string.cancel),
+                                onClick = {
+                                    scope.launchDelayed {
+                                        onClick(MangaConstants.DownloadAction.Cancel)
+                                    }
+                                },
+                            ),
+                        )
+                    }
+                    Download.State.QUEUE,
+                    Download.State.DOWNLOADING -> {
+                        listOf(
+                            SimpleDropDownItem.Action(
+                                text = UiText.StringResource(R.string.start_downloading_now),
+                                onClick = {
+                                    scope.launchDelayed {
+                                        onClick(MangaConstants.DownloadAction.ImmediateDownload)
+                                    }
+                                },
+                            ),
+                            SimpleDropDownItem.Action(
+                                text = UiText.StringResource(R.string.cancel),
+                                onClick = {
+                                    scope.launchDelayed {
+                                        onClick(MangaConstants.DownloadAction.Cancel)
+                                    }
+                                },
+                            ),
+                        )
+                    }
+                    Download.State.NOT_DOWNLOADED -> listOf()
                 }
-                Download.State.ERROR -> {
-                    listOf(
-                        SimpleDropDownItem.Action(
-                            text = UiText.StringResource(R.string.cancel),
-                            onClick = {
-                                scope.launchDelayed {
-                                    onClick(MangaConstants.DownloadAction.Cancel)
-                                }
-                            },
-                        ),
-                    )
-                }
-                Download.State.QUEUE,
-                Download.State.DOWNLOADING -> {
-                    listOf(
-                        SimpleDropDownItem.Action(
-                            text = UiText.StringResource(R.string.start_downloading_now),
-                            onClick = {
-                                scope.launchDelayed {
-                                    onClick(MangaConstants.DownloadAction.ImmediateDownload)
-                                }
-                            },
-                        ),
-                        SimpleDropDownItem.Action(
-                            text = UiText.StringResource(R.string.cancel),
-                            onClick = {
-                                scope.launchDelayed {
-                                    onClick(MangaConstants.DownloadAction.Cancel)
-                                }
-                            },
-                        ),
-                    )
-                }
-                Download.State.NOT_DOWNLOADED -> listOf()
-            }
 
-        SimpleDropdownMenu(
-            expanded = showChapterDropdown,
-            themeColorState = themeColorState,
-            onDismiss = { showChapterDropdown = false },
-            dropDownItems = dropDownItems,
-        )
+            SimpleDropdownMenu(
+                expanded = showChapterDropdown,
+                themeColorState = themeColorState,
+                onDismiss = { showChapterDropdown = false },
+                dropDownItems = dropDownItems,
+            )
+        }
     }
 }
 

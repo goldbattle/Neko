@@ -15,6 +15,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -161,7 +162,7 @@ fun FeedChapterTitleLine(
             Gap(Size.extraTiny)
         }
         if (language.isNotEmpty() && !language.equals("en", true)) {
-            val lang = MdLang.fromIsoCode(language)
+            val lang = remember(language) { MdLang.fromIsoCode(language) }
             val iconRes = lang?.iconResId
 
             when (iconRes == null) {
@@ -169,11 +170,10 @@ fun FeedChapterTitleLine(
                     TimberKt.e { "Missing flag for $language" }
                 }
                 false -> {
-                    val painter =
-                        rememberDrawablePainter(
-                            drawable =
-                                AppCompatResources.getDrawable(LocalContext.current, iconRes),
-                        )
+                    val res: Int = iconRes
+                    val context = LocalContext.current
+                    val drawable = remember(res) { AppCompatResources.getDrawable(context, res) }
+                    val painter = rememberDrawablePainter(drawable = drawable)
                     Image(
                         painter = painter,
                         modifier =

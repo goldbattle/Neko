@@ -30788,3 +30788,7 @@ HSPLuy/kohesive/injekt/registry/default/DefaultRegistrar$addSingletonFactory$1;-
 HSPLuy/kohesive/injekt/registry/default/DefaultRegistrar$addSingletonFactory$1;->invoke()Ljava/lang/Object;
 Luy/kohesive/injekt/registry/default/DefaultRegistrar$threadedValues$1;
 HSPLuy/kohesive/injekt/registry/default/DefaultRegistrar$threadedValues$1;-><init>()V
+HSPLorg/nekomanga/**->**(**)**
+HSPLeu/kanade/**->**(**)**
+Lorg/nekomanga/**;
+Leu/kanade/**;

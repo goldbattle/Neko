@@ -10,6 +10,7 @@ import io.github.g00fy2.versioncompare.Version
 import java.util.Date
 import java.util.concurrent.TimeUnit
 import kotlinx.serialization.json.Json
+import okhttp3.CookieJar
 import org.nekomanga.BuildConfig
 import org.nekomanga.core.network.GET
 import tachiyomi.core.network.await
@@ -25,6 +26,12 @@ class AppUpdateChecker {
     private val json: Json by injectLazy()
 
     private val context: Context by lazy { Injekt.get<Application>().applicationContext }
+
+    // GitHub API needs no cookies; the default jar is WebView's CookieManager, which loads
+    // Chromium.
+    private val client by lazy {
+        networkService.client.newBuilder().cookieJar(CookieJar.NO_COOKIES).build()
+    }
 
     suspend fun checkForUpdate(
         isUserPrompt: Boolean = false,
@@ -42,20 +49,16 @@ class AppUpdateChecker {
         return withIOContext {
             val result =
                 with(json) {
-                    networkService.client
-                        .newCall(GET(LATEST_RELEASE_URL))
-                        .await()
-                        .parseAs<GithubRelease>()
-                        .let {
-                            preferences.lastAppCheck().set(Date().time)
+                    client.newCall(GET(LATEST_RELEASE_URL)).await().parseAs<GithubRelease>().let {
+                        preferences.lastAppCheck().set(Date().time)
 
-                            // Check if latest version is different from current version
-                            if (Version(it.version).isHigherThan(BuildConfig.VERSION_NAME)) {
-                                AppUpdateResult.NewUpdate(it)
-                            } else {
-                                AppUpdateResult.NoNewUpdate
-                            }
+                        // Check if latest version is different from current version
+                        if (Version(it.version).isHigherThan(BuildConfig.VERSION_NAME)) {
+                            AppUpdateResult.NewUpdate(it)
+                        } else {
+                            AppUpdateResult.NoNewUpdate
                         }
+                    }
                 }
             if (doExtrasAfterNewUpdate && result is AppUpdateResult.NewUpdate) {
                 if (

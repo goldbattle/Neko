@@ -14,11 +14,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import kotlinx.coroutines.delay
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
+import kotlinx.coroutines.delay
 import org.nekomanga.presentation.theme.ThemeConfig
 import org.nekomanga.presentation.theme.ThemeConfigProvider
 import org.nekomanga.presentation.theme.ThemedPreviews
@@ -33,8 +33,9 @@ fun LoadingScreen(showLoadingIcon: Boolean = true) {
 }
 
 /**
- * Spinner for list screens that are about to show content: invisible for the first [delayMs] (so a quick load or a
- * tab crossfade never flashes a spinner under content), then fades in only if loading is genuinely slow.
+ * Spinner for list screens that are about to show content: invisible for the first [delayMs] (so a
+ * quick load or a tab crossfade never flashes a spinner under content), then fades in only if
+ * loading is genuinely slow.
  */
 @Composable
 fun DelayedLoadingIndicator(modifier: Modifier = Modifier, delayMs: Long = 600) {

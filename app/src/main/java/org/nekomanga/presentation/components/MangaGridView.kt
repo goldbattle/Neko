@@ -318,25 +318,23 @@ fun BoxScope.CompactGridItem(
         modifier = modifier,
     )
 
+    val gradientBrush = remember {
+        Brush.verticalGradient(
+            colors =
+                listOf(
+                    Color.Transparent,
+                    Color.Black.copy(NekoColors.veryLowContrast),
+                    Color.Black.copy(NekoColors.highAlphaLowContrast),
+                ),
+        )
+    }
+    val gradientShape = remember {
+        RoundedCornerShape(bottomStart = Shapes.coverRadius, bottomEnd = Shapes.coverRadius)
+    }
+
     Box(
         modifier =
-            Modifier.background(
-                    brush =
-                        Brush.verticalGradient(
-                            colors =
-                                listOf(
-                                    Color.Transparent,
-                                    Color.Black.copy(NekoColors.veryLowContrast),
-                                    Color.Black.copy(NekoColors.highAlphaLowContrast),
-                                ),
-                        ),
-                    shape =
-                        RoundedCornerShape(
-                            bottomStart = Shapes.coverRadius,
-                            bottomEnd = Shapes.coverRadius,
-                        ),
-                )
-                .matchParentSize(),
+            Modifier.background(brush = gradientBrush, shape = gradientShape).matchParentSize(),
     ) {
         Column(modifier = Modifier.fillMaxWidth().align(Alignment.BottomStart)) {
             MangaGridTitle(

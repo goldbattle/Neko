@@ -49,8 +49,7 @@ fun UpdatesCard(
 ) {
     val icon =
         rememberVectorPainter(
-            if (chapterItem.chapter.read) Icons.Default.VisibilityOff
-            else Icons.Default.Visibility,
+            if (chapterItem.chapter.read) Icons.Default.VisibilityOff else Icons.Default.Visibility,
         )
     val secondary = MaterialTheme.colorScheme.secondary
     val endSwipeActions =
@@ -60,7 +59,7 @@ fun UpdatesCard(
                     icon = icon,
                     background = secondary,
                     onSwipe = { chapterSwipe(chapterItem) },
-                )
+                ),
             )
         }
 
@@ -138,9 +137,10 @@ private fun UpdatesRow(
                 style = MaterialTheme.typography.bodyMedium,
                 textColor = updatedColor,
             )
-            val date = (updateDate ?: chapterItem.chapter.dateUpload).timeSpanFromNow
+            val dateUpload = updateDate ?: chapterItem.chapter.dateUpload
+            val updatedText = remember(dateUpload) { "Updated ${dateUpload.timeSpanFromNow}" }
             Text(
-                text = "Updated $date",
+                text = updatedText,
                 style = MaterialTheme.typography.labelSmall,
                 color = updatedColor,
                 maxLines = 1,
@@ -148,8 +148,9 @@ private fun UpdatesRow(
             )
 
             if (isGrouped && numberOfChapters > 1) {
+                val totalText = remember(numberOfChapters) { "$numberOfChapters total chapters" }
                 Text(
-                    text = "$numberOfChapters total chapters",
+                    text = totalText,
                     style = MaterialTheme.typography.labelSmall,
                     color = updatedColor,
                     maxLines = 1,

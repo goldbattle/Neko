@@ -10,9 +10,6 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.os.Build
-import android.os.Handler
-import android.os.Looper
-import android.webkit.CookieManager
 import android.webkit.WebView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatDelegate
@@ -97,22 +94,16 @@ open class App : Application(), DefaultLifecycleObserver, SingletonImageLoader.F
             }
         }
 
-        // Warm up WebView (loads its native lib, ~seconds) off the main thread; only used to warn if missing.
-        Thread {
-                kotlin
-                    .runCatching { CookieManager.getInstance() }
-                    .onFailure {
-                        Handler(Looper.getMainLooper()).post {
-                            Toast.makeText(
-                                    applicationContext,
-                                    "Error! App requires WebView to be installed",
-                                    Toast.LENGTH_LONG,
-                                )
-                                .show()
-                        }
-                    }
-            }
-            .start()
+        // Only warn if WebView is missing; getCurrentWebViewPackage() does not load the WebView
+        // native lib.
+        if (kotlin.runCatching { WebView.getCurrentWebViewPackage() }.getOrNull() == null) {
+            Toast.makeText(
+                    applicationContext,
+                    "Error! App requires WebView to be installed",
+                    Toast.LENGTH_LONG,
+                )
+                .show()
+        }
 
         // TLS 1.3 support for Android < 10
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
@@ -231,9 +222,9 @@ open class App : Application(), DefaultLifecycleObserver, SingletonImageLoader.F
             }
         }
 
-        // Prewarm the mapping DB off the cold-start path
+        // Prewarm the mapping DB off the cold-start path (runs after the cold-start library load)
         ProcessLifecycleOwner.get().lifecycleScope.launchIO {
-            delay(3000)
+            delay(9000)
             runCatching { Injekt.get<MangaMappings>().prewarm() }
         }
     }
@@ -257,11 +248,10 @@ open class App : Application(), DefaultLifecycleObserver, SingletonImageLoader.F
     override fun getPackageName(): String {
         try {
             // Override the value passed as X-Requested-With in WebView requests
-            val stackTrace = Looper.getMainLooper().thread.stackTrace
+            val stackTrace = Throwable().stackTrace
             val isChromiumCall = stackTrace.any { trace ->
-                trace.className.lowercase() in
-                    setOf("org.chromium.base.buildinfo", "org.chromium.base.apkinfo") &&
-                    trace.methodName.lowercase() in setOf("getall", "getpackagename", "<init>")
+                trace.className.lowercase() in CHROMIUM_CLASSES &&
+                    trace.methodName.lowercase() in CHROMIUM_METHODS
             }
 
             if (isChromiumCall) return WebViewUtil.spoofedPackageName(applicationContext)
@@ -270,6 +260,12 @@ open class App : Application(), DefaultLifecycleObserver, SingletonImageLoader.F
         }
 
         return super.getPackageName()
+    }
+
+    private companion object {
+        private val CHROMIUM_CLASSES =
+            setOf("org.chromium.base.buildinfo", "org.chromium.base.apkinfo")
+        private val CHROMIUM_METHODS = setOf("getall", "getpackagename", "<init>")
     }
 
     override fun newImageLoader(context: Context) = coilImageLoader(context)

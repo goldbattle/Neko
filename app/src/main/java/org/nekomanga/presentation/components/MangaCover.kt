@@ -17,11 +17,14 @@ import androidx.compose.ui.res.colorResource
 import coil3.compose.AsyncImage
 import coil3.request.ImageRequest
 import coil3.size.Precision
+import coil3.size.Size as CoilSize
 import com.zedlabs.pastelplaceholder.Pastel
 import eu.kanade.tachiyomi.data.coil.dynamicCover
 import org.nekomanga.domain.manga.Artwork
 import org.nekomanga.presentation.extensions.conditional
 import org.nekomanga.presentation.theme.Shapes
+
+private val CoverShape = RoundedCornerShape(Shapes.coverRadius)
 
 /**
  * Taken from main app then modified
@@ -36,7 +39,7 @@ enum class MangaCover(val ratio: Float) {
         modifier: Modifier = Modifier,
         artwork: Artwork,
         contentDescription: String = "",
-        shape: Shape = RoundedCornerShape(Shapes.coverRadius),
+        shape: Shape = CoverShape,
         shouldOutlineCover: Boolean = true,
         dynamicCover: Boolean,
         shoulderOverlayCover: Boolean = false,
@@ -56,6 +59,7 @@ enum class MangaCover(val ratio: Float) {
                     .data(artwork)
                     .dynamicCover(dynamicCover)
                     .precision(Precision.INEXACT)
+                    .size(CoilSize.ORIGINAL)
                     .build()
             }
         val placeholderColor = colorResource(color)
@@ -77,7 +81,7 @@ enum class MangaCover(val ratio: Float) {
                             this.border(
                                 width = Outline.thickness,
                                 color = Outline.color,
-                                shape = RoundedCornerShape(Shapes.coverRadius),
+                                shape = CoverShape,
                             )
                         },
                     ),

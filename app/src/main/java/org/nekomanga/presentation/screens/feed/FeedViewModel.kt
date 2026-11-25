@@ -12,6 +12,7 @@ import eu.kanade.tachiyomi.data.preference.PreferencesHelper
 import eu.kanade.tachiyomi.ui.manga.MangaConstants
 import eu.kanade.tachiyomi.util.system.launchIO
 import eu.kanade.tachiyomi.util.system.launchNonCancellable
+import java.util.concurrent.atomic.AtomicBoolean
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -90,6 +91,9 @@ class FeedViewModel() : ViewModel() {
 
     private var searchJob: Job? = null
 
+    private val summaryPreloadStarted = AtomicBoolean(false)
+    private val historyPreloadStarted = AtomicBoolean(false)
+
     private val updatesPaginator =
         DefaultPaginator(
             initialKey = _updatesScreenPagingState.value.offset,
@@ -124,6 +128,13 @@ class FeedViewModel() : ViewModel() {
                                 (state.updatesFeedMangaList + items).toList()
                             },
                     )
+                }
+                // Deferred history preload: once, after the first Updates page is shown.
+                if (
+                    _historyScreenPagingState.value.historyFeedMangaList.isEmpty() &&
+                        historyPreloadStarted.compareAndSet(false, true)
+                ) {
+                    viewModelScope.launchIO { historyPaginator.loadNextItems() }
                 }
             },
         )
@@ -178,6 +189,8 @@ class FeedViewModel() : ViewModel() {
                             },
                     )
                 }
+                // Deferred summary preload: start once, after the first History page is shown.
+                if (summaryPreloadStarted.compareAndSet(false, true)) loadSummaryPage()
             },
         )
 
@@ -259,6 +272,18 @@ class FeedViewModel() : ViewModel() {
         }
 
         preferences.feedViewType().changes().observeAndUpdate(viewModelScope) { type ->
+            val alreadyLoaded =
+                when (type) {
+                    FeedScreenType.History ->
+                        _historyScreenPagingState.value.historyFeedMangaList.isNotEmpty()
+                    FeedScreenType.Updates ->
+                        _updatesScreenPagingState.value.updatesFeedMangaList.isNotEmpty()
+                    FeedScreenType.Summary -> false
+                }
+            if (alreadyLoaded) {
+                _feedScreenState.update { state -> state.copy(feedScreenType = type) }
+                return@observeAndUpdate
+            }
             when (type) {
                 FeedScreenType.Summary -> Unit
                 FeedScreenType.History -> {
@@ -1141,7 +1166,6 @@ class FeedViewModel() : ViewModel() {
             lastContinueReadingList = null
             lastSummaryNewlyAddedFeedMangaList = null
         }
-        viewModelScope.launchIO { loadSummaryPage() }
         if (!skipUpdatesRefresh) viewModelScope.launchIO { refreshUpdatesFeed() }
         if (!skipHistoryRefresh) viewModelScope.launchIO { refreshHistoryFeed() }
     }

@@ -1,10 +1,9 @@
 package org.nekomanga.presentation.screens.manga
 
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import eu.kanade.tachiyomi.ui.manga.MangaConstants
 import eu.kanade.tachiyomi.ui.manga.MangaConstants.ChapterActions
 import org.nekomanga.domain.chapter.ChapterItem
@@ -36,7 +35,12 @@ fun MangaChapterListItem(
         }
 
     ExpressiveListCard(
-        modifier = Modifier.padding(horizontal = Size.small),
+        modifier =
+            Modifier.padding(
+                start = Size.small,
+                end = Size.small,
+                bottom = if (listCardType != ListCardType.Bottom) Size.tiny else 0.dp,
+            ),
         listCardType = listCardType,
         themeColorState = themeColorState,
     ) {
@@ -55,8 +59,5 @@ fun MangaChapterListItem(
             swipeRightAction = swipeRightAction,
             swipeLeftAction = swipeLeftAction,
         )
-    }
-    if (listCardType != ListCardType.Bottom) {
-        Spacer(modifier = Modifier.size(Size.tiny))
     }
 }

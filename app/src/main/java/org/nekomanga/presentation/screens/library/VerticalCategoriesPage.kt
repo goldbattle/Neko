@@ -26,6 +26,7 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.snapshotFlow
@@ -46,6 +47,7 @@ import eu.kanade.tachiyomi.data.coil.dynamicCover
 import jp.wasabeef.gap.Gap
 import kotlinx.coroutines.flow.distinctUntilChanged
 import org.nekomanga.domain.category.CategoryItem
+import org.nekomanga.domain.manga.DisplayManga
 import org.nekomanga.domain.manga.LibraryMangaItem
 import org.nekomanga.presentation.components.MangaGridItem
 import org.nekomanga.presentation.components.MangaRow
@@ -152,7 +154,7 @@ fun VerticalCategoriesPage(
                                 .data(item.displayManga.currentArtwork)
                                 .dynamicCover(displayOptions.dynamicCovers)
                                 .size(CoilSize.ORIGINAL)
-                                .build()
+                                .build(),
                         )
                     }
                 }
@@ -167,7 +169,10 @@ fun VerticalCategoriesPage(
         verticalArrangement = Arrangement.spacedBy(0.dp),
     ) {
         libraryScreenState.items.forEach { item ->
-            item(key = "header-${item.categoryItem.name}-${item.categoryItem.id}") {
+            item(
+                key = "header-${item.categoryItem.name}-${item.categoryItem.id}",
+                contentType = "library-header",
+            ) {
                 LibraryCategoryHeader(
                     categoryItem = item.categoryItem,
                     useVividColorHeaders = libraryScreenState.useVividColorHeaders,
@@ -210,6 +215,7 @@ fun VerticalCategoriesPage(
                         itemsIndexed(
                             items = chunks,
                             key = { index, _ -> "grid-row-${item.categoryItem.id}-$index" },
+                            contentType = { _, _ -> "library-grid-row" },
                         ) { _, rowItems ->
                             RowGrid(
                                 rowItems = rowItems,
@@ -230,6 +236,7 @@ fun VerticalCategoriesPage(
                             key = { _, libraryItem ->
                                 "list-${item.categoryItem.name}-${libraryItem.displayManga.mangaId}"
                             },
+                            contentType = { _, _ -> "library-list-row" },
                         ) { index, libraryItem ->
                             ListItem(
                                 index = index,
@@ -265,30 +272,46 @@ private fun RowGrid(
         horizontalArrangement = Arrangement.spacedBy(Size.small),
     ) {
         rowItems.forEach { libraryItem ->
-            MangaGridItem(
-                displayManga = libraryItem.displayManga,
-                showUnreadBadge = displayOptions.showUnreadBadges,
-                unreadCount = libraryItem.unreadCount,
-                showDownloadBadge = displayOptions.showDownloadBadges,
-                downloadCount = libraryItem.downloadCount,
-                shouldOutlineCover = displayOptions.outlineCovers,
-                dynamicCover = displayOptions.dynamicCovers,
-                isComfortable = isComfortableGrid,
-                isSelected = libraryItem.displayManga.mangaId in selectedSet,
-                showStartReadingButton =
-                    displayOptions.showStartReadingButton && libraryItem.unreadCount > 0,
-                onStartReadingClick = {
-                    libraryScreenActions.mangaStartReadingClick(libraryItem.displayManga.mangaId)
-                },
-                onClick = { _ ->
-                    if (selectedSet.isNotEmpty()) {
-                        libraryScreenActions.mangaLongClick(libraryItem)
-                    } else {
-                        libraryScreenActions.mangaClick(libraryItem.displayManga.mangaId)
+            key(libraryItem.displayManga.mangaId) {
+                val onStartReadingClick: () -> Unit =
+                    remember(libraryItem, libraryScreenActions) {
+                        {
+                            libraryScreenActions.mangaStartReadingClick(
+                                libraryItem.displayManga.mangaId,
+                            )
+                        }
                     }
-                },
-                onLongClick = { _ -> libraryScreenActions.mangaLongClick(libraryItem) },
-            )
+                val onItemClick: (Long) -> Unit =
+                    remember(libraryItem, selectedSet, libraryScreenActions) {
+                        { _: Long ->
+                            if (selectedSet.isNotEmpty()) {
+                                libraryScreenActions.mangaLongClick(libraryItem)
+                            } else {
+                                libraryScreenActions.mangaClick(libraryItem.displayManga.mangaId)
+                            }
+                        }
+                    }
+                val onItemLongClick: (DisplayManga) -> Unit =
+                    remember(libraryItem, libraryScreenActions) {
+                        { _: DisplayManga -> libraryScreenActions.mangaLongClick(libraryItem) }
+                    }
+                MangaGridItem(
+                    displayManga = libraryItem.displayManga,
+                    showUnreadBadge = displayOptions.showUnreadBadges,
+                    unreadCount = libraryItem.unreadCount,
+                    showDownloadBadge = displayOptions.showDownloadBadges,
+                    downloadCount = libraryItem.downloadCount,
+                    shouldOutlineCover = displayOptions.outlineCovers,
+                    dynamicCover = displayOptions.dynamicCovers,
+                    isComfortable = isComfortableGrid,
+                    isSelected = libraryItem.displayManga.mangaId in selectedSet,
+                    showStartReadingButton =
+                        displayOptions.showStartReadingButton && libraryItem.unreadCount > 0,
+                    onStartReadingClick = onStartReadingClick,
+                    onClick = onItemClick,
+                    onLongClick = onItemLongClick,
+                )
+            }
         }
     }
 }

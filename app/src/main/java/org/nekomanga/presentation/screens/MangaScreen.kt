@@ -16,6 +16,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material3.LocalRippleConfiguration
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.SnackbarHostState
@@ -25,6 +26,7 @@ import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -69,6 +71,7 @@ import eu.kanade.tachiyomi.util.system.sharedCacheDir
 import eu.kanade.tachiyomi.util.system.toast
 import eu.kanade.tachiyomi.util.system.withUIContext
 import java.text.DateFormat
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.nekomanga.R
 import org.nekomanga.constants.MdConstants
@@ -176,13 +179,11 @@ fun MangaScreen(
                 altTitleResetClick = { mangaViewModel.setAltTitle(null) },
             ),
         generatePalette = { drawable ->
-            val bitmap = drawable.toBitmap()
-            Palette.from(bitmap).generate {
-                it ?: return@generate
-                scope.launch {
-                    val vibrantColor = it.getBestColor() ?: return@launch
-                    mangaViewModel.updateMangaColor(vibrantColor)
-                }
+            scope.launch(Dispatchers.Default) {
+                val bitmap = drawable.toBitmap()
+                val palette = Palette.from(bitmap).generate()
+                val vibrantColor = palette.getBestColor() ?: return@launch
+                mangaViewModel.updateMangaColor(vibrantColor)
             }
         },
         onToggleFavorite = mangaViewModel::toggleFavorite,
@@ -525,42 +526,46 @@ private fun MangaScreenWrapper(
             )
         },
     ) { contentPadding ->
-        if (isTablet) {
-            SideBySideLayout(
-                incomingContentPadding = contentPadding,
-                screenState = screenState,
-                windowSizeClass = windowSizeClass,
-                themeColorState = themeColorState,
-                chapterActions = chapterActions,
-                informationActions = informationActions,
-                descriptionActions = descriptionActions,
-                onSimilarClick = onSimilarClick,
-                onShareClick = onShareClick,
-                onToggleFavorite = onToggleFavoriteAction,
-                generatePalette = generatePalette,
-                onOpenSheet = ::openSheet,
-                categoryActions = categoryActions,
-                onBookmark = onBookmark,
-                onRead = onRead,
-            )
-        } else {
-            VerticalLayout(
-                incomingContentPadding = contentPadding,
-                screenState = screenState,
-                windowSizeClass = windowSizeClass,
-                themeColorState = themeColorState,
-                chapterActions = chapterActions,
-                informationActions = informationActions,
-                descriptionActions = descriptionActions,
-                onSimilarClick = onSimilarClick,
-                onShareClick = onShareClick,
-                onToggleFavorite = onToggleFavoriteAction,
-                generatePalette = generatePalette,
-                onOpenSheet = ::openSheet,
-                categoryActions = categoryActions,
-                onBookmark = onBookmark,
-                onRead = onRead,
-            )
+        CompositionLocalProvider(
+            LocalRippleConfiguration provides themeColorState.rippleConfiguration,
+        ) {
+            if (isTablet) {
+                SideBySideLayout(
+                    incomingContentPadding = contentPadding,
+                    screenState = screenState,
+                    windowSizeClass = windowSizeClass,
+                    themeColorState = themeColorState,
+                    chapterActions = chapterActions,
+                    informationActions = informationActions,
+                    descriptionActions = descriptionActions,
+                    onSimilarClick = onSimilarClick,
+                    onShareClick = onShareClick,
+                    onToggleFavorite = onToggleFavoriteAction,
+                    generatePalette = generatePalette,
+                    onOpenSheet = ::openSheet,
+                    categoryActions = categoryActions,
+                    onBookmark = onBookmark,
+                    onRead = onRead,
+                )
+            } else {
+                VerticalLayout(
+                    incomingContentPadding = contentPadding,
+                    screenState = screenState,
+                    windowSizeClass = windowSizeClass,
+                    themeColorState = themeColorState,
+                    chapterActions = chapterActions,
+                    informationActions = informationActions,
+                    descriptionActions = descriptionActions,
+                    onSimilarClick = onSimilarClick,
+                    onShareClick = onShareClick,
+                    onToggleFavorite = onToggleFavoriteAction,
+                    generatePalette = generatePalette,
+                    onOpenSheet = ::openSheet,
+                    categoryActions = categoryActions,
+                    onBookmark = onBookmark,
+                    onRead = onRead,
+                )
+            }
         }
 
         if (screenState.general.removedChapters.isNotEmpty()) {
@@ -595,6 +600,11 @@ private fun LazyListScope.chapterList(
         )
     }
 
+    val hideChapterTitles =
+        screenState.chapters.chapterFilter.hideChapterTitles == ToggleableState.On
+    val swipeRightAction = screenState.general.chapterSwipeRightAction
+    val swipeLeftAction = screenState.general.chapterSwipeLeftAction
+
     itemsIndexed(
         items = chapters,
         key = { _, chapter -> chapter.chapter.id },
@@ -605,13 +615,12 @@ private fun LazyListScope.chapterList(
             chapterItem = chapterItem,
             count = chapters.size,
             themeColorState = themeColorState,
-            shouldHideChapterTitles =
-                screenState.chapters.chapterFilter.hideChapterTitles == ToggleableState.On,
+            shouldHideChapterTitles = hideChapterTitles,
             chapterActions = chapterActions,
             onBookmark = onBookmark,
             onRead = onRead,
-            swipeRightAction = screenState.general.chapterSwipeRightAction,
-            swipeLeftAction = screenState.general.chapterSwipeLeftAction,
+            swipeRightAction = swipeRightAction,
+            swipeLeftAction = swipeLeftAction,
         )
     }
 }

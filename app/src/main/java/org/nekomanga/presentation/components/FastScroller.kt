@@ -29,6 +29,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
@@ -68,254 +69,274 @@ fun VerticalFastScroller(
     endContentPadding: Dp = Dp.Hairline,
     content: @Composable () -> Unit,
 ) {
+    val contentHeightState = remember { mutableIntStateOf(0) }
+    val scrollerContent: @Composable () -> Unit =
+        remember(
+            listState,
+            thumbAllowed,
+            thumbColor,
+            topContentPadding,
+            bottomContentPadding,
+            endContentPadding,
+        ) {
+            @Composable
+            scroller@{
+                val contentHeight = contentHeightState.intValue
+                val beforeContentPaddingPx = with(LocalDensity.current) { topContentPadding.toPx() }
+                val afterContentPaddingPx =
+                    with(LocalDensity.current) { bottomContentPadding.toPx() }
+                val thumbTopPadding = with(LocalDensity.current) { topContentPadding.toPx() }
+                val thumbBottomPadding = with(LocalDensity.current) { bottomContentPadding.toPx() }
+
+                val heightPx =
+                    contentHeight.toFloat() -
+                        thumbTopPadding -
+                        thumbBottomPadding -
+                        afterContentPaddingPx
+                val thumbHeightPx = with(LocalDensity.current) { ThumbLength.toPx() }
+                val trackHeightPx = heightPx - thumbHeightPx
+                val scrollHeightPx =
+                    contentHeight.toFloat() -
+                        beforeContentPaddingPx -
+                        afterContentPaddingPx -
+                        thumbBottomPadding
+
+                val showScrollerState = remember {
+                    derivedStateOf {
+                        val layout = listState.layoutInfo
+                        layout.visibleItemsInfo.isNotEmpty() && layout.totalItemsCount > 0
+                    }
+                }
+                if (!showScrollerState.value) return@scroller
+
+                var thumbOffsetY by remember { mutableFloatStateOf(thumbTopPadding) }
+
+                val dragInteractionSource = remember { MutableInteractionSource() }
+                val isThumbDragged by dragInteractionSource.collectIsDraggedAsState()
+                val scrolled = remember {
+                    MutableSharedFlow<Unit>(
+                        extraBufferCapacity = 1,
+                        onBufferOverflow = BufferOverflow.DROP_OLDEST,
+                    )
+                }
+
+                val scrolling = listState.isScrollInProgress
+                val scrollStateTracker = remember { MutableData(scrolling) }
+                val stableScrollInProgress = scrollStateTracker.value || scrolling
+                scrollStateTracker.value = scrolling
+                val anyScrollInProgress = stableScrollInProgress || isThumbDragged
+
+                val maxRemainingSections = remember { MutableData(0f) }
+                val estimateConfidence = remember { MutableData(0f) }
+                val layoutChangeTracker = remember { MutableData(0f) }
+
+                // Defer Compose state read using snapshotFlow instead of triggering
+                // LaunchedEffect on every scroll tick
+                val isThumbDraggedState = rememberUpdatedState(isThumbDragged)
+                val trackHeightPxState = rememberUpdatedState(trackHeightPx)
+                val thumbTopPaddingState = rememberUpdatedState(thumbTopPadding)
+                val stableScrollInProgressState = rememberUpdatedState(stableScrollInProgress)
+                val scrollHeightPxState = rememberUpdatedState(scrollHeightPx)
+
+                LaunchedEffect(listState) {
+                    snapshotFlow {
+                        val layout = listState.layoutInfo
+                        if (layout.visibleItemsInfo.isEmpty() || layout.totalItemsCount == 0) {
+                            null
+                        } else {
+                            val visibleItems = layout.visibleItemsInfo
+                            val topItem =
+                                visibleItems.fastFirstOrNull { it.bottom >= 0 }
+                                    ?: visibleItems.firstOrNull()
+                            val bottomItemInner =
+                                visibleItems.fastLastOrNull { it.top <= scrollHeightPxState.value }
+                                    ?: visibleItems.lastOrNull()
+
+                            if (topItem == null || bottomItemInner == null) {
+                                null
+                            } else {
+                                val topHiddenProportion =
+                                    -1f * topItem.top / topItem.size.coerceAtLeast(1)
+                                val bottomHiddenProportion =
+                                    (bottomItemInner.bottom - scrollHeightPxState.value) /
+                                        bottomItemInner.size.coerceAtLeast(1)
+                                val remainingSectionsLocal =
+                                    bottomHiddenProportion +
+                                        (layout.totalItemsCount - (bottomItemInner.index + 1))
+                                val previousSections = topHiddenProportion + topItem.index
+                                val scrollableSections = previousSections + remainingSectionsLocal
+
+                                FastScrollerState(
+                                    isThumbDragged = isThumbDraggedState.value,
+                                    remainingSectionsLocal = remainingSectionsLocal,
+                                    scrollableSections = scrollableSections,
+                                    stableScrollInProgress = stableScrollInProgressState.value,
+                                    trackHeightPx = trackHeightPxState.value,
+                                    thumbTopPadding = thumbTopPaddingState.value,
+                                )
+                            }
+                        }
+                    }
+                        .collectLatest { snapshot ->
+                            if (snapshot == null || snapshot.isThumbDragged) return@collectLatest
+
+                            val anyScrollInProgressInner =
+                                snapshot.stableScrollInProgress || snapshot.isThumbDragged
+                            val layoutChanged =
+                                !anyScrollInProgressInner &&
+                                    abs(
+                                        layoutChangeTracker.value - snapshot.scrollableSections,
+                                    ) > 0.1
+                            layoutChangeTracker.value = snapshot.scrollableSections
+
+                            if (layoutChanged) {
+                                estimateConfidence.value = snapshot.remainingSectionsLocal
+                            }
+                            estimateConfidence.value =
+                                max(estimateConfidence.value, snapshot.remainingSectionsLocal)
+
+                            val maxRemainingSectionsVal =
+                                max(snapshot.scrollableSections, estimateConfidence.value)
+                            maxRemainingSections.value = maxRemainingSectionsVal
+
+                            if (maxRemainingSectionsVal >= 0.5f) {
+                                val proportion =
+                                    1f - snapshot.remainingSectionsLocal / maxRemainingSectionsVal
+                                thumbOffsetY =
+                                    snapshot.trackHeightPx * proportion + snapshot.thumbTopPadding
+                                if (snapshot.stableScrollInProgress) scrolled.tryEmit(Unit)
+                            }
+                        }
+                }
+
+                LaunchedEffect(listState) {
+                    snapshotFlow { thumbOffsetY }
+                        .collectLatest { thumbOffsetY ->
+                            if (
+                                listState.layoutInfo.totalItemsCount == 0 ||
+                                    !isThumbDraggedState.value
+                            )
+                                return@collectLatest
+                            val thumbProportion =
+                                (thumbOffsetY - thumbTopPaddingState.value) /
+                                    trackHeightPxState.value
+                            if (thumbProportion <= 0.001f) {
+                                estimateConfidence.value = -1f
+                                listState.scrollToItem(index = 0, scrollOffset = 0)
+                                scrolled.tryEmit(Unit)
+                                return@collectLatest
+                            }
+                            val scrollRemainingSections =
+                                (1f - thumbProportion) * maxRemainingSections.value
+                            val currentSection =
+                                listState.layoutInfo.totalItemsCount - scrollRemainingSections
+                            val scrollSectionIndex =
+                                currentSection
+                                    .toInt()
+                                    .coerceAtMost(listState.layoutInfo.totalItemsCount)
+                            val expectedScrollItem =
+                                listState.layoutInfo.visibleItemsInfo.find {
+                                    it.index == scrollSectionIndex
+                                }
+                                    ?: listState.layoutInfo.visibleItemsInfo.firstOrNull()
+                                    ?: return@collectLatest
+                            val scrollRelativeOffset =
+                                expectedScrollItem.size * (currentSection - scrollSectionIndex)
+                            val scrollSectionOffset =
+                                (scrollRelativeOffset - scrollHeightPx).roundToInt()
+                            val scrollItemIndex =
+                                scrollSectionIndex.coerceIn(
+                                    0,
+                                    listState.layoutInfo.totalItemsCount - 1,
+                                )
+                            val scrollItemOffset =
+                                scrollSectionOffset +
+                                    (scrollSectionIndex - scrollItemIndex) *
+                                        (listState.layoutInfo.visibleItemsInfo.lastOrNull()?.size
+                                            ?: 0)
+                            listState.scrollToItem(
+                                index = scrollItemIndex,
+                                scrollOffset = scrollItemOffset,
+                            )
+                            scrolled.tryEmit(Unit)
+                        }
+                }
+
+                val thumbAlpha = remember { Animatable(0f) }
+                val isThumbVisible by remember { derivedStateOf { thumbAlpha.value > 0f } }
+                LaunchedEffect(scrolled, thumbAlpha) {
+                    scrolled.sample(100).collectLatest {
+                        if (thumbAllowed() && maxRemainingSections.value >= 0.5f) {
+                            if (thumbAlpha.value != 1f) thumbAlpha.snapTo(1f)
+                            thumbAlpha.animateTo(0f, animationSpec = FadeOutAnimationSpec)
+                        } else {
+                            if (thumbAlpha.value != 0f) {
+                                thumbAlpha.animateTo(
+                                    0f,
+                                    animationSpec = ImmediateFadeOutAnimationSpec,
+                                )
+                            }
+                        }
+                    }
+                }
+
+                Box(
+                    modifier =
+                        Modifier.offset { IntOffset(0, thumbOffsetY.roundToInt()) }
+                            .then(
+                                if (isThumbVisible && !listState.isScrollInProgress) {
+                                    Modifier.draggable(
+                                        interactionSource = dragInteractionSource,
+                                        orientation = Orientation.Vertical,
+                                        state =
+                                            rememberDraggableState { delta ->
+                                                val newOffsetY = thumbOffsetY + delta
+                                                thumbOffsetY =
+                                                    newOffsetY.coerceIn(
+                                                        thumbTopPadding,
+                                                        thumbTopPadding + trackHeightPx,
+                                                    )
+                                            },
+                                    )
+                                } else {
+                                    Modifier
+                                },
+                            )
+                            .then(
+                                if (
+                                    isThumbVisible &&
+                                        !isThumbDragged &&
+                                        !listState.isScrollInProgress
+                                ) {
+                                    Modifier.systemGestureExclusion()
+                                } else {
+                                    Modifier
+                                },
+                            )
+                            .height(ThumbLength)
+                            .padding(horizontal = 8.dp)
+                            .padding(end = endContentPadding)
+                            .width(ThumbThickness)
+                            .graphicsLayer { alpha = thumbAlpha.value }
+                            .background(
+                                color = thumbColor,
+                                shape = MaterialTheme.shapes.medium,
+                            ),
+                )
+            }
+        }
+
     SubcomposeLayout(modifier = modifier) { constraints ->
         val contentPlaceable = subcompose("content", content).map { it.measure(constraints) }
         val contentHeight = contentPlaceable.fastMaxBy { it.height }?.height ?: 0
         val contentWidth = contentPlaceable.fastMaxBy { it.width }?.width ?: 0
+        if (contentHeightState.intValue != contentHeight) {
+            contentHeightState.intValue = contentHeight
+        }
 
         val scrollerConstraints = constraints.copy(minWidth = 0, minHeight = 0)
         val scrollerPlaceable =
-            subcompose("scroller") {
-                    val beforeContentPaddingPx =
-                        with(LocalDensity.current) { topContentPadding.toPx() }
-                    val afterContentPaddingPx =
-                        with(LocalDensity.current) { bottomContentPadding.toPx() }
-                    val thumbTopPadding = with(LocalDensity.current) { topContentPadding.toPx() }
-                    val thumbBottomPadding =
-                        with(LocalDensity.current) { bottomContentPadding.toPx() }
-
-                    val heightPx =
-                        contentHeight.toFloat() -
-                            thumbTopPadding -
-                            thumbBottomPadding -
-                            afterContentPaddingPx
-                    val thumbHeightPx = with(LocalDensity.current) { ThumbLength.toPx() }
-                    val trackHeightPx = heightPx - thumbHeightPx
-                    val scrollHeightPx =
-                        contentHeight.toFloat() -
-                            beforeContentPaddingPx -
-                            afterContentPaddingPx -
-                            thumbBottomPadding
-
-                    val showScrollerState = remember {
-                        derivedStateOf {
-                            val layout = listState.layoutInfo
-                            layout.visibleItemsInfo.isNotEmpty() && layout.totalItemsCount > 0
-                        }
-                    }
-                    if (!showScrollerState.value) return@subcompose
-
-                    var thumbOffsetY by remember { mutableFloatStateOf(thumbTopPadding) }
-
-                    val dragInteractionSource = remember { MutableInteractionSource() }
-                    val isThumbDragged by dragInteractionSource.collectIsDraggedAsState()
-                    val scrolled = remember {
-                        MutableSharedFlow<Unit>(
-                            extraBufferCapacity = 1,
-                            onBufferOverflow = BufferOverflow.DROP_OLDEST,
-                        )
-                    }
-
-                    val scrolling = listState.isScrollInProgress
-                    val scrollStateTracker = remember { MutableData(scrolling) }
-                    val stableScrollInProgress = scrollStateTracker.value || scrolling
-                    scrollStateTracker.value = scrolling
-                    val anyScrollInProgress = stableScrollInProgress || isThumbDragged
-
-                    val maxRemainingSections = remember { MutableData(0f) }
-                    val estimateConfidence = remember { MutableData(0f) }
-                    val layoutChangeTracker = remember { MutableData(0f) }
-
-                    // Defer Compose state read using snapshotFlow instead of triggering
-                    // LaunchedEffect on every scroll tick
-                    val isThumbDraggedState = rememberUpdatedState(isThumbDragged)
-                    val trackHeightPxState = rememberUpdatedState(trackHeightPx)
-                    val thumbTopPaddingState = rememberUpdatedState(thumbTopPadding)
-                    val stableScrollInProgressState = rememberUpdatedState(stableScrollInProgress)
-                    val scrollHeightPxState = rememberUpdatedState(scrollHeightPx)
-
-                    LaunchedEffect(listState) {
-                        snapshotFlow {
-                            val layout = listState.layoutInfo
-                            if (layout.visibleItemsInfo.isEmpty() || layout.totalItemsCount == 0) {
-                                null
-                            } else {
-                                val visibleItems = layout.visibleItemsInfo
-                                val topItem =
-                                    visibleItems.fastFirstOrNull { it.bottom >= 0 }
-                                        ?: visibleItems.firstOrNull()
-                                val bottomItemInner =
-                                    visibleItems.fastLastOrNull {
-                                        it.top <= scrollHeightPxState.value
-                                    } ?: visibleItems.lastOrNull()
-
-                                if (topItem == null || bottomItemInner == null) {
-                                    null
-                                } else {
-                                    val topHiddenProportion =
-                                        -1f * topItem.top / topItem.size.coerceAtLeast(1)
-                                    val bottomHiddenProportion =
-                                        (bottomItemInner.bottom - scrollHeightPxState.value) /
-                                            bottomItemInner.size.coerceAtLeast(1)
-                                    val remainingSectionsLocal =
-                                        bottomHiddenProportion +
-                                            (layout.totalItemsCount - (bottomItemInner.index + 1))
-                                    val previousSections = topHiddenProportion + topItem.index
-                                    val scrollableSections =
-                                        previousSections + remainingSectionsLocal
-
-                                    FastScrollerState(
-                                        isThumbDragged = isThumbDraggedState.value,
-                                        remainingSectionsLocal = remainingSectionsLocal,
-                                        scrollableSections = scrollableSections,
-                                        stableScrollInProgress = stableScrollInProgressState.value,
-                                        trackHeightPx = trackHeightPxState.value,
-                                        thumbTopPadding = thumbTopPaddingState.value,
-                                    )
-                                }
-                            }
-                        }
-                            .collectLatest { snapshot ->
-                                if (snapshot == null || snapshot.isThumbDragged)
-                                    return@collectLatest
-
-                                val anyScrollInProgressInner =
-                                    snapshot.stableScrollInProgress || snapshot.isThumbDragged
-                                val layoutChanged =
-                                    !anyScrollInProgressInner &&
-                                        abs(
-                                            layoutChangeTracker.value - snapshot.scrollableSections,
-                                        ) > 0.1
-                                layoutChangeTracker.value = snapshot.scrollableSections
-
-                                if (layoutChanged) {
-                                    estimateConfidence.value = snapshot.remainingSectionsLocal
-                                }
-                                estimateConfidence.value =
-                                    max(estimateConfidence.value, snapshot.remainingSectionsLocal)
-
-                                val maxRemainingSectionsVal =
-                                    max(snapshot.scrollableSections, estimateConfidence.value)
-                                maxRemainingSections.value = maxRemainingSectionsVal
-
-                                if (maxRemainingSectionsVal >= 0.5f) {
-                                    val proportion =
-                                        1f -
-                                            snapshot.remainingSectionsLocal /
-                                                maxRemainingSectionsVal
-                                    thumbOffsetY =
-                                        snapshot.trackHeightPx * proportion +
-                                            snapshot.thumbTopPadding
-                                    if (snapshot.stableScrollInProgress) scrolled.tryEmit(Unit)
-                                }
-                            }
-                    }
-
-                    LaunchedEffect(listState) {
-                      snapshotFlow { thumbOffsetY }.collectLatest { thumbOffsetY ->
-                        if (
-                            listState.layoutInfo.totalItemsCount == 0 ||
-                                !isThumbDraggedState.value
-                        )
-                            return@collectLatest
-                        val thumbProportion =
-                            (thumbOffsetY - thumbTopPaddingState.value) / trackHeightPxState.value
-                        if (thumbProportion <= 0.001f) {
-                            estimateConfidence.value = -1f
-                            listState.scrollToItem(index = 0, scrollOffset = 0)
-                            scrolled.tryEmit(Unit)
-                            return@collectLatest
-                        }
-                        val scrollRemainingSections =
-                            (1f - thumbProportion) * maxRemainingSections.value
-                        val currentSection =
-                            listState.layoutInfo.totalItemsCount - scrollRemainingSections
-                        val scrollSectionIndex =
-                            currentSection
-                                .toInt()
-                                .coerceAtMost(listState.layoutInfo.totalItemsCount)
-                        val expectedScrollItem =
-                            listState.layoutInfo.visibleItemsInfo.find {
-                                it.index == scrollSectionIndex
-                            }
-                                ?: listState.layoutInfo.visibleItemsInfo.firstOrNull()
-                                ?: return@collectLatest
-                        val scrollRelativeOffset =
-                            expectedScrollItem.size * (currentSection - scrollSectionIndex)
-                        val scrollSectionOffset =
-                            (scrollRelativeOffset - scrollHeightPx).roundToInt()
-                        val scrollItemIndex =
-                            scrollSectionIndex.coerceIn(0, listState.layoutInfo.totalItemsCount - 1)
-                        val scrollItemOffset =
-                            scrollSectionOffset +
-                                (scrollSectionIndex - scrollItemIndex) *
-                                    (listState.layoutInfo.visibleItemsInfo.lastOrNull()?.size ?: 0)
-                        listState.scrollToItem(
-                            index = scrollItemIndex,
-                            scrollOffset = scrollItemOffset,
-                        )
-                        scrolled.tryEmit(Unit)
-                      }
-                    }
-
-                    val thumbAlpha = remember { Animatable(0f) }
-                    val isThumbVisible by remember { derivedStateOf { thumbAlpha.value > 0f } }
-                    LaunchedEffect(scrolled, thumbAlpha) {
-                        scrolled.sample(100).collectLatest {
-                            if (thumbAllowed() && maxRemainingSections.value >= 0.5f) {
-                                thumbAlpha.snapTo(1f)
-                                thumbAlpha.animateTo(0f, animationSpec = FadeOutAnimationSpec)
-                            } else {
-                                thumbAlpha.animateTo(0f, animationSpec = ImmediateFadeOutAnimationSpec)
-                            }
-                        }
-                    }
-
-                    Box(
-                        modifier =
-                            Modifier.offset { IntOffset(0, thumbOffsetY.roundToInt()) }
-                                .then(
-                                    if (isThumbVisible && !listState.isScrollInProgress) {
-                                        Modifier.draggable(
-                                            interactionSource = dragInteractionSource,
-                                            orientation = Orientation.Vertical,
-                                            state =
-                                                rememberDraggableState { delta ->
-                                                    val newOffsetY = thumbOffsetY + delta
-                                                    thumbOffsetY =
-                                                        newOffsetY.coerceIn(
-                                                            thumbTopPadding,
-                                                            thumbTopPadding + trackHeightPx,
-                                                        )
-                                                },
-                                        )
-                                    } else {
-                                        Modifier
-                                    },
-                                )
-                                .then(
-                                    if (
-                                        isThumbVisible &&
-                                            !isThumbDragged &&
-                                            !listState.isScrollInProgress
-                                    ) {
-                                        Modifier.systemGestureExclusion()
-                                    } else {
-                                        Modifier
-                                    },
-                                )
-                                .height(ThumbLength)
-                                .padding(horizontal = 8.dp)
-                                .padding(end = endContentPadding)
-                                .width(ThumbThickness)
-                                .graphicsLayer { alpha = thumbAlpha.value }
-                                .background(
-                                    color = thumbColor,
-                                    shape = MaterialTheme.shapes.medium,
-                                ),
-                    )
-                }
-                .map { it.measure(scrollerConstraints) }
+            subcompose("scroller", scrollerContent).map { it.measure(scrollerConstraints) }
         val scrollerWidth = scrollerPlaceable.fastMaxBy { it.width }?.width ?: 0
 
         layout(contentWidth, contentHeight) {
@@ -424,39 +445,44 @@ fun VerticalGridFastScroller(
                     val isThumbDraggedGridState = rememberUpdatedState(isThumbDragged)
 
                     LaunchedEffect(state) {
-                      snapshotFlow { thumbOffsetY }.collectLatest { thumbOffsetY ->
-                        if (
-                            state.layoutInfo.totalItemsCount == 0 ||
-                                !isThumbDraggedGridState.value
-                        )
-                            return@collectLatest
-                        val columnCount = columnCountState.value
-                        val heightPx = heightPxState.value
-                        val visibleItems = state.layoutInfo.visibleItemsInfo
-                        val startChild = visibleItems.first()
-                        val endChild = visibleItems.last()
-                        val laidOutArea =
-                            (endChild.offset.y + endChild.size.height) - startChild.offset.y
-                        val laidOutRows = 1 + abs(endChild.index - startChild.index) / columnCount
-                        val avgSizePerRow = laidOutArea.toFloat() / laidOutRows
+                        snapshotFlow { thumbOffsetY }
+                            .collectLatest { thumbOffsetY ->
+                                if (
+                                    state.layoutInfo.totalItemsCount == 0 ||
+                                        !isThumbDraggedGridState.value
+                                )
+                                    return@collectLatest
+                                val columnCount = columnCountState.value
+                                val heightPx = heightPxState.value
+                                val visibleItems = state.layoutInfo.visibleItemsInfo
+                                val startChild = visibleItems.first()
+                                val endChild = visibleItems.last()
+                                val laidOutArea =
+                                    (endChild.offset.y + endChild.size.height) - startChild.offset.y
+                                val laidOutRows =
+                                    1 + abs(endChild.index - startChild.index) / columnCount
+                                val avgSizePerRow = laidOutArea.toFloat() / laidOutRows
 
-                        val scrollRatio =
-                            (thumbOffsetY - thumbTopPaddingGridState.value) /
-                                trackHeightPxGridState.value
-                        val scrollAmt =
-                            scrollRatio *
-                                (computeGridScrollRange(state = state, columnCount = columnCount)
-                                        .toFloat() - heightPx)
-                                    .coerceAtLeast(1f)
-                        val rowNumber = (scrollAmt / avgSizePerRow).toInt()
-                        val rowOffset = scrollAmt - rowNumber * avgSizePerRow
+                                val scrollRatio =
+                                    (thumbOffsetY - thumbTopPaddingGridState.value) /
+                                        trackHeightPxGridState.value
+                                val scrollAmt =
+                                    scrollRatio *
+                                        (computeGridScrollRange(
+                                                    state = state,
+                                                    columnCount = columnCount,
+                                                )
+                                                .toFloat() - heightPx)
+                                            .coerceAtLeast(1f)
+                                val rowNumber = (scrollAmt / avgSizePerRow).toInt()
+                                val rowOffset = scrollAmt - rowNumber * avgSizePerRow
 
-                        state.scrollToItem(
-                            index = columnCount * rowNumber,
-                            scrollOffset = rowOffset.roundToInt(),
-                        )
-                        scrolled.tryEmit(Unit)
-                      }
+                                state.scrollToItem(
+                                    index = columnCount * rowNumber,
+                                    scrollOffset = rowOffset.roundToInt(),
+                                )
+                                scrolled.tryEmit(Unit)
+                            }
                     }
 
                     LaunchedEffect(state) {
@@ -501,7 +527,10 @@ fun VerticalGridFastScroller(
                                 thumbAlpha.snapTo(1f)
                                 thumbAlpha.animateTo(0f, animationSpec = FadeOutAnimationSpec)
                             } else {
-                                thumbAlpha.animateTo(0f, animationSpec = ImmediateFadeOutAnimationSpec)
+                                thumbAlpha.animateTo(
+                                    0f,
+                                    animationSpec = ImmediateFadeOutAnimationSpec,
+                                )
                             }
                         }
                     }

@@ -16,7 +16,9 @@ class MangaMappings(context: Context) {
         openDatabase(context, "2026-07-23_neko_mapping.db")
     }
 
-    /** Copies/opens the asset DB ahead of time so the first lookup (manga open) doesn't pay for it. */
+    /**
+     * Copies/opens the asset DB ahead of time so the first lookup (manga open) doesn't pay for it.
+     */
     fun prewarm() {
         dbMappings
     }
@@ -36,7 +38,7 @@ class MangaMappings(context: Context) {
     @Throws(IOException::class)
     private fun copyDatabase(context: Context, dbFile: File, dbPath: String) {
         context.assets.open(dbPath).use { `is` ->
-            FileOutputStream(dbFile).use { os -> `is`.copyTo(os) }
+            FileOutputStream(dbFile).use { os -> `is`.copyTo(os, 1 shl 20) }
         }
     }
 
@@ -66,12 +68,15 @@ class MangaMappings(context: Context) {
 
     private object NoResult
 
-    // Keyed by "<query>|<arg>"; the query string encodes the method/column. NoResult stands in for null.
+    // Keyed by "<query>|<arg>"; the query string encodes the method/column. NoResult stands in for
+    // null.
     private val cache = java.util.concurrent.ConcurrentHashMap<String, Any>()
 
     private fun getResult(queryString: String, whereArgs: Array<String>): String? {
         val key = queryString + "|" + whereArgs.joinToString("|")
-        cache[key]?.let { return it as? String }
+        cache[key]?.let {
+            return it as? String
+        }
         if (!dbMappings.isOpen) {
             return null
         }

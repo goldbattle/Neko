@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -24,11 +23,10 @@ import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material.icons.outlined.Lock
 import androidx.compose.material3.Icon
-import androidx.compose.material3.LocalRippleConfiguration
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -54,7 +52,6 @@ import eu.kanade.tachiyomi.ui.manga.MangaConstants
 import eu.kanade.tachiyomi.util.chapter.ChapterUtil
 import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
-import jp.wasabeef.gap.Gap
 import me.saket.swipe.SwipeAction
 import org.nekomanga.R
 import org.nekomanga.constants.Constants
@@ -85,79 +82,75 @@ fun ChapterRow(
     blockScanlator: (MangaConstants.BlockType, String) -> Unit,
     markPrevious: (ChapterItem, Boolean) -> Unit,
 ) {
-    CompositionLocalProvider(LocalRippleConfiguration provides themeColor.rippleConfiguration) {
-        val colorScheme = MaterialTheme.colorScheme
-        val swipeActionBackgroundColor =
-            remember(colorScheme, themeColor.primaryColor) {
-                colorScheme.surfaceColorAtElevationCustomColor(
-                    themeColor.primaryColor,
-                    Size.small,
-                )
-            }
+    val colorScheme = MaterialTheme.colorScheme
+    val swipeActionBackgroundColor =
+        remember(colorScheme, themeColor.primaryColor) {
+            colorScheme.surfaceColorAtElevationCustomColor(themeColor.primaryColor, Size.small)
+        }
 
-        val latestItem = rememberUpdatedState(chapterItem)
-        val currentOnBookmark by rememberUpdatedState(onBookmark)
-        val currentOnRead by rememberUpdatedState(onRead)
-        val currentOnDownload by rememberUpdatedState(onDownload)
-        val rightSwipeAction =
-            remember(
-                swipeRightAction,
-                chapterItem.chapter.read,
-                chapterItem.chapter.bookmark,
-                chapterItem.downloadState,
-                chapterItem.chapter.isUnavailable,
-                chapterItem.chapter.scanlator,
-                themeColor,
-                swipeActionBackgroundColor,
-            ) {
-                chapterSwipeAction(
-                    action = swipeRightAction,
-                    chapterItem = chapterItem,
-                    themeColor = themeColor,
-                    background = swipeActionBackgroundColor,
-                    onBookmark = { currentOnBookmark(latestItem.value) },
-                    onRead = { currentOnRead(latestItem.value) },
-                    onDownload = { _, a -> currentOnDownload(listOf(latestItem.value), a) },
-                )
-            }
-        val leftSwipeAction =
-            remember(
-                swipeLeftAction,
-                chapterItem.chapter.read,
-                chapterItem.chapter.bookmark,
-                chapterItem.downloadState,
-                chapterItem.chapter.isUnavailable,
-                chapterItem.chapter.scanlator,
-                themeColor,
-                swipeActionBackgroundColor,
-            ) {
-                chapterSwipeAction(
-                    action = swipeLeftAction,
-                    chapterItem = chapterItem,
-                    themeColor = themeColor,
-                    background = swipeActionBackgroundColor,
-                    onBookmark = { currentOnBookmark(latestItem.value) },
-                    onRead = { currentOnRead(latestItem.value) },
-                    onDownload = { _, a -> currentOnDownload(listOf(latestItem.value), a) },
-                )
-            }
-        val startSwipeActions = remember(rightSwipeAction) { listOfNotNull(rightSwipeAction) }
-        val endSwipeActions = remember(leftSwipeAction) { listOfNotNull(leftSwipeAction) }
-
-        // The app theme forces LTR, so swiping right reveals the start actions.
-        ChapterSwipe(startSwipeActions = startSwipeActions, endSwipeActions = endSwipeActions) {
-            ChapterRowContent(
-                themeColorState = themeColor,
-                shouldHideChapterTitles = shouldHideChapterTitles,
+    val latestItem = rememberUpdatedState(chapterItem)
+    val currentOnBookmark by rememberUpdatedState(onBookmark)
+    val currentOnRead by rememberUpdatedState(onRead)
+    val latestOnDownload = rememberUpdatedState(onDownload)
+    val rightSwipeAction =
+        remember(
+            swipeRightAction,
+            chapterItem.chapter.read,
+            chapterItem.chapter.bookmark,
+            chapterItem.downloadState,
+            chapterItem.chapter.isUnavailable,
+            chapterItem.chapter.scanlator,
+            themeColor,
+            swipeActionBackgroundColor,
+        ) {
+            chapterSwipeAction(
+                action = swipeRightAction,
                 chapterItem = chapterItem,
-                onClick = onClick,
-                onWebView = onWebView,
-                onComment = onComment,
-                onDownload = onDownload,
-                markPrevious = markPrevious,
-                blockScanlator = blockScanlator,
+                themeColor = themeColor,
+                background = swipeActionBackgroundColor,
+                onBookmark = { currentOnBookmark(latestItem.value) },
+                onRead = { currentOnRead(latestItem.value) },
+                onDownload = { _, a -> latestOnDownload.value(listOf(latestItem.value), a) },
             )
         }
+    val leftSwipeAction =
+        remember(
+            swipeLeftAction,
+            chapterItem.chapter.read,
+            chapterItem.chapter.bookmark,
+            chapterItem.downloadState,
+            chapterItem.chapter.isUnavailable,
+            chapterItem.chapter.scanlator,
+            themeColor,
+            swipeActionBackgroundColor,
+        ) {
+            chapterSwipeAction(
+                action = swipeLeftAction,
+                chapterItem = chapterItem,
+                themeColor = themeColor,
+                background = swipeActionBackgroundColor,
+                onBookmark = { currentOnBookmark(latestItem.value) },
+                onRead = { currentOnRead(latestItem.value) },
+                onDownload = { _, a -> latestOnDownload.value(listOf(latestItem.value), a) },
+            )
+        }
+    val startSwipeActions = remember(rightSwipeAction) { listOfNotNull(rightSwipeAction) }
+    val endSwipeActions = remember(leftSwipeAction) { listOfNotNull(leftSwipeAction) }
+
+    // The app theme forces LTR, so swiping right reveals the start actions.
+    ChapterSwipe(startSwipeActions = startSwipeActions, endSwipeActions = endSwipeActions) {
+        ChapterRowContent(
+            themeColorState = themeColor,
+            shouldHideChapterTitles = shouldHideChapterTitles,
+            chapterItem = chapterItem,
+            latestChapterItem = latestItem,
+            latestOnDownload = latestOnDownload,
+            onClick = onClick,
+            onWebView = onWebView,
+            onComment = onComment,
+            markPrevious = markPrevious,
+            blockScanlator = blockScanlator,
+        )
     }
 }
 
@@ -233,10 +226,11 @@ private fun ChapterRowContent(
     themeColorState: ThemeColorState,
     shouldHideChapterTitles: Boolean,
     chapterItem: ChapterItem,
+    latestChapterItem: State<ChapterItem>,
+    latestOnDownload: State<(List<ChapterItem>, MangaConstants.DownloadAction) -> Unit>,
     onClick: (ChapterItem) -> Unit,
     onWebView: (ChapterItem) -> Unit,
     onComment: (String) -> Unit,
-    onDownload: (List<ChapterItem>, MangaConstants.DownloadAction) -> Unit,
     markPrevious: (ChapterItem, Boolean) -> Unit,
     blockScanlator: (MangaConstants.BlockType, String) -> Unit,
 ) {
@@ -288,15 +282,21 @@ private fun ChapterRowContent(
         )
     }
 
-    val latestChapterItem by rememberUpdatedState(chapterItem)
     val latestOnClick by rememberUpdatedState(onClick)
-    val latestOnDownload by rememberUpdatedState(onDownload)
-    val onRowClick = remember { { latestOnClick(latestChapterItem) } }
+    val onRowClick = remember { { latestOnClick(latestChapterItem.value) } }
     val onIndicatorDownload = remember {
         { action: MangaConstants.DownloadAction ->
-            latestOnDownload(listOf(latestChapterItem), action)
+            latestOnDownload.value(listOf(latestChapterItem.value), action)
         }
     }
+    val startReadingLabel = remember(context) { context.getString(R.string.start_reading) }
+    val onRowLongClick =
+        remember(haptic) {
+            {
+                haptic.performHapticFeedback(HapticFeedbackType.LongPress)
+                isDropdownExpanded = true
+            }
+        }
 
     Row(
         modifier =
@@ -306,12 +306,9 @@ private fun ChapterRowContent(
                 }
                 .combinedClickable(
                     onClick = onRowClick,
-                    onLongClick = {
-                        haptic.performHapticFeedback(HapticFeedbackType.LongPress)
-                        isDropdownExpanded = true
-                    },
+                    onLongClick = onRowLongClick,
                     role = Role.Button,
-                    onClickLabel = stringResource(id = R.string.start_reading),
+                    onClickLabel = startReadingLabel,
                 )
                 .padding(start = Size.small, top = Size.small, bottom = Size.small),
         horizontalArrangement = Arrangement.SpaceBetween,
@@ -397,12 +394,11 @@ private fun ChapterTitle(
     textColor: Color,
     themeColor: Color,
 ) {
-    val chapterLabel =
-        if (shouldHideChapterTitles) stringResource(id = R.string.chapter_, "%s") else ""
+    val context = LocalContext.current
     val displayTitle =
-        remember(shouldHideChapterTitles, title, chapterNumber, chapterLabel) {
+        remember(shouldHideChapterTitles, title, chapterNumber, context) {
             if (shouldHideChapterTitles)
-                chapterLabel.replace("%s", decimalFormat.format(chapterNumber))
+                context.getString(R.string.chapter_, decimalFormat.format(chapterNumber))
             else title
         }
     val baseStyle = MaterialTheme.typography.bodyLarge
@@ -415,10 +411,9 @@ private fun ChapterTitle(
             Icon(
                 imageVector = Icons.Filled.Bookmark,
                 contentDescription = null,
-                modifier = Modifier.size(Size.medium),
+                modifier = Modifier.padding(end = Size.tiny).size(Size.medium),
                 tint = themeColor,
             )
-            Gap(Size.tiny)
         }
         Text(
             text = displayTitle,
@@ -463,16 +458,18 @@ private fun LanguageIcon(language: String, textColor: Color) {
     if (mdLang?.iconResId != null) {
         Image(
             painter = painterResource(id = mdLang.iconResId),
-            modifier = Modifier.height(Size.medium).clip(RoundedCornerShape(Size.tiny)),
+            modifier =
+                Modifier.padding(end = Size.tiny)
+                    .height(Size.medium)
+                    .clip(RoundedCornerShape(Size.tiny)),
             contentDescription = mdLang.prettyPrint,
         )
-        Spacer(modifier = Modifier.size(Size.tiny))
     } else {
         Text(
             text = "$language?",
             style = style,
+            modifier = Modifier.padding(end = Size.tiny),
         )
-        Spacer(modifier = Modifier.size(Size.tiny))
     }
 }
 

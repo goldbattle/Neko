@@ -9,6 +9,7 @@ import coil3.disk.DiskCache
 import coil3.disk.directory
 import coil3.gif.AnimatedImageDecoder
 import coil3.gif.GifDecoder
+import coil3.imageDecoderEnabled
 import coil3.memory.MemoryCache
 import coil3.request.allowHardware
 import coil3.request.allowRgb565
@@ -16,10 +17,13 @@ import coil3.request.crossfade
 import coil3.svg.SvgDecoder
 import coil3.util.DebugLogger
 import eu.kanade.tachiyomi.data.image.coil.ArtworkFactory
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.nekomanga.core.network.NetworkPreferences
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 
+@OptIn(ExperimentalCoroutinesApi::class)
 fun coilImageLoader(context: Context) =
     ImageLoader.Builder(context)
         .apply {
@@ -51,6 +55,11 @@ fun coilImageLoader(context: Context) =
             crossfade(150) // gentle fade for covers that were not already in memory
             allowRgb565(context.getSystemService<ActivityManager>()!!.isLowRamDevice)
             allowHardware(isCurrSDKPieOrGreater)
+            // BitmapFactory (inSampleSize) decodes covers cheaper than
+            // android.graphics.ImageDecoder.
+            imageDecoderEnabled(false)
+            // Cap concurrent cover decodes so they don't starve the UI/render threads.
+            decoderCoroutineContext(Dispatchers.IO.limitedParallelism(2))
             if (Injekt.get<NetworkPreferences>().verboseLogging().get()) {
                 logger(DebugLogger())
             }

@@ -67,7 +67,8 @@ object DatabaseMigrations {
                 db.execSQL(
                     "CREATE INDEX IF NOT EXISTS `index_history_last_read` ON `history` (`last_read`)",
                 )
-                // Neko Fast 3.8.13/3.8.14 shipped a different v48 (covering index only): make sure every
+                // Neko Fast 3.8.13/3.8.14 shipped a different v48 (covering index only): make sure
+                // every
                 // v48 database ends with all indexes.
                 for (sql in
                     listOf(

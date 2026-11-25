@@ -12,14 +12,23 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import coil3.imageLoader
+import coil3.request.ImageRequest
+import coil3.size.Precision
+import coil3.size.Size as CoilSize
+import eu.kanade.tachiyomi.data.coil.dynamicCover
 import eu.kanade.tachiyomi.ui.manga.MangaConstants
 import java.util.Date
 import jp.wasabeef.gap.Gap
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.withContext
 import org.nekomanga.R
 import org.nekomanga.domain.chapter.ChapterItem
 import org.nekomanga.presentation.components.UiText
@@ -126,29 +135,31 @@ private fun Grouped(
         }
     }
 
-    val now = Date().time
-    var timeSpan by remember { mutableStateOf("") }
-    val groupedBySeries =
-        remember(feedUpdatesMangaList) {
-            feedUpdatesMangaList
-                .groupBy { getDateString(it.date, now) }
-                .map {
-                    it.value
-                        .groupBy { it.mangaId }
-                        .map {
-                            val (read, unread) =
-                                it.value.flatMap { it.chapters }.partition { it.chapter.read }
-                            val chapters = (unread.reversed() + read).toList()
-                            it.value.first().copy(chapters = chapters)
-                        }
-                }
-                .flatten()
-        }
+    val groupedState = remember { mutableStateOf(computeGroupedBySeries(feedUpdatesMangaList)) }
+    LaunchedEffect(feedUpdatesMangaList) {
+        if (groupedState.value.source === feedUpdatesMangaList) return@LaunchedEffect
+        val result =
+            withContext(Dispatchers.Default) { computeGroupedBySeries(feedUpdatesMangaList) }
+        groupedState.value = result
+    }
+    val groupedBySeries = groupedState.value.series
+    val renderedGroups = groupedState.value.rendered
 
-    val renderedGroups =
-        remember(groupedBySeries) { groupedBySeries.groupBy { getDateString(it.date, now) } }
+    PrefetchCovers(
+        scrollState,
+        remember(renderedGroups) {
+            buildList<Any?> {
+                renderedGroups.forEach { (dateString, list) ->
+                    if (dateString.isNotEmpty()) add(null)
+                    list.forEach { add(it.artwork) }
+                }
+            }
+        },
+        dynamicCovers,
+    )
 
     LazyColumn(modifier = modifier, state = scrollState, contentPadding = contentPadding) {
+        var timeSpan = ""
         // 2. Iterate through the date groups
         renderedGroups.forEach { (dateString, seriesListForDate) ->
 
@@ -160,7 +171,8 @@ private fun Grouped(
 
                 // The 'timeSpan' state needs to track the date string globally to prevent duplicate
                 // headers
-                if (firstItem == groupedBySeries.first()) timeSpan = "" // Reset tracker at the start
+                if (firstItem == groupedBySeries.first())
+                    timeSpan = "" // Reset tracker at the start
 
                 if (timeSpan != dateString) {
                     timeSpan = dateString
@@ -293,15 +305,29 @@ private fun Ungrouped(
         }
     }
 
-    val now = Date().time
-    var timeSpan by remember { mutableStateOf("") }
+    val ungroupedState = remember { mutableStateOf(computeUngrouped(feedUpdatesMangaList)) }
+    LaunchedEffect(feedUpdatesMangaList) {
+        if (ungroupedState.value.source === feedUpdatesMangaList) return@LaunchedEffect
+        val result = withContext(Dispatchers.Default) { computeUngrouped(feedUpdatesMangaList) }
+        ungroupedState.value = result
+    }
+    val grouped = ungroupedState.value.grouped
 
-    val grouped =
-        remember(feedUpdatesMangaList) {
-            feedUpdatesMangaList.groupBy { getDateString(it.date, now) }
-        }
+    PrefetchCovers(
+        scrollState,
+        remember(grouped) {
+            buildList<Any?> {
+                grouped.forEach { (dateString, list) ->
+                    if (dateString.isNotEmpty()) add(null)
+                    list.forEach { fm -> fm.chapters.forEach { _ -> add(fm.artwork) } }
+                }
+            }
+        },
+        dynamicCovers,
+    )
 
     LazyColumn(modifier = modifier, state = scrollState, contentPadding = contentPadding) {
+        var timeSpan = ""
         grouped.forEach { (dateString, mangaListForDate) ->
             if (dateString.isNotEmpty() && timeSpan != dateString) {
                 timeSpan = dateString
@@ -395,7 +421,86 @@ private fun Ungrouped(
     }
 }
 
+@Composable
+private fun PrefetchCovers(
+    listState: androidx.compose.foundation.lazy.LazyListState,
+    artworks: List<Any?>,
+    dynamicCovers: Boolean,
+) {
+    val context = LocalContext.current
+    val currentArtworks by rememberUpdatedState(artworks)
+    val lastPrefetchedHolder = remember(listState, dynamicCovers) { intArrayOf(-1) }
+    LaunchedEffect(listState, dynamicCovers) {
+        snapshotFlow { listState.layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: -1 }
+            .distinctUntilChanged()
+            .collect { last ->
+                if (last < 0) return@collect
+                val artworks = currentArtworks
+                val end = minOf(last + 8, artworks.lastIndex)
+                for (i in (lastPrefetchedHolder[0] + 1)..end) {
+                    val data = artworks[i] ?: continue
+                    context.imageLoader.enqueue(
+                        ImageRequest.Builder(context)
+                            .data(data)
+                            .dynamicCover(dynamicCovers)
+                            .precision(Precision.INEXACT)
+                            .size(CoilSize.ORIGINAL)
+                            .build(),
+                    )
+                }
+                if (end > lastPrefetchedHolder[0]) lastPrefetchedHolder[0] = end
+            }
+    }
+}
+
 private fun getDateString(date: Long, currentDate: Long): String {
     return DateUtils.getRelativeTimeSpanString(date, currentDate, DateUtils.DAY_IN_MILLIS)
         .toString()
+}
+
+private class GroupedResult(
+    val source: List<FeedManga>,
+    val series: List<FeedManga>,
+    val rendered: Map<String, List<FeedManga>>,
+)
+
+private class UngroupedResult(
+    val source: List<FeedManga>,
+    val grouped: Map<String, List<FeedManga>>,
+)
+
+// Each call uses its own DateStringCache (a plain HashMap), so it is safe on any thread.
+private fun computeGroupedBySeries(list: List<FeedManga>): GroupedResult {
+    val dateCache = DateStringCache(Date().time)
+    val series =
+        list
+            .groupBy { dateCache.get(it.date) }
+            .map {
+                it.value
+                    .groupBy { it.mangaId }
+                    .map {
+                        val (read, unread) =
+                            it.value.flatMap { it.chapters }.partition { it.chapter.read }
+                        val chapters = (unread.reversed() + read).toList()
+                        it.value.first().copy(chapters = chapters)
+                    }
+            }
+            .flatten()
+    val rendered = series.groupBy { dateCache.get(it.date) }
+    return GroupedResult(list, series, rendered)
+}
+
+private fun computeUngrouped(list: List<FeedManga>): UngroupedResult {
+    val dateCache = DateStringCache(Date().time)
+    return UngroupedResult(list, list.groupBy { dateCache.get(it.date) })
+}
+
+private class DateStringCache(val now: Long) {
+    private val cache = HashMap<Long, String>()
+
+    fun get(date: Long): String {
+        val tz = java.util.TimeZone.getDefault()
+        val day = Math.floorDiv(date + tz.getOffset(date), DateUtils.DAY_IN_MILLIS)
+        return cache.getOrPut(day) { getDateString(date, now) }
+    }
 }

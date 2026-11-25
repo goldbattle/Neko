@@ -3,7 +3,6 @@ package org.nekomanga.presentation.screens.feed
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
-import org.nekomanga.presentation.screens.DelayedLoadingIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -14,6 +13,7 @@ import kotlinx.coroutines.launch
 import org.nekomanga.R
 import org.nekomanga.presentation.components.dialog.ClearDownloadQueueDialog
 import org.nekomanga.presentation.components.dialog.ConfirmationDialog
+import org.nekomanga.presentation.screens.DelayedLoadingIndicator
 import org.nekomanga.presentation.screens.download.DownloadScreen
 
 @Composable
@@ -62,7 +62,8 @@ fun FeedScreenContent(
     loadNextPage: () -> Unit,
 ) {
     Box(modifier = modifier) {
-        // Only while there is nothing to show yet: a refresh of the first page (offset 0) must not draw the
+        // Only while there is nothing to show yet: a refresh of the first page (offset 0) must not
+        // draw the
         // spinner underneath a list that is already on screen.
         if (
             (feedScreenState.feedScreenType == FeedScreenType.History &&

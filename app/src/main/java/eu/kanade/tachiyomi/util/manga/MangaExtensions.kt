@@ -167,16 +167,13 @@ fun LibraryManga.toLibraryMangaItem(): LibraryMangaItem {
     val unknownList = listOf("Unknown")
 
     val genreList =
-        this.genre
-            ?.split(",")
-            ?.mapNotNull { raw ->
-                genreTagCache
-                    .getOrPut(raw) {
-                        if (raw.contains("content rating:", true)) ""
-                        else raw.trim().capitalizeWords()
-                    }
-                    .ifBlank { null }
-            } ?: unknownList
+        this.genre?.split(",")?.mapNotNull { raw ->
+            genreTagCache
+                .getOrPut(raw) {
+                    if (raw.contains("content rating:", true)) "" else raw.trim().capitalizeWords()
+                }
+                .ifBlank { null }
+        } ?: unknownList
 
     val authorList =
         when (this.author.isNullOrBlank() && this.artist.isNullOrBlank()) {
@@ -249,11 +246,7 @@ fun SManga.getSlug(): String = titleToSlug(this.title)
 
 fun titleToSlug(title: String): String {
     val title =
-        title
-            .trim()
-            .lowercase()
-            .replace(slugNonAlnumRegex, "-")
-            .replace(slugTrailingDashRegex, "")
+        title.trim().lowercase().replace(slugNonAlnumRegex, "-").replace(slugTrailingDashRegex, "")
 
     val wordList = title.split('-')
     val slug = mutableListOf<String>()

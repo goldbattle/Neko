@@ -80,19 +80,19 @@ interface HistoryDao {
                chapters.language AS ch_language,
                history.id AS hi_id, history.chapter_id AS hi_chapter_id,
                history.last_read AS hi_last_read, history.time_read AS hi_time_read
-        FROM manga
-        JOIN chapters ON manga.id = chapters.manga_id
-        JOIN history ON chapters.id = history.chapter_id
-        JOIN (
-            SELECT chapters.manga_id, chapters.id as history_chapter_id, MAX(history.last_read) as history_last_read
-            FROM chapters JOIN history ON chapters.id = history.chapter_id
-            GROUP BY chapters.manga_id
-        ) AS max_last_read
-        ON chapters.manga_id = max_last_read.manga_id
-        AND max_last_read.history_chapter_id = history.chapter_id
-        AND max_last_read.history_last_read > 0
+        FROM history
+        JOIN chapters ON chapters.id = history.chapter_id
+        JOIN manga ON manga.id = chapters.manga_id
+        WHERE history.last_read > 0
         AND LOWER(manga.title) LIKE :search
-        ORDER BY max_last_read.history_last_read DESC
+        AND history.chapter_id = (
+            SELECT h2.chapter_id
+            FROM chapters AS c2 JOIN history AS h2 ON c2.id = h2.chapter_id
+            WHERE c2.manga_id = chapters.manga_id
+            ORDER BY h2.last_read DESC
+            LIMIT 1
+        )
+        ORDER BY history.last_read DESC
         LIMIT :limit OFFSET :offset
     """,
     )
@@ -115,19 +115,19 @@ interface HistoryDao {
                chapters.language AS ch_language,
                history.id AS hi_id, history.chapter_id AS hi_chapter_id,
                history.last_read AS hi_last_read, history.time_read AS hi_time_read
-        FROM manga
-        JOIN chapters ON manga.id = chapters.manga_id
-        JOIN history ON chapters.id = history.chapter_id
-        JOIN (
-            SELECT chapters.manga_id, chapters.id as history_chapter_id, MAX(history.last_read) as history_last_read
-            FROM chapters JOIN history ON chapters.id = history.chapter_id
-            GROUP BY chapters.manga_id
-        ) AS max_last_read
-        ON chapters.manga_id = max_last_read.manga_id
-        AND max_last_read.history_chapter_id = history.chapter_id
-        AND max_last_read.history_last_read > 0
+        FROM history
+        JOIN chapters ON chapters.id = history.chapter_id
+        JOIN manga ON manga.id = chapters.manga_id
+        WHERE history.last_read > 0
         AND LOWER(manga.title) LIKE :search
-        ORDER BY max_last_read.history_last_read DESC
+        AND history.chapter_id = (
+            SELECT h2.chapter_id
+            FROM chapters AS c2 JOIN history AS h2 ON c2.id = h2.chapter_id
+            WHERE c2.manga_id = chapters.manga_id
+            ORDER BY h2.last_read DESC
+            LIMIT 1
+        )
+        ORDER BY history.last_read DESC
         LIMIT :limit OFFSET :offset
     """,
     )

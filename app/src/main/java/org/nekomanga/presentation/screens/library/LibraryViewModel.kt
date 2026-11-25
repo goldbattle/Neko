@@ -44,7 +44,6 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.mapNotNull
-import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
@@ -152,13 +151,13 @@ class LibraryViewModel() : ViewModel() {
                 }
             }
             .distinctUntilChanged()
-            .shareIn(viewModelScope, SharingStarted.WhileSubscribed(5000), 1)
+            .shareIn(viewModelScope, SharingStarted.Lazily, 1)
 
     private val hasLoggedTrackersFlow: Flow<Boolean> =
         loggedServicesFlow
             .map { loggedServices -> loggedServices.any { !it.isMdList() } }
             .distinctUntilChanged()
-            .shareIn(viewModelScope, SharingStarted.WhileSubscribed(5000), 1)
+            .shareIn(viewModelScope, SharingStarted.Lazily, 1)
 
     /** Save the current list to speed up loading later */
     override fun onCleared() {
@@ -185,13 +184,13 @@ class LibraryViewModel() : ViewModel() {
                 (listOf(updatedDefaultCategory) + categories).sortedBy { it.order }
             }
             .distinctUntilChanged()
-            .shareIn(viewModelScope, SharingStarted.WhileSubscribed(5000), 1)
+            .shareIn(viewModelScope, SharingStarted.Lazily, 1)
 
     private val allTracksFlow =
         trackRepository
             .observeAllTracks()
             .flowOn(Dispatchers.Default)
-            .shareIn(viewModelScope, SharingStarted.WhileSubscribed(5000), 1)
+            .shareIn(viewModelScope, SharingStarted.Lazily, 1)
 
     val trackMapFlow: Flow<Map<Long, List<String>>> =
         combine(allTracksFlow, loggedServicesFlow) { tracks, loggedServices ->
@@ -209,7 +208,7 @@ class LibraryViewModel() : ViewModel() {
             }
             .distinctUntilChanged()
             .flowOn(Dispatchers.Default)
-            .shareIn(viewModelScope, SharingStarted.WhileSubscribed(5000), 1)
+            .shareIn(viewModelScope, SharingStarted.Lazily, 1)
 
     val trackCountMapFlow: Flow<Map<Long, Int>> =
         combine(allTracksFlow, loggedServicesFlow) { tracks, loggedServices ->
@@ -225,19 +224,19 @@ class LibraryViewModel() : ViewModel() {
             }
             .distinctUntilChanged()
             .flowOn(Dispatchers.Default)
-            .shareIn(viewModelScope, SharingStarted.WhileSubscribed(5000), 1)
+            .shareIn(viewModelScope, SharingStarted.Lazily, 1)
 
     private val rawLibraryMangaListFlow =
         mangaRepository
             .observeLibrary()
             .distinctUntilChanged()
-            .shareIn(viewModelScope, SharingStarted.WhileSubscribed(5000), 1)
+            .shareIn(viewModelScope, SharingStarted.Lazily, 1)
 
     private val hasMangaInLibraryFlow =
         rawLibraryMangaListFlow
             .map { it.isNotEmpty() }
             .distinctUntilChanged()
-            .shareIn(viewModelScope, SharingStarted.WhileSubscribed(5000), 1)
+            .shareIn(viewModelScope, SharingStarted.Lazily, 1)
 
     /**
      * Flow that tracks download counts for all manga in the library. By mapping only the manga IDs
@@ -257,7 +256,7 @@ class LibraryViewModel() : ViewModel() {
             }
             .distinctUntilChanged()
             .conflate()
-            .shareIn(viewModelScope, SharingStarted.WhileSubscribed(5000), 1)
+            .shareIn(viewModelScope, SharingStarted.Lazily, 1)
 
     /**
      * Flow that performs the initial, expensive conversion from DB entities to UI models. This is
@@ -268,7 +267,7 @@ class LibraryViewModel() : ViewModel() {
             .map { dbMangaList -> dbMangaList.map { it.toLibraryMangaItem() } }
             .distinctUntilChanged()
             .flowOn(Dispatchers.Default)
-            .shareIn(viewModelScope, SharingStarted.WhileSubscribed(5000), 1)
+            .shareIn(viewModelScope, SharingStarted.Lazily, 1)
 
     /**
      * The core data list flow. It combines the pre-converted UI models with dynamic data like track
@@ -277,15 +276,11 @@ class LibraryViewModel() : ViewModel() {
      */
     val libraryMangaListFlow: Flow<List<LibraryMangaItem>> =
         combine(
-            initialLibraryItemsFlow,
-            trackMapFlow,
-            trackCountMapFlow,
-            downloadCountMapFlow,
-        ) {
-                items,
-                trackMap,
-                trackCountMap,
-                downloadCountMap ->
+                initialLibraryItemsFlow,
+                trackMapFlow,
+                trackCountMapFlow,
+                downloadCountMapFlow,
+            ) { items, trackMap, trackCountMap, downloadCountMap ->
                 items.map { item ->
                     val mangaId = item.displayManga.mangaId
                     val newDownloadCount = downloadCountMap[mangaId] ?: 0
@@ -301,7 +296,7 @@ class LibraryViewModel() : ViewModel() {
             }
             .distinctUntilChanged()
             .conflate()
-            .shareIn(viewModelScope, SharingStarted.WhileSubscribed(5000), 1)
+            .shareIn(viewModelScope, SharingStarted.Lazily, 1)
 
     /**
      * MACRO-LEVEL PERFORMANCE OPTIMIZATION (Overclock):
@@ -335,7 +330,7 @@ class LibraryViewModel() : ViewModel() {
                 )
             }
             .distinctUntilChanged()
-            .shareIn(viewModelScope, SharingStarted.WhileSubscribed(5000), 1)
+            .shareIn(viewModelScope, SharingStarted.Lazily, 1)
 
     /**
      * MACRO-LEVEL PERFORMANCE OPTIMIZATION (Overclock):
@@ -355,7 +350,7 @@ class LibraryViewModel() : ViewModel() {
                 Pair(collapsedCategories, collapsedDynamicCategories)
             }
             .distinctUntilChanged()
-            .shareIn(viewModelScope, SharingStarted.WhileSubscribed(5000), 1)
+            .shareIn(viewModelScope, SharingStarted.Lazily, 1)
 
     /**
      * Flow that tracks the last read manga to be used for sorting.
@@ -390,7 +385,7 @@ class LibraryViewModel() : ViewModel() {
                 }
             }
             .conflate()
-            .shareIn(viewModelScope, SharingStarted.WhileSubscribed(5000), 1)
+            .shareIn(viewModelScope, SharingStarted.Lazily, 1)
     }
 
     val lastReadMangaFlow =
@@ -432,7 +427,7 @@ class LibraryViewModel() : ViewModel() {
                 }
             }
             .conflate()
-            .shareIn(viewModelScope, SharingStarted.WhileSubscribed(5000), 1)
+            .shareIn(viewModelScope, SharingStarted.Lazily, 1)
 
     val filterPreferencesFlow: Flow<LibraryFilters> =
         combine(
@@ -459,7 +454,7 @@ class LibraryViewModel() : ViewModel() {
                 )
             }
             .distinctUntilChanged()
-            .shareIn(viewModelScope, SharingStarted.WhileSubscribed(5000), 1)
+            .shareIn(viewModelScope, SharingStarted.Lazily, 1)
     // 1. FILTER FLOW: Applies filters and fetches necessary data (Download counts)
     private val activeMangaFlow =
         combine(filteredMangaListFlow, filterPreferencesFlow) { mangaList, libraryFilters ->
@@ -692,7 +687,7 @@ class LibraryViewModel() : ViewModel() {
             }
             .stateIn(
                 scope = viewModelScope,
-                started = SharingStarted.WhileSubscribed(5000),
+                started = SharingStarted.Lazily,
                 initialValue = initialState,
             )
 

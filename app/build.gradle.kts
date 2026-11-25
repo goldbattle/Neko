@@ -27,8 +27,8 @@ android {
         minSdk = AndroidConfig.minSdkVersion
         targetSdk = AndroidConfig.targetSdkVersion
         applicationId = "org.nekomanga.neko"
-        versionCode = 3816
-        versionName = "3.8.16-fast"
+        versionCode = 3817
+        versionName = "3.8.17-fast"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled = true
         buildConfigField("String", "COMMIT_COUNT", "\"${getCommitCount()}\"")
@@ -45,6 +45,8 @@ android {
 
         ndk { abiFilters += supportedAbis }
     }
+
+    androidResources { noCompress += "db" }
 
     splits {
         abi {
@@ -96,6 +98,7 @@ android {
 }
 
 base { archivesName.set("Neko") }
+
 composeCompiler {
     val enableMetrics =
         project.providers.gradleProperty("enableComposeCompilerMetrics").orNull.toBoolean()

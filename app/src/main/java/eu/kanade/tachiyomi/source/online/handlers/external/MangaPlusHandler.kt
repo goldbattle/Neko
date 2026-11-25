@@ -27,7 +27,7 @@ class MangaPlusHandler {
             .add("User-Agent", USER_AGENT)
             .build()
 
-    private val session = UUID.randomUUID().toString()
+    private val session by lazy { UUID.randomUUID().toString() }
 
     val client: OkHttpClient by lazy {
         Injekt.get<NetworkHelper>()

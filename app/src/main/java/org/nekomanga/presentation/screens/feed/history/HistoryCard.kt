@@ -1,7 +1,5 @@
 package org.nekomanga.presentation.screens.feed.history
 
-import androidx.compose.animation.animateColorAsState
-import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -36,6 +34,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.dp
 import jp.wasabeef.gap.Gap
 import org.nekomanga.R
 import org.nekomanga.domain.chapter.ChapterItem
@@ -67,15 +66,13 @@ fun HistoryCard(
     deleteHistoryClick: (SimpleChapter) -> Unit,
 ) {
     var expanded by rememberSaveable { mutableStateOf(false) }
-    val canExpand by remember { mutableStateOf(feedManga.chapters.size > 1) }
-    val allChaptersRead = feedManga.chapters.all { it.chapter.read }
-    val cardColor: Color by
-        animateColorAsState(
-            if (expanded) MaterialTheme.colorScheme.surfaceColorAtElevation(Size.small)
-            else if (outlineCard) CardDefaults.outlinedCardColors().containerColor
-            else CardDefaults.elevatedCardColors().containerColor,
-            label = "historyCardExpansion",
-        )
+    val canExpand by remember(feedManga.chapters) { mutableStateOf(feedManga.chapters.size > 1) }
+    val allChaptersRead =
+        remember(feedManga.chapters) { feedManga.chapters.all { it.chapter.read } }
+    val cardColor: Color =
+        if (expanded) MaterialTheme.colorScheme.surfaceColorAtElevation(Size.small)
+        else if (outlineCard) CardDefaults.outlinedCardColors().containerColor
+        else CardDefaults.elevatedCardColors().containerColor
     val lowContrastColor =
         MaterialTheme.colorScheme.onSurface.copy(alpha = NekoColors.mediumAlphaLowContrast)
     val cardColors =
@@ -85,7 +82,7 @@ fun HistoryCard(
             CardDefaults.elevatedCardColors().copy(containerColor = cardColor)
         }
     Card(
-        modifier = modifier.fillMaxWidth().padding(horizontal = Size.small).animateContentSize(),
+        modifier = modifier.fillMaxWidth().padding(horizontal = Size.small),
         outlineCard = outlineCard,
         cardColor = cardColors,
     ) {
@@ -218,7 +215,12 @@ fun Card(
             OutlinedCard(modifier = modifier, colors = cardColor, content = content)
         }
         false -> {
-            ElevatedCard(modifier = modifier, colors = cardColor, content = content)
+            ElevatedCard(
+                modifier = modifier,
+                colors = cardColor,
+                elevation = CardDefaults.elevatedCardElevation(defaultElevation = 0.dp),
+                content = content,
+            )
         }
     }
 }

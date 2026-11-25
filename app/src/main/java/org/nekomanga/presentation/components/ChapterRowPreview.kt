@@ -1,9 +1,11 @@
 package org.nekomanga.presentation.components
 
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.LocalRippleConfiguration
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
@@ -22,18 +24,22 @@ import org.nekomanga.presentation.theme.withThemes
 private fun ChapterRowPreviewContent(chapterItem: ChapterItem) {
     val themeColorState = defaultThemeColorState()
     Surface(color = MaterialTheme.colorScheme.surface, modifier = Modifier.padding(Size.medium)) {
-        ChapterRow(
-            themeColor = themeColorState,
-            chapterItem = chapterItem,
-            onClick = {},
-            onBookmark = {},
-            onRead = {},
-            onWebView = {},
-            onComment = {},
-            onDownload = { _, _ -> },
-            blockScanlator = { _, _ -> },
-            markPrevious = { _, _ -> },
-        )
+        CompositionLocalProvider(
+            LocalRippleConfiguration provides themeColorState.rippleConfiguration,
+        ) {
+            ChapterRow(
+                themeColor = themeColorState,
+                chapterItem = chapterItem,
+                onClick = {},
+                onBookmark = {},
+                onRead = {},
+                onWebView = {},
+                onComment = {},
+                onDownload = { _, _ -> },
+                blockScanlator = { _, _ -> },
+                markPrevious = { _, _ -> },
+            )
+        }
     }
 }
 

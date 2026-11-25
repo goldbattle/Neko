@@ -72,6 +72,8 @@ interface ChapterDao {
     )
     suspend fun updateSourceOrder(chapterId: String, mangaId: Long, order: Int)
 
+    // CROSS JOIN forces chapters as the outer loop so the date_upload/date_fetch index is scanned
+    // in order and LIMIT stops early.
     @Query(
         """
         SELECT manga.*,
@@ -83,7 +85,7 @@ interface ChapterDao {
                chapters.smart_order AS ch_smart_order, chapters.date_fetch AS ch_date_fetch, chapters.date_upload AS ch_date_upload,
                chapters.mangadex_chapter_id AS ch_mangadex_chapter_id,
                chapters.language AS ch_language
-        FROM manga JOIN chapters ON manga.id = chapters.manga_id
+        FROM chapters CROSS JOIN manga ON manga.id = chapters.manga_id
         WHERE manga.favorite = 1
         AND chapters.date_fetch > manga.date_added
         AND LOWER(manga.title) LIKE :search
@@ -110,7 +112,7 @@ interface ChapterDao {
                chapters.smart_order AS ch_smart_order, chapters.date_fetch AS ch_date_fetch, chapters.date_upload AS ch_date_upload,
                chapters.mangadex_chapter_id AS ch_mangadex_chapter_id,
                chapters.language AS ch_language
-        FROM manga JOIN chapters ON manga.id = chapters.manga_id
+        FROM chapters CROSS JOIN manga ON manga.id = chapters.manga_id
         WHERE manga.favorite = 1
         AND chapters.date_fetch > manga.date_added
         AND LOWER(manga.title) LIKE :search
@@ -146,7 +148,7 @@ interface ChapterDao {
                chapters.smart_order AS ch_smart_order, chapters.date_fetch AS ch_date_fetch, chapters.date_upload AS ch_date_upload,
                chapters.mangadex_chapter_id AS ch_mangadex_chapter_id,
                chapters.language AS ch_language
-        FROM manga JOIN chapters ON manga.id = chapters.manga_id
+        FROM chapters CROSS JOIN manga ON manga.id = chapters.manga_id
         WHERE manga.favorite = 1
         AND chapters.date_fetch > manga.date_added
         AND LOWER(manga.title) LIKE :search
@@ -173,7 +175,7 @@ interface ChapterDao {
                chapters.smart_order AS ch_smart_order, chapters.date_fetch AS ch_date_fetch, chapters.date_upload AS ch_date_upload,
                chapters.mangadex_chapter_id AS ch_mangadex_chapter_id,
                chapters.language AS ch_language
-        FROM manga JOIN chapters ON manga.id = chapters.manga_id
+        FROM chapters CROSS JOIN manga ON manga.id = chapters.manga_id
         WHERE manga.favorite = 1
         AND chapters.date_fetch > manga.date_added
         AND LOWER(manga.title) LIKE :search
