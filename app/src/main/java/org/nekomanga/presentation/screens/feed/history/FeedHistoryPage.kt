@@ -23,6 +23,7 @@ import coil3.size.Precision
 import coil3.size.Size as CoilSize
 import eu.kanade.tachiyomi.data.coil.dynamicCover
 import java.util.Date
+import java.util.TimeZone
 import jp.wasabeef.gap.Gap
 import kotlinx.coroutines.flow.distinctUntilChanged
 import org.nekomanga.R
@@ -77,6 +78,8 @@ fun FeedHistoryPage(
 
     val now = remember(feedHistoryMangaList) { Date().time }
 
+    val dateStringCache = remember(now, historyGrouping) { HashMap<Long, String>() }
+
     val context = LocalContext.current
     val artworks = remember(feedHistoryMangaList) { feedHistoryMangaList.map { it.artwork } }
     val currentArtworks by rememberUpdatedState(artworks)
@@ -109,8 +112,19 @@ fun FeedHistoryPage(
     ) {
         var timeSpan = ""
         feedHistoryMangaList.forEachIndexed { index, feedManga ->
+            val lastRead = feedManga.chapters.first().chapter.lastRead
+            val cacheKey =
+                if (historyGrouping == FeedHistoryGroup.Day) {
+                    lastRead -
+                        Math.floorMod(
+                            lastRead + TimeZone.getDefault().getOffset(lastRead),
+                            86_400_000L,
+                        )
+                } else {
+                    lastRead
+                }
             val dateString =
-                getDateString(feedManga.chapters.first().chapter.lastRead, now, historyGrouping)
+                dateStringCache.getOrPut(cacheKey) { getDateString(lastRead, now, historyGrouping) }
             if (dateString.isNotEmpty() && timeSpan != dateString) {
                 timeSpan = dateString
 
